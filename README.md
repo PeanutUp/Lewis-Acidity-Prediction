@@ -40,8 +40,7 @@ If you use or reference this repository, please also cite the original DimeNet a
 ## Usage
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
-   cd <repo-directory>
+   git clone https://github.com/PeanutUp/Lewis-Acidity-Prediction.git
    ```
 2. Set up the environment:
    ```bash
