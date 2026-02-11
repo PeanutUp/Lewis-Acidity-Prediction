@@ -156,19 +156,19 @@ cython_debug/
 *.DS_Store
 
 # Images and figures
-*.png
-*.jpg
-*.jpeg
-*.svg
-*.tiff
+# *.png
+# *.jpg
+# *.jpeg
+# *.svg
+# *.tiff
 
 # Data files (raw and processed)
 
-*.npy
-*.npz
+# *.npy
+# *.npz
 *.json
 *.csv
-*.xlsx
+# *.xlsx
 *.h5
 *.pkl
 *.pt
