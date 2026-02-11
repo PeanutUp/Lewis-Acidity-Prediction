@@ -171,9 +171,9 @@ cython_debug/
 # *.xlsx
 *.h5
 *.pkl
-*.pt
-*.ckpt
-*.log
+# *.pt
+# *.ckpt
+# *.log
 
 # Model checkpoints and outputs
 outputs_vae/
