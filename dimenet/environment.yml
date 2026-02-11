@@ -1,0 +1,18 @@
+name: dimenet
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - numpy
+  - scipy>=1.3
+  - sympy>=1.5
+  - tensorflow>=2.1
+  - tensorflow-addons
+  - tqdm
+  - pyyaml
+  - pip
+  - pip:
+    - sacred  # 可选，用于集群训练
+    - seml    # 可选，用于集群训练
+

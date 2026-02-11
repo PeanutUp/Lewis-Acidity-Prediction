@@ -1,0 +1,58 @@
+model_name: "dimenet++"
+
+# 模型架构参数
+emb_size: 128
+out_emb_size: 256  # 这个参数在minimal模式下不会被使用
+int_emb_size: 64
+basis_emb_size: 8
+num_blocks: 4
+
+# 基础函数参数
+num_spherical: 7
+num_radial: 6
+output_init: 'GlorotOrthogonal'
+
+# 模型行为参数
+extensive: True
+cutoff: 5.0
+envelope_exponent: 5
+
+# 输出块参数
+num_before_skip: 1
+num_after_skip: 2
+num_dense_output: 0  # minimal模式下不使用
+num_targets: 1       # FIA任务只有1个target
+
+# 关键参数：启用最简化模式
+minimal_output: True
+# 冻结参数
+freeze_features: True
+pretrained_weights_path: "pretrained/dimenet_pp/U/ckpt"
+frozen_training: True
+
+# 数据参数
+num_train: 1600      
+num_valid: 300       
+data_seed: 42
+dataset: "data/fia49k_processed.npz"  # 你的FIA数据
+logdir: "."
+
+# 训练参数
+num_steps: 100000    # 减少训练步数，适合小数据集
+ema_decay: 0.999
+
+# 学习率参数
+learning_rate: 0.0001  # 更小的学习率，适合小数据集
+warmup_steps: 1000     # 减少warmup步数
+decay_rate: 0.01
+decay_steps: 50000     # 减少decay步数
+
+# 批次参数
+batch_size: 16        # 更小的batch size，适合小数据集
+
+# 评估参数
+evaluation_interval: 5000
+save_interval: 5000
+restart: None
+comment: "FIA minimal output"
+targets: ['fia_gas-DSDBLYP']  # 你的FIA目标属性
