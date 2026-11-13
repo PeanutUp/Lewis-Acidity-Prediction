@@ -5,7 +5,7 @@ partial experiments cannot silently enter the final article. Author-only metadat
 remain explicit in the separate revision report rather than being invented.
 """
 from pathlib import Path
-import json,re,sys
+import json,re,sys,shutil
 import pandas as pd
 from docx import Document
 from docx.shared import Inches,Pt,RGBColor
@@ -226,5 +226,7 @@ def main():
  (MAN/'article_content.json').write_text(json.dumps(dict(title=TITLE,authors=AUTHORS,abstract=abstract,blocks=blocks,references=REFS),ensure_ascii=False,indent=2)+'\n')
  for journal in ['Digital Discovery','JCIM']:article(journal,abstract,blocks)
  si();chinese_report();tex(abstract,blocks)
+ review=MAN/'review';review.mkdir(exist_ok=True)
+ for path in MAN.glob('*.docx'):shutil.copy2(path,review/path.name)
  print('Built both journal manuscripts, SI, response report and TeX sources',flush=True)
 if __name__=='__main__':main()

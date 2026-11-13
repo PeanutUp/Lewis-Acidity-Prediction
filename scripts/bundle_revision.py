@@ -85,6 +85,7 @@ AI辅助已披露。当前是待作者审核的研究稿，PR保持draft，未�
                '.toml', '.ini', '.sh', '.tex', '.svg', '.pdf', '.png', '.docx', '.xlsx'}
     selected = [p for p in paths if (ROOT / p).suffix in allowed
                 or '.part-' in p or Path(p).name in {'.gitignore', 'LICENSE', 'Makefile'}]
+    assert 'manuscript/rsc_official_article_template.tex' in selected
     manifest = {p: dict(bytes=(ROOT / p).stat().st_size, sha256=digest(ROOT / p))
                 for p in selected}
     archive = output / 'Lewis_Acidity_Revision_2026-11-13.zip'

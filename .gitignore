@@ -284,3 +284,4 @@ manuscript/*.pdf
 /checkpoints/*_evaluation/
 !/artifacts/predictions/
 !/artifacts/predictions/*.part-*
+!/manuscript/rsc_official_article_template.tex
