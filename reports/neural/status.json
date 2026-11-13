@@ -1,15 +1,15 @@
 {
-  "partial": true,
+  "partial": false,
   "available": {
     "radial-site": 3,
     "radial-sum": 3,
-    "egnn-sum": 1,
-    "dimenet": 0,
-    "acid-qm": 1,
-    "scaffold-site": 1,
-    "scaffold-qm": 0,
+    "egnn-sum": 3,
+    "dimenet": 3,
+    "acid-qm": 3,
+    "scaffold-site": 3,
+    "scaffold-qm": 3,
     "composition": 1,
-    "composition-qm": 0
+    "composition-qm": 1
   },
   "uncertainty": "2000 paired, central-class-stratified bootstrap samples of fixed test predictions; not training uncertainty or prospective coverage",
   "ensembles": "Unweighted mean of all declared seeds; seed mean/SD separately reported",

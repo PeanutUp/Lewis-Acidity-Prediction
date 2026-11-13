@@ -1,0 +1,21 @@
+{
+  "python": "3.10.20 (main, Jun 11 2026, 15:17:37) [GCC 14.3.0]",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "rdkit": "2026.9.2",
+    "torch": "2.6.0",
+    "torch-geometric": "2.6.1",
+    "torch-cluster": "1.6.3+pt26cu124",
+    "torch-scatter": "2.1.2+pt26cu124",
+    "torch-sparse": "0.6.18+pt26cu124",
+    "matplotlib": "3.10.9",
+    "threadpoolctl": "3.8.0",
+    "joblib": "1.6.0",
+    "pytest": "9.2.0"
+  },
+  "scope": "Final neural and matched1000-stage HGB experiments; document exports use separate python-docx1.2.0 runtime"
+}

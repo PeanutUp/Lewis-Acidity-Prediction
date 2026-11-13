@@ -277,3 +277,10 @@ reports/grouped*/manifest.csv
 reports/geometry_diagnostics.csv
 manuscript/*.docx
 manuscript/*.pdf
+
+# Frozen binaries are transported in verified chunks; restore with the helper.
+/checkpoints/*.gz
+/artifacts/**/*.csv.gz
+/checkpoints/*_evaluation/
+!/artifacts/predictions/
+!/artifacts/predictions/*.part-*

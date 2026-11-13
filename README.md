@@ -58,6 +58,18 @@ training/validation IDs. Test evaluation is a separate command and rejects a
 different dataset. All six published test groups are exported with molecule IDs;
 no failing or inconvenient cases are intersected away.
 
+For a new, **unlabeled unbound-acid** XYZ file, use the frozen normalizer directly:
+
+```bash
+python -m lewis_acidity.predict --checkpoint runs/dimenet-s1/best.pt --xyz acid.xyz --center-index 0 --output predictions.csv
+```
+
+Use the training geometry protocol and identify the accepting atom by its 0-based
+index. Repeat `--checkpoint` for an unweighted ensemble. Its exported SD measures
+model disagreement and is not a calibrated interval. Acid-QM checkpoints also
+require `--features features.json`, mapping each XYZ filename stem to exactly the
+10 feature names stored in the checkpoint's feature state.
+
 Controlled variants:
 
 ```bash
@@ -120,12 +132,50 @@ not a contrastive-learning method.
 
 ## Results, manuscript and reproducibility
 
+The completed experiment includes 23 neural runs. Main-test MAE is in kJ/mol:
+
+| Model/input regime | Seed mean ± sample SD | Three-seed ensemble |
+| --- | ---: | ---: |
+| DimeNet++, acid geometry | 11.21 ± 0.27 | 10.29 |
+| EGNN feature messages, acid geometry | 12.08 ± 0.16 | 11.04 |
+| Radial filters, center readout | 12.22 ± 0.17 | 11.15 |
+| Geometry + acid electronic features | 12.18 ± 0.04 | 11.12 |
+| Released FIA-GNN reference | 12.11 (released predictions) | — |
+
+The separate adduct-dependent refinement tier gives MAE 3.29, compared with
+23.33 for raw PBEh-3c FIA, 10.06 for a train-only global correction and 7.15
+for a center-class correction. Its scaffold-holdout MAE is 3.35. These values
+measure agreement with the DSD-BLYP target and require lower-level acid **and
+adduct** calculations. They cannot establish equivalent cost or absolute accuracy.
+
 Small metrics/configuration/provenance reports are versioned under `reports/`.
-Large prepared data, fitted checkpoints and raw per-molecule exports are generated
-locally under `.data/`, `runs/` and the report subdirectories. Manuscript sources,
-figures and journal variants are maintained under `manuscript/`. A publication
-archive must include the frozen weights, prediction exports and manifests; the
-Digital Discovery code/data DOI must be minted before publication.
+Frozen checkpoints and complete molecule-level exports are also included as
+checksum-verified storage chunks. Restore them after cloning:
+
+```bash
+python scripts/restore_artifacts.py
+python -m lewis_acidity.predict --checkpoint checkpoints/dimenet-s1.pt.gz --xyz acid.xyz --center-index 0 --output predictions.csv
+```
+
+See `checkpoints/manifest.json` and `artifacts/storage_manifest.json` for exact
+contents and hashes. Prepared data and original run directories remain local
+under `.data/` and `runs/`; regenerate the input arrays with the command above.
+Manuscript sources, figures and journal variants are under `manuscript/`;
+editable documents and rendered review PDFs are in `manuscript/review/`.
+An immutable archive DOI must be minted before publication.
+
+Regenerate the tables and manuscript from completed run directories with:
+
+```bash
+python scripts/evaluate_completed.py
+python -m lewis_acidity.analysis
+python scripts/plot_results.py
+python scripts/build_manuscripts.py
+```
+
+The final article generator refuses a partial analysis. Word exports use
+`python-docx`; PDF exports are rendered separately with LibreOffice. See the
+Chinese revision report for the 18 PDF comments and author-only submission fields.
 
 Data: Sigmund et al., FIA49k, CC BY 4.0,
 [targets](https://doi.org/10.6084/m9.figshare.24635136.v1),

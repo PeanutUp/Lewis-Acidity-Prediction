@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 import torch
-from lewis_acidity.data import Molecules, collate, split_indices
+from lewis_acidity.data import Molecules, collate, split_indices, content_fingerprint
 from lewis_acidity.model import AcidityNet
 from lewis_acidity.prepare import parse_xyz
 from lewis_acidity.train import load_checkpoint
@@ -73,3 +73,29 @@ def test_quantum_features_fit_only_training_and_restore_frozen_preprocessing(tmp
     frame.to_csv(tmp_path/'FIA49k.csv.gz',index=False)
     with pytest.raises(ValueError):
         Molecules(tmp_path/'geometry.npz',feature_mode='acid-qm',feature_state=a.feature_state)
+
+
+def test_unlabeled_xyz_inference_reuses_checkpoint_scaling(tmp_path):
+    from lewis_acidity.predict import predict_files,xyz_item
+    torch.manual_seed(7)
+    cfg=dict(hidden=16,layers=2,cutoff=5,kind='radial',readout='site')
+    model=AcidityNet(**cfg).eval()
+    checkpoint=tmp_path/'model.pt'
+    torch.save(dict(model=model.state_dict(),model_config=cfg,mean=123.,scale=17.),checkpoint)
+    xyz=tmp_path/'acid.xyz';xyz.write_text('3\nexample\nB 0 0 0\nF 1 0 0\nH 0 1 0\n')
+    result=predict_files([checkpoint],[xyz])
+    expected=(model(collate([xyz_item(xyz,0,5)]))*17+123).item()
+    assert result.predicted_fia_gas_DSDBLYP_kJ_mol.iloc[0]==expected
+    assert result.n_models.iloc[0]==1
+    with pytest.raises(ValueError): predict_files([checkpoint],[xyz,xyz])
+
+
+def test_dataset_fingerprint_ignores_zip_container_but_detects_changed_values(tmp_path):
+    arrays=dict(mol_id=np.array(['acid']),N=np.array([1]),Z=np.array([5]),
+                R=np.zeros((1,3)),y=np.array([123.]),split=np.array(['train']),center_index=np.array([0]))
+    a,b=tmp_path/'a.npz',tmp_path/'b.npz'
+    np.savez(a,**arrays);np.savez_compressed(b,**arrays)
+    assert a.read_bytes()!=b.read_bytes()
+    assert content_fingerprint(a)==content_fingerprint(b)
+    arrays['y'][0]+=1;np.savez_compressed(b,**arrays)
+    assert content_fingerprint(a)!=content_fingerprint(b)

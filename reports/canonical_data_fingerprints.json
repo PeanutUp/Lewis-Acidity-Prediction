@@ -1,0 +1,10 @@
+{
+  ".data/la-PBEh3c.npz": {
+    "file_sha256": "d301fa666039627a30dd9481c334b186e704c8da45573b52ed77e268eda28bb2",
+    "content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7"
+  },
+  ".data/scaffold-PBEh3c.npz": {
+    "file_sha256": "acf7dc98f985078fc82718099cd7937db3f66ba1711226fd1f86e23824e8c536",
+    "content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d"
+  }
+}

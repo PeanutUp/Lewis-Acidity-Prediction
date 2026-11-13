@@ -1,0 +1,23 @@
+% Review source; Word/PDF exports are rendered and checked. The RSC official template is supplied separately.
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx,booktabs,hyperref}
+\title{Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity}
+\author{Simin Huang, Shenqi Zong, and Han Chen}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+Fluoride ion affinity (FIA) prediction depends on molecular representation, chemical coverage and the computational reference level. We compare fixed-geometry message-passing models, descriptor controls and quantum-assisted refinement on all 48,986 FIA49k molecules, using preserved identities, validation-only selection and a separate ligand-scaffold holdout. The lowest mean test MAE among the geometry-only models is 11.21 kJ mol-1, compared with 12.11 kJ mol-1 from released FIA-GNN predictions, whereas learning the DSD-BLYP--PBEh-3c FIA correction achieves 3.29 kJ mol-1 and 3.35 kJ mol-1 under the scaffold holdout. Matched-ligand corrections and frozen-model geometry-source tests delimit these gains: the refinement requires fluoride-adduct calculations, and increased agreement with computed labels does not establish absolute or base-independent Lewis-acidity accuracy.
+\end{abstract}
+\input{body}
+\section*{Data and software availability}
+Versioned FIA49k data and code: see the complete statements in the Word/PDF manuscript and README. A persistent DOI for the new frozen archive must be supplied before publication.
+\section*{Conflicts of interest}
+The authors will provide their declaration before submission.
+\section*{Acknowledgements}
+OpenAI Codex assisted with drafting, code inspection, computational experiments and analysis scripts; author review is required.
+\input{references}
+\end{document}

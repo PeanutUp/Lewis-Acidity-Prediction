@@ -1,0 +1,431 @@
+[
+  {
+    "run": "radial-site-s1",
+    "file": "checkpoints/radial-site-s1.pt.gz",
+    "sha256": "7b908edee291988f03f475a2bc8ff6c8cca05f795b54ff2eb7cac30792993501",
+    "original_checkpoint_sha256": "02b96b8d47a1ce1101769fea39b5d06643b55f7e394cdd68bf267f9d3c8e8bc5",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 11.917571255384624,
+    "epoch": 61,
+    "feature_mode": "none"
+  },
+  {
+    "run": "radial-site-s2",
+    "file": "checkpoints/radial-site-s2.pt.gz",
+    "sha256": "8e3869ee176b01264d2c56443ec3347a25cee984228d44effdf09dd5ee80cd36",
+    "original_checkpoint_sha256": "011fcb654b22d5f84d4a2eeb9408ab66e370479eb8828a16a0e9bff6d7a7311d",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 11.918684599927758,
+    "epoch": 60,
+    "feature_mode": "none"
+  },
+  {
+    "run": "radial-site-s3",
+    "file": "checkpoints/radial-site-s3.pt.gz",
+    "sha256": "25badc8c641eadaa7d32056885927b2c6f311dffd74515ce6b28100fdaa36e35",
+    "original_checkpoint_sha256": "04fec4e21efa122694d4410f6eeebbb8675719d3ebfa8171a0957a3457b4ab7a",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 11.843775582064936,
+    "epoch": 97,
+    "feature_mode": "none"
+  },
+  {
+    "run": "radial-sum-s1",
+    "file": "checkpoints/radial-sum-s1.pt.gz",
+    "sha256": "fecf925623fd02a6f42a6528a7729df3fe83bd6ee6e3f325cd968923a711c53e",
+    "original_checkpoint_sha256": "08c4d7c8e832b0110ada85f0e96862d35538c18a84a3c39f2be040c15500fc7a",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 11.970544424657735,
+    "epoch": 74,
+    "feature_mode": "none"
+  },
+  {
+    "run": "radial-sum-s2",
+    "file": "checkpoints/radial-sum-s2.pt.gz",
+    "sha256": "f9ba6b213ddc6597d675ee8be64c846dfc5db8227c79da42f127138c6ba954c1",
+    "original_checkpoint_sha256": "ce484604c3dac889c95326f3200f4e375af1c7c5ab30f8294a14d200a7e7021c",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 11.84616552995045,
+    "epoch": 62,
+    "feature_mode": "none"
+  },
+  {
+    "run": "radial-sum-s3",
+    "file": "checkpoints/radial-sum-s3.pt.gz",
+    "sha256": "b3e9fc623086d94db51449fe6fb1a10c6d1d1c07f3d5a96d8cb0ee0e49f627ca",
+    "original_checkpoint_sha256": "41352f80d4403d723758f7bd074fb383b85db2bcc3079ffcb00eda9abb59b152",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 11.872817412323142,
+    "epoch": 58,
+    "feature_mode": "none"
+  },
+  {
+    "run": "egnn-sum-s1",
+    "file": "checkpoints/egnn-sum-s1.pt.gz",
+    "sha256": "897c3061198910f4ae339bf1706ee42c2492093c8aa05828dee6a5f495734bdb",
+    "original_checkpoint_sha256": "248380a3b92e023afac2b1cc02bdfafa8f700ef463f7b6c0b420d7992046f229",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 7,
+      "kind": "egnn",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 11.944157264076324,
+    "epoch": 83,
+    "feature_mode": "none"
+  },
+  {
+    "run": "egnn-sum-s2",
+    "file": "checkpoints/egnn-sum-s2.pt.gz",
+    "sha256": "9ab3b18326c2f9ae4d3fd1557e9d512bf1981cb5f660db7d6e7ef8d3a08b9097",
+    "original_checkpoint_sha256": "4ddfd72158f20e7532b67d198ca19ef49bce91eb9ceb2191d68caa6918599ab4",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 7,
+      "kind": "egnn",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 11.699298122511168,
+    "epoch": 99,
+    "feature_mode": "none"
+  },
+  {
+    "run": "egnn-sum-s3",
+    "file": "checkpoints/egnn-sum-s3.pt.gz",
+    "sha256": "5c822dc44e29c15e624992e504434d594c6798e5febd5fb06b0a8d5c6c1ef44f",
+    "original_checkpoint_sha256": "9932e08ea84a6e18c8eca8025450324f0ee97053357e9d965256b0491a612f18",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 7,
+      "kind": "egnn",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 11.720199298354629,
+    "epoch": 62,
+    "feature_mode": "none"
+  },
+  {
+    "run": "dimenet-s1",
+    "file": "checkpoints/dimenet-s1.pt.gz",
+    "sha256": "8e7e90ff5f0aba6461bf40a068930df8f2ff78a037addb6c1118dc436c3c99d9",
+    "original_checkpoint_sha256": "4f3e750d76a5903e397205f6d6651b649e03f4698b0e08343e8050213715f3e6",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "dimenet",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 10.49614437034072,
+    "epoch": 94,
+    "feature_mode": "none"
+  },
+  {
+    "run": "dimenet-s2",
+    "file": "checkpoints/dimenet-s2.pt.gz",
+    "sha256": "d1e038be67e301dcea12ef47f92275b41550c21e05ce24980f29669a22b8d44f",
+    "original_checkpoint_sha256": "77db6e01a31162307d6c72c414dd7857ed8bb00e6f0df7b24dcc6e6703d3697d",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "dimenet",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 10.834459998712866,
+    "epoch": 83,
+    "feature_mode": "none"
+  },
+  {
+    "run": "dimenet-s3",
+    "file": "checkpoints/dimenet-s3.pt.gz",
+    "sha256": "0697fbf6f25e28d1c13276df79af125849fb8d98c0bdea6d53133fa625a2a0d3",
+    "original_checkpoint_sha256": "eaaa81c8320a6901aafc058a62675ae7d6d0248fb4ca7352d3a957b88d8f0cea",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "dimenet",
+      "readout": "sum",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 10.583172975106166,
+    "epoch": 99,
+    "feature_mode": "none"
+  },
+  {
+    "run": "acid-qm-s1",
+    "file": "checkpoints/acid-qm-s1.pt.gz",
+    "sha256": "f32385b997a610ef3ff02e06a3897c0a955794fb575f4a56d011b27535e8e1b9",
+    "original_checkpoint_sha256": "1afcf674d7dd700365326dd652a488b11a523b33c20ba5d4f175bca7162ecc83",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 11.548581568381902,
+    "epoch": 94,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "acid-qm-s2",
+    "file": "checkpoints/acid-qm-s2.pt.gz",
+    "sha256": "ed811b306c34a3180e6921c871f51e5312e817d51961471279b2ef2c49343acd",
+    "original_checkpoint_sha256": "673ac8d62a45a3b66aaa3ce6b8cc6707a27323b7f5f7c53545e0b6a8ad35699c",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 11.769177888397012,
+    "epoch": 68,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "acid-qm-s3",
+    "file": "checkpoints/acid-qm-s3.pt.gz",
+    "sha256": "95381d63fe9baa73b08b1bdc9281c60b020fb79316f65877fd5d65a314e384d7",
+    "original_checkpoint_sha256": "75290f4e4b1f222d49dad6f7907d1ab6e7750c7d925d8143022dbdbed58a5d29",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 11.758975660642578,
+    "epoch": 47,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "scaffold-site-s1",
+    "file": "checkpoints/scaffold-site-s1.pt.gz",
+    "sha256": "8fd11ecb52d42f4e8f03d067fc1034c918d11ea67bf70c001ea75adf6065dac4",
+    "original_checkpoint_sha256": "e45b4f2a0755edc2e13efb3b6281b502e01b4d145b13dee990f901c7670ea3c5",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true
+    },
+    "validation_mae": 12.558049403045745,
+    "epoch": 67,
+    "feature_mode": "none"
+  },
+  {
+    "run": "scaffold-site-s2",
+    "file": "checkpoints/scaffold-site-s2.pt.gz",
+    "sha256": "57229aac09f1ddabb1c7c7dc82aea30aee2db7c178d837044013e41cf026089b",
+    "original_checkpoint_sha256": "a6cd7915bc4b4629b251e241b43f359036789255165a3522939fd35a4468f2fb",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 12.406708511182705,
+    "epoch": 98,
+    "feature_mode": "none"
+  },
+  {
+    "run": "scaffold-site-s3",
+    "file": "checkpoints/scaffold-site-s3.pt.gz",
+    "sha256": "024633f641b6238aff7c4ff783da4c7f23c78f98cd20b0c178f1402e10ad6855",
+    "original_checkpoint_sha256": "b774fb17674448bf5e58cc595131d23aa8ec445c00d844d21e5ea172d1bfda88",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 0
+    },
+    "validation_mae": 12.519702972971846,
+    "epoch": 72,
+    "feature_mode": "none"
+  },
+  {
+    "run": "scaffold-qm-s1",
+    "file": "checkpoints/scaffold-qm-s1.pt.gz",
+    "sha256": "dbe21c933a66fb9e5d427c42d826c015e95c4951932a0baf4745f9a1ef189d0b",
+    "original_checkpoint_sha256": "e70347bbc584872b589cf008a9598170b981f2a683f2fad2008a20e006edffbe",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 12.321644065559125,
+    "epoch": 28,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "scaffold-qm-s2",
+    "file": "checkpoints/scaffold-qm-s2.pt.gz",
+    "sha256": "d26ba3ae03ba805cb649fa4a0611433247cc2b78324cc8c8d3401cf082193a88",
+    "original_checkpoint_sha256": "1e22f47d56189a8e6af9f4215c74d18c791e9cbbd23c09d46069fbace62e1ff2",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 12.086020488054293,
+    "epoch": 44,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "scaffold-qm-s3",
+    "file": "checkpoints/scaffold-qm-s3.pt.gz",
+    "sha256": "ca2cf210adb77014d50d05b3929815501b00c137350466eace59f623ec00f6c1",
+    "original_checkpoint_sha256": "9ac69c061852d56826b03c9accbc60338031b389c2dd62ffba1e9a19480164fd",
+    "data_content_sha256": "cb61c780471dd05ad88e37398664178900e77c015761294d442da8617a64e34d",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 5.0,
+      "geometry": true,
+      "global_dim": 10
+    },
+    "validation_mae": 12.213327921227352,
+    "epoch": 47,
+    "feature_mode": "acid-qm"
+  },
+  {
+    "run": "composition-s1",
+    "file": "checkpoints/composition-s1.pt.gz",
+    "sha256": "92171fe86285334417225f6b4a244d2977a8abde36780dd3d3e2f83a1a851727",
+    "original_checkpoint_sha256": "5319ecc928e5d73e63d143ac27bab1f10dc1e656ca275817020b284be00243e4",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 0.0,
+      "geometry": false
+    },
+    "validation_mae": 28.396666651163045,
+    "epoch": 31,
+    "feature_mode": "none"
+  },
+  {
+    "run": "composition-qm-s1",
+    "file": "checkpoints/composition-qm-s1.pt.gz",
+    "sha256": "b386d530bb97ad5e53da2d149368e8e7c1de9fcfeb898065fa738ba3335497d8",
+    "original_checkpoint_sha256": "5c37d600f878eac782fe9b5380f57748f4455e388837eceb7df66e0249179bed",
+    "data_content_sha256": "871092911e9df72b3f7878fbaafafcfa91bc22db3aa59adeefbc281628e34dc7",
+    "model_config": {
+      "hidden": 128,
+      "layers": 4,
+      "kind": "radial",
+      "readout": "site",
+      "cutoff": 0.0,
+      "geometry": false,
+      "global_dim": 10
+    },
+    "validation_mae": 19.732329235777073,
+    "epoch": 39,
+    "feature_mode": "acid-qm"
+  }
+]

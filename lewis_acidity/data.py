@@ -1,9 +1,28 @@
 """Ragged molecular batches: no padding, atom cap, or implicit geometry fallback."""
 from pathlib import Path
+import hashlib
 import numpy as np
 import torch
 from torch.utils.data import Dataset
 from .prepare import checksum
+
+
+def content_fingerprint(path):
+    """Hash array contents independently of ZIP compression and container headers."""
+    h=hashlib.sha256()
+    dtypes={'N':'<i4','Z':'<i2','R':'<f4','y':'<f8','center_index':'<i4'}
+    with np.load(path,allow_pickle=False) as data:
+        for key in ['mol_id','N','Z','R','y','split','center_index']:
+            h.update((key+'\0').encode())
+            values=data[key]
+            h.update(str(tuple(values.shape)).encode())
+            if key in {'mol_id','split'}:
+                for value in values:
+                    encoded=str(value).encode('utf-8')
+                    h.update(len(encoded).to_bytes(8,'little'));h.update(encoded)
+            else:
+                h.update(np.ascontiguousarray(values,dtype=dtypes[key]).tobytes())
+    return h.hexdigest()
 
 
 def split_indices(labels):
@@ -22,6 +41,7 @@ class Molecules(Dataset):
             raise ValueError('Unknown feature mode')
         self.path = Path(path)
         self.sha256 = checksum(self.path)
+        self.content_sha256 = content_fingerprint(self.path)
         with np.load(path, allow_pickle=False) as f:
             self.ids, self.y, self.labels = f['mol_id'].copy(), f['y'].copy(), f['split'].copy()
             n, z, r, centers = f['N'], f['Z'], f['R'], f['center_index']

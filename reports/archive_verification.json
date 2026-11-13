@@ -1,0 +1,144 @@
+{
+  "restoration_exercised": [
+    "checkpoints/dimenet-s1.pt.gz",
+    "artifacts/diagnostics/geometry_diagnostics.csv.gz"
+  ],
+  "artifacts": 73,
+  "storage_parts": 121,
+  "all_parts_in_git_candidates": true,
+  "models": [
+    {
+      "run": "radial-site-s1",
+      "original_state_identical": true,
+      "sha256": "7b908edee291988f03f475a2bc8ff6c8cca05f795b54ff2eb7cac30792993501"
+    },
+    {
+      "run": "radial-site-s2",
+      "original_state_identical": true,
+      "sha256": "8e3869ee176b01264d2c56443ec3347a25cee984228d44effdf09dd5ee80cd36"
+    },
+    {
+      "run": "radial-site-s3",
+      "original_state_identical": true,
+      "sha256": "25badc8c641eadaa7d32056885927b2c6f311dffd74515ce6b28100fdaa36e35"
+    },
+    {
+      "run": "radial-sum-s1",
+      "original_state_identical": true,
+      "sha256": "fecf925623fd02a6f42a6528a7729df3fe83bd6ee6e3f325cd968923a711c53e"
+    },
+    {
+      "run": "radial-sum-s2",
+      "original_state_identical": true,
+      "sha256": "f9ba6b213ddc6597d675ee8be64c846dfc5db8227c79da42f127138c6ba954c1"
+    },
+    {
+      "run": "radial-sum-s3",
+      "original_state_identical": true,
+      "sha256": "b3e9fc623086d94db51449fe6fb1a10c6d1d1c07f3d5a96d8cb0ee0e49f627ca"
+    },
+    {
+      "run": "egnn-sum-s1",
+      "original_state_identical": true,
+      "sha256": "897c3061198910f4ae339bf1706ee42c2492093c8aa05828dee6a5f495734bdb"
+    },
+    {
+      "run": "egnn-sum-s2",
+      "original_state_identical": true,
+      "sha256": "9ab3b18326c2f9ae4d3fd1557e9d512bf1981cb5f660db7d6e7ef8d3a08b9097"
+    },
+    {
+      "run": "egnn-sum-s3",
+      "original_state_identical": true,
+      "sha256": "5c822dc44e29c15e624992e504434d594c6798e5febd5fb06b0a8d5c6c1ef44f"
+    },
+    {
+      "run": "dimenet-s1",
+      "original_state_identical": true,
+      "sha256": "8e7e90ff5f0aba6461bf40a068930df8f2ff78a037addb6c1118dc436c3c99d9"
+    },
+    {
+      "run": "dimenet-s2",
+      "original_state_identical": true,
+      "sha256": "d1e038be67e301dcea12ef47f92275b41550c21e05ce24980f29669a22b8d44f"
+    },
+    {
+      "run": "dimenet-s3",
+      "original_state_identical": true,
+      "sha256": "0697fbf6f25e28d1c13276df79af125849fb8d98c0bdea6d53133fa625a2a0d3"
+    },
+    {
+      "run": "acid-qm-s1",
+      "original_state_identical": true,
+      "sha256": "f32385b997a610ef3ff02e06a3897c0a955794fb575f4a56d011b27535e8e1b9"
+    },
+    {
+      "run": "acid-qm-s2",
+      "original_state_identical": true,
+      "sha256": "ed811b306c34a3180e6921c871f51e5312e817d51961471279b2ef2c49343acd"
+    },
+    {
+      "run": "acid-qm-s3",
+      "original_state_identical": true,
+      "sha256": "95381d63fe9baa73b08b1bdc9281c60b020fb79316f65877fd5d65a314e384d7"
+    },
+    {
+      "run": "scaffold-site-s1",
+      "original_state_identical": true,
+      "sha256": "8fd11ecb52d42f4e8f03d067fc1034c918d11ea67bf70c001ea75adf6065dac4"
+    },
+    {
+      "run": "scaffold-site-s2",
+      "original_state_identical": true,
+      "sha256": "57229aac09f1ddabb1c7c7dc82aea30aee2db7c178d837044013e41cf026089b"
+    },
+    {
+      "run": "scaffold-site-s3",
+      "original_state_identical": true,
+      "sha256": "024633f641b6238aff7c4ff783da4c7f23c78f98cd20b0c178f1402e10ad6855"
+    },
+    {
+      "run": "scaffold-qm-s1",
+      "original_state_identical": true,
+      "sha256": "dbe21c933a66fb9e5d427c42d826c015e95c4951932a0baf4745f9a1ef189d0b"
+    },
+    {
+      "run": "scaffold-qm-s2",
+      "original_state_identical": true,
+      "sha256": "d26ba3ae03ba805cb649fa4a0611433247cc2b78324cc8c8d3401cf082193a88"
+    },
+    {
+      "run": "scaffold-qm-s3",
+      "original_state_identical": true,
+      "sha256": "ca2cf210adb77014d50d05b3929815501b00c137350466eace59f623ec00f6c1"
+    },
+    {
+      "run": "composition-s1",
+      "original_state_identical": true,
+      "sha256": "92171fe86285334417225f6b4a244d2977a8abde36780dd3d3e2f83a1a851727"
+    },
+    {
+      "run": "composition-qm-s1",
+      "original_state_identical": true,
+      "sha256": "b386d530bb97ad5e53da2d149368e8e7c1de9fcfeb898065fa738ba3335497d8"
+    }
+  ],
+  "unlabeled_inference_roundtrip": [
+    {
+      "run": "dimenet-s1",
+      "molecule": "Al_3_M010344",
+      "prediction_delta_kJ_mol": 0.0
+    },
+    {
+      "run": "egnn-sum-s1",
+      "molecule": "Al_3_M010344",
+      "prediction_delta_kJ_mol": 0.0
+    },
+    {
+      "run": "radial-site-s1",
+      "molecule": "Al_3_M010344",
+      "prediction_delta_kJ_mol": 0.0
+    }
+  ],
+  "regression_tests": "....................                                                     [100%]\n20 passed in 2.16s"
+}

@@ -4,6 +4,7 @@ Example: python -m lewis_acidity.train --output runs/radial-site-s1 --device cud
 Test evaluation is a separate command, so monitoring never consumes test labels.
 """
 import argparse
+import gzip
 import json
 import random
 import time
@@ -19,7 +20,11 @@ def move(batch, device): return {k: v.to(device) for k, v in batch.items()}
 
 
 def load_checkpoint(path, device='cpu'):
-    ckpt = torch.load(path, map_location=device, weights_only=True)
+    if str(path).endswith('.gz'):
+        with gzip.open(path,'rb') as stream:
+            ckpt = torch.load(stream, map_location=device, weights_only=True)
+    else:
+        ckpt = torch.load(path, map_location=device, weights_only=True)
     model = build_model(ckpt['model_config']).to(device)
     model.load_state_dict(ckpt['model'])
     model.eval()
@@ -114,6 +119,7 @@ def main():
                 best, best_epoch = mae, epoch
                 torch.save(dict(model=model.state_dict(), model_config=config, mean=mean, scale=scale,
                                 epoch=epoch, validation_mae=mae, data_sha256=dataset.sha256,
+                                data_content_sha256=dataset.content_sha256,
                                 train_ids=dataset.ids[tr].tolist(), validation_ids=dataset.ids[va].tolist(),
                                 feature_mode=args.features, feature_state=dataset.feature_state,
                                 seed=args.seed), args.output/'best.pt')
