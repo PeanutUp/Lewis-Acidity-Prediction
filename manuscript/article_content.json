@@ -1,7 +1,7 @@
 {
   "title": "Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity",
   "authors": "Simin Huang, Shenqi Zong, and Han Chen",
-  "abstract": "Fluoride ion affinity (FIA) prediction depends on molecular representation, chemical coverage and the computational reference level. We compare fixed-geometry message-passing models, descriptor controls and quantum-assisted refinement on all 48,986 FIA49k molecules, using preserved identities, validation-only selection and a separate ligand-scaffold holdout. The lowest mean test MAE among the geometry-only models is 11.21 kJ mol−1, compared with 12.11 kJ mol−1 from released FIA-GNN predictions, whereas learning the DSD-BLYP–PBEh-3c FIA correction achieves 3.29 kJ mol−1 and 3.35 kJ mol−1 under the scaffold holdout. Matched-ligand corrections and frozen-model geometry-source tests delimit these gains: the refinement requires fluoride-adduct calculations, and increased agreement with computed labels does not establish absolute or base-independent Lewis-acidity accuracy.",
+  "abstract": "Predicting fluoride ion affinity (FIA) across diverse Lewis acids requires a balance between molecular information and the cost of obtaining it. We evaluate geometric neural networks, molecular descriptors and quantum-chemical correction models on 48,986 FIA49k molecules, including a separate holdout of ligand-scaffold combinations. DimeNet++ gives a main-test mean absolute error of 11.21 ± 0.27 kJ mol−1 across three training seeds, while a correction to PBEh-3c FIA reduces the error from 23.33 to 3.29 kJ mol−1 and retains an error of 3.35 kJ mol−1 on the scaffold holdout. Matched-ligand comparisons reveal systematic central-element dependence in the reference-method correction, and a frozen-model geometry-source test identifies an additional deployment error, together defining distinct workflows for acid-geometry prediction and adduct-assisted quantum refinement.",
   "blocks": [
     [
       "h",
@@ -10,19 +10,19 @@
     ],
     [
       "p",
-      "Fluoride ion affinity (FIA), the negative enthalpy change for fluoride binding to a Lewis acid, provides a well-defined target for predicting Lewis acidity toward a hard base. It is useful for comparing potential fluoride acceptors, but does not alone determine catalytic activity, the rate of adduct formation or affinity toward another base. Broad p-block FIA datasets now permit learning across many central elements and coordination environments. [1,2] The practical question is which information a prediction workflow must obtain, and whether its added preparation cost is justified by better accuracy on chemically distinct molecules."
+      "Lewis acids participate in bond activation, catalysis and anion recognition, making the prediction of their binding strength a useful objective for molecular design. Fluoride ion affinity (FIA), defined as the negative enthalpy change for binding F− to a Lewis acid, provides a quantitative measure of affinity toward a hard Lewis base. Accurate quantum-chemical FIA calculations have established trends across the p-block, but their use in large-scale screening is limited by the cost of evaluating both the free acid and its fluoride adduct. [1,2] Predictive models can reduce this burden if their molecular inputs and chemical range match the intended screening task."
     ],
     [
       "p",
-      "FIA-GNN established connectivity-based prediction on FIA49k. [1] More recent interpretable models for boron acids obtained strong accuracy by restricting the scaffold space and using chemically informed descriptors. [3] Their results motivate targeted chemical analysis, rather than a general inference that a higher-dimensional representation must be superior. Equivariant feature messages, directional message passing and continuous distance filters offer different inductive biases. [4–6] These architectures can be compared empirically, but their rankings do not identify the physical origin of Lewis acidity. In particular, a network built from interatomic distances can encode angular relationships through its multi-atom geometry; a distance-based model is not a distance-only chemical theory."
+      "The FIA49k dataset extends FIA prediction across central elements, oxidation states and ligand environments. FIA-GNN demonstrated that molecular connectivity supports prediction in this broad chemical space. [1] Complementary work on boron Lewis acids showed that chemically informed descriptors can achieve high accuracy within selected scaffold families and can connect predictions to substituent effects. [3] These approaches address different regimes of chemical diversity. An outstanding question is how much additional information is provided by an optimized acid geometry or by electronic quantities obtained from the same calculation, particularly when the ligand framework changes."
     ],
     [
       "p",
-      "A second source of information is a less expensive quantum-chemical estimate of the target. Δ-learning treats the discrepancy between approximate and higher-level calculations as the supervised quantity. [7] For FIA, this changes the task substantially: a lower-level FIA already contains information about the free acid and the fluoride adduct. A successful correction model is therefore a refinement tool for an existing quantum workflow, whereas a connectivity model can be used before these calculations are available. These input regimes should be evaluated with separate controls."
+      "Geometric neural networks offer several ways to represent an optimized structure. Equivariant feature messages, directional message passing and continuous distance filters incorporate spatial information through different constructions. [4–6] Their predictive performance depends on both representation and optimization, while the molecular distances available to each architecture can also encode angular relationships. A complementary route is Δ-learning, in which a model predicts the difference between an inexpensive quantum calculation and a higher-level reference. [7] For FIA, this route retains the thermochemical information in a lower-level acid–fluoride binding calculation and changes the information available to the learner."
     ],
     [
       "p",
-      "Here we examine representation and reference-level effects under an identity-preserving protocol. The study combines repeated geometric-model training, classical controls, a ligand-scaffold holdout, matched-ligand method corrections and a frozen-model test of geometry-source sensitivity. The contribution is this controlled account of when additional inputs help on FIA49k; it is not a new family of graph networks or a new Δ-learning algorithm. We use one optimized structure per molecule. Explicit learning over conformer ensembles is a separate problem with established benchmarks, [8] and is not claimed here."
+      "Here we compare these routes on FIA49k using fixed molecular identities and validation-based model selection. Repeated geometric-model training establishes the effect of representation and readout, and descriptor controls quantify the contribution of acid electronic information. A separate ligand-scaffold partition tests transfer across structural combinations. We then analyze reference-method corrections at matched ligand identity and evaluate the response of frozen models to a change in geometry source. Together, these experiments relate prediction accuracy to the information required by each workflow."
     ],
     [
       "h",
@@ -32,57 +32,66 @@
     [
       "h",
       2,
-      "Endpoint, geometry and partitions"
+      "Dataset and structural partitions"
     ],
     [
       "p",
-      "The primary endpoint is fia_gas-DSDBLYP, in kJ mol−1, from FIA49k: RI-DSD-BLYP-D3(BJ)/def2-QZVPP single-point calculations on PBEh-3c geometries with the dataset’s thermochemical and reference conventions. [1,11] Solution-phase FIA is a separate endpoint. Versioned target, geometry and released-prediction archives were obtained from Figshare and their published MD5 checksums verified. [11–13] The coordinate converter accepts only the explicitly requested unbound-acid geometry; it never substitutes an optimized fluoride-adduct structure. It retains all 48,986 molecules, all 22 atomic species and the largest 118-atom molecule. The 13 elements serving as accepting centers are a different count from the atom-type vocabulary."
+      "The target is the gas-phase fia_gas-DSDBLYP value from FIA49k, expressed in kJ mol−1. The reference combines RI-DSD-BLYP-D3(BJ)/def2-QZVPP single-point energies with PBEh-3c structures and the published thermochemical and reference conventions. [1,11] Targets, geometries and released FIA-GNN predictions were obtained from the versioned Figshare archives. [11–13] Geometric predictors receive one optimized unbound-acid structure per molecule. The dataset contains 48,986 molecules, 22 atomic species and a maximum of 118 atoms; 13 elements occur as accepting centers. Source checksums, geometry parsing and the complete atom vocabulary are documented in the Supporting Information (SI)."
     ],
     [
       "p",
-      "The primary benchmark retains 32,333 training and 7,001 validation molecules and six published test groups: FIA44k (6,732), CSD (1,200), bimacrocycles (763), four-membered-ring compounds (911), phase-transfer catalysts (15) and additional catalysts (31). No test compound is removed for descriptor failure, atom count or vocabulary mismatch. Exact identifiers, geometries and target arrays are checked before comparing exports. The CSD source also contributes training and validation examples; the CSD test is therefore not a wholly unseen source. The two catalyst groups are case studies with limited sample sizes."
+      "The primary partition contains 32,333 training and 7,001 validation molecules. Six published test groups are evaluated separately: the main FIA44k test (6,732 molecules), CSD compounds (1,200), bimacrocycles (763), four-membered-ring compounds (911), phase-transfer catalysts (15) and additional catalysts (31). All molecules in each group are retained. The CSD source also contributes training and validation compounds, whereas the two small catalyst groups provide individual chemical case studies. Molecular identifiers and reference targets are aligned before calculating any model comparison."
     ],
     [
       "p",
-      "For a separate structural-generalization experiment, the original train, validation and main-test pool of 46,066 molecules is regrouped by ligand structure, excluding the central element from the key. Each cyclic ligand is represented by its generic Bemis–Murcko scaffold; an acyclic ligand uses its generic full graph. The sorted multiset of these ligand representations is hashed with a fixed seed, assigning whole groups to train/validation/test with nominal probabilities 0.70/0.15/0.15. The resulting sizes are 33,460/6,379/6,227 across 12,448 groups. Individual ligands and scaffold components may recur in different combinations; the split holds out complete generic ligand-scaffold multisets, not every individual ligand. Published FIA-GNN predictions are not used as a baseline for this new partition, because their training membership would be incompatible. An exact-ligand-set holdout is also provided in the SI."
+      "A secondary partition groups the original training, validation and main-test pool of 46,066 molecules by ligand structure. The accepting center is removed from the grouping key. Cyclic ligands are represented by generic Bemis–Murcko scaffolds, and acyclic ligands by generic full graphs. The sorted multiset of ligand representations defines a group; a fixed-seed hash assigns whole groups to training, validation and test with nominal probabilities 0.70, 0.15 and 0.15. This produces 33,460/6,379/6,227 molecules across 12,448 groups. The test therefore holds out complete scaffold combinations, while individual components can occur in other combinations. The SI also reports an exact-ligand-set partition. Models used on these secondary partitions are fitted independently."
     ],
     [
       "h",
       2,
-      "Models and input regimes"
+      "Representations, controls and training"
     ],
     [
       "p",
-      "The released FIA-GNN predictions are rescored by Compound identifier without retraining. [13] New histogram-based gradient-boosting (HGB) controls use central-element identity, oxidation number, period, group, ligand count and denticity. Additional inputs are either RDKit 2D descriptors or six unbound-acid PBEh-3c quantities: Mulliken and Löwdin center charges, dipole magnitude, global electrophilicity, and HOMO/LUMO energies. [14,15] Training-only filtering retains 190 varying RDKit descriptors; all molecular SMILES parse in the recorded environment. Nonfinite descriptors remain missing values handled natively by HGB. All HGB comparisons use 1,000 fitted stages, learning rate 0.05, at most 31 leaves, L2 regularization 1 and no internal validation split; stages 100, 400 and 1,000 are compared using the designated validation set only."
+      "The geometric models use trainable atomic-number embeddings and 5.0 Å radius graphs. The EGNN feature-message baseline has seven residual layers of width 128 and retains fixed coordinates, as in the upstream QM9 implementation. [4] The radial-filter model has four width-128 interaction layers, 32 Gaussian radial functions and a cosine cutoff envelope. [6] Its sum readout is compared with a readout concatenating the accepting-center, mean and sum representations. The accepting center follows the archive’s first-atom convention, checked against the recorded central element. DimeNet++ uses four interaction blocks, hidden width 128, interaction width 64, seven spherical and six radial basis functions; its neighbor cap is 118. [5] Full architecture settings are provided in the SI."
     ],
     [
       "p",
-      "Geometric models use trainable atomic-number embeddings and a 5.0 Å radius graph containing bonded and nonbonded neighbors. Ragged batches contain no padded atoms or artificial padding edges. The reconstructed EGNN feature-message baseline has seven width-128 residual layers using pair features and squared distances; coordinates remain fixed, following the upstream QM9 implementation. [4] A radial-filter model has four width-128 interaction layers, 32 Gaussian radial functions and a cosine cutoff envelope, drawing on continuous-filter constructions. [6] Its sum readout is compared with concatenated accepting-center, mean and sum representations. The accepting center follows the archive’s first-atom convention, with its elemental identity checked for every molecule. This check does not independently resolve equivalent atoms of the same element."
+      "Each geometric model is initialized from scratch and trained with AdamW, normalized L1 loss, learning rate 0.001 and weight decay 10−6. Learning rates are reduced after eight epochs without validation improvement, with a maximum of 100 epochs and early-stopping patience of 25 epochs. Batch sizes are 64, except for DimeNet++ (32). The checkpoint with the lowest validation MAE is selected for each of three random seeds. Training-derived normalizers, molecular identities and model settings are stored with each checkpoint."
     ],
     [
       "p",
-      "A fresh PyTorch Geometric DimeNet++ reference uses four interaction blocks, width 128, interaction width 64, basis width 8, output width 256, seven spherical and six radial functions. [5] The neighbor cap is raised to 118, avoiding the library’s default 32-neighbor truncation for this dataset. This reimplementation does not reproduce the legacy TensorFlow training schedule or reuse QM9 weights. All neural models use AdamW, normalized L1 loss, initial learning rate 0.001, weight decay 10−6, validation-plateau learning-rate reduction and a maximum of 100 epochs with patience 25. Batch sizes are 64, or 32 for DimeNet++. Seeds 1, 2 and 3 are reported separately. The checkpoint with lowest validation MAE is frozen before test export; its training IDs, normalizer, configuration and dataset fingerprint are saved."
+      "The composition control uses the radial architecture on a complete graph with all distances set to zero. An acid-QM extension combines the geometric readout with six PBEh-3c acid properties: Mulliken and Löwdin center charges, dipole magnitude, global electrophilicity, and HOMO and LUMO energies. Four numerical chemical metadata fields are included in the same global input. A composition-plus-QM control receives these global quantities without coordinates. Feature imputation and standardization are fitted on training molecules. These extensions test the additional value of electronic information available from the acid calculation."
     ],
     [
       "p",
-      "Two additional controls examine information rather than model names. A composition control uses the same radial model on a complete graph with distances set to zero, removing geometry from both edges and messages. An acid-QM fusion model appends a learned encoding of the six acid electronic descriptors and four numerical metadata fields to the geometric readout; median imputation and standardization are fitted on training records alone. A composition-plus-QM control receives identical global descriptors without coordinates. The latter experiments are identified as an exploratory extension. Acquiring PBEh-3c geometries already entails an acid calculation, so the acid-QM fusion is operationally relevant when those calculations are available; it is not a SMILES-only model."
+      "Classical controls use histogram-based gradient boosting (HGB). Inputs comprise chemical metadata, 190 varying RDKit 2D descriptors, the six acid electronic quantities, or their combinations. [14,15] Metadata encode the central element, oxidation state, period, group, ligand count and denticity. HGB uses learning rate 0.05, at most 31 leaves and L2 regularization 1. Predictions at 100, 400 and 1,000 fitted stages are compared on the designated validation set. Descriptor filtering is based on training data, and nonfinite values are handled as missing inputs. Released FIA-GNN predictions provide a published connectivity-based reference with its original training procedure. [13]"
     ],
     [
       "h",
       2,
-      "Quantum refinement and analysis"
+      "Quantum correction and statistical analysis"
     ],
     [
       "p",
-      "In the separate refinement regime the prediction is FIA_hat(DSD) = FIA(PBEh-3c) + f(x), where f is fitted to FIA(DSD) − FIA(PBEh-3c). The HGB correction receives the lower-level FIA, metadata, RDKit descriptors and the six acid electronic quantities. Controls are raw PBEh-3c FIA, a training-set global mean correction, a training-set center-class mean correction and a metadata-based HGB correction. All models are refitted for the scaffold partition. No DSD-BLYP electronic feature or adduct descriptor is provided to the correction learner; nevertheless, its lower-level FIA requires acid and adduct calculations and carries a higher input cost than the other prediction regimes."
+      "For quantum-assisted refinement, the learned target is the difference between DSD-BLYP and PBEh-3c FIA. The final estimate is"
+    ],
+    [
+      "equation",
+      "\\widehat{\\mathrm{FIA}}_{\\mathrm{DSD}}=\\mathrm{FIA}_{\\mathrm{PBEh\\text{-}3c}}+f_{\\theta}(\\mathbf{x}).",
+      "FIA_hat(DSD) = FIA(PBEh-3c) + fθ(x)."
     ],
     [
       "p",
-      "MAE, RMSE, signed error and pooled R2 = 1 − SSE/SST are computed from identical target vectors. For neural models we report mean and standard deviation across three seeds and, separately, the unweighted prediction ensemble. Paired central-class-stratified bootstrap intervals use 2,000 resamples of fixed test predictions. They describe sensitivity to test composition, not prospective coverage or full training uncertainty. Training wall times are recorded on a shared GPU host and do not establish an isolated architecture-speed ranking. All model, partition and feature variants are retained in the machine-readable reports, including unfavorable results."
+      "The HGB correction receives lower-level FIA, metadata, RDKit descriptors and the acid electronic quantities. Controls comprise raw PBEh-3c FIA, a global mean correction, center-class mean corrections and a metadata-based HGB correction. All correction parameters are learned from training data, and the same stage-selection budget is used throughout. The lower-level FIA requires both acid and fluoride-adduct calculations, whereas the geometric and acid-QM models require the unbound acid alone. This distinction defines two computational input regimes."
     ],
     [
       "p",
-      "To probe deployment sensitivity, the frozen radial-center ensemble is also evaluated with la-GFN2xTB structures, preserving molecule identities, atom ordering, targets and partition labels. Radius graphs are recomputed from the alternate geometry, but weights and normalization remain fixed. This is a geometry-source shift, not a conformer-ensemble calculation or an evaluation of an xTB-trained model. Separate paired acid/adduct diagnostics quantify heavy-atom pair-distance changes after checking atom-count and element-order correspondence. These distances are not deformation energies. Matched-ligand comparisons of reference-method corrections use training examples only, averaging repeated records within each ligand-set/center-class cell before pairing."
+      "MAE, RMSE, signed error and pooled R² are evaluated on identical molecular target vectors. Neural results are reported as the mean and sample standard deviation across training seeds; an unweighted prediction ensemble is evaluated separately. Paired bootstrap intervals use 2,000 resamples stratified by central-atom class. These intervals condition on the fitted weights and preserve the composition of each test group. Matched-ligand method comparisons use training molecules only: repeated records are averaged within each ligand-set/center-class cell before pairing central elements."
+    ],
+    [
+      "p",
+      "Geometry-source sensitivity is measured by substituting GFN2-xTB acid structures for PBEh-3c structures while retaining the frozen radial-center models, target values and molecular identities. Radius graphs are recalculated for the alternate coordinates. This evaluates a change in the input-generation protocol; each molecule still contributes one optimized structure. Explicit conformer-ensemble learning involves a different data representation and aggregation problem. [8] Paired acid/adduct diagnostics in the SI additionally quantify changes in heavy-atom pair distances after checking atom-count and element-order correspondence."
     ],
     [
       "h",
@@ -92,11 +101,15 @@
     [
       "h",
       2,
-      "Representation effects under independent evaluation"
+      "Geometric information improves broad-space prediction"
+    ],
+    [
+      "p",
+      "DimeNet++ gives the lowest mean MAE among the geometric models, 11.21 ± 0.27 kJ mol−1 on the 6,732-molecule main test (Table 1). The EGNN feature-message baseline gives 12.08 ± 0.16, while the radial models give 12.22 and 12.39 with center and sum readouts, respectively. The three-seed DimeNet++ ensemble reduces MAE to 10.29, compared with 12.11 from released FIA-GNN predictions. The paired bootstrap interval for this ensemble difference is −2.06 to −1.59 kJ mol−1. The published connectivity reference and the new geometric models have different optimization histories, so this comparison describes the resulting prediction workflows."
     ],
     [
       "table",
-      "Table 1. Main-test MAE (kJ mol−1; identical 6,732 molecules). Neural values are seed mean ± sample SD; ensembles are listed separately. Input regimes are explicit. FIA-GNN is a released reference, not a matched-budget retraining; HGB controls are fixed-budget comparisons.",
+      "Table 1. Main-test MAE in kJ mol−1. Geometric-model values are three-seed mean ± sample SD; composition controls use one seed. Ensemble errors are calculated from averaged predictions. FIA-GNN uses released predictions.",
       [
         "Model",
         "Inputs",
@@ -105,7 +118,7 @@
       ],
       [
         [
-          "Released FIA-GNN",
+          "FIA-GNN",
           "Connectivity",
           "12.11",
           "—"
@@ -135,13 +148,13 @@
           "—"
         ],
         [
-          "composition control",
+          "Composition control",
           "Composition",
           "28.70",
           "28.70"
         ],
         [
-          "EGNN feature-message baseline",
+          "EGNN feature messages",
           "Acid geometry",
           "12.08 ± 0.16",
           "11.04"
@@ -153,25 +166,25 @@
           "10.29"
         ],
         [
-          "radial filters with sum readout",
+          "Radial, sum readout",
           "Acid geometry",
           "12.39 ± 0.11",
           "11.22"
         ],
         [
-          "radial filters with center readout",
+          "Radial, center readout",
           "Acid geometry",
           "12.22 ± 0.17",
           "11.15"
         ],
         [
-          "composition + acid QM",
-          "Acid QM + composition",
+          "Composition + acid QM",
+          "Composition + QM",
           "20.16",
           "20.16"
         ],
         [
-          "geometry + acid QM",
+          "Geometry + acid QM",
           "Acid geometry + QM",
           "12.18 ± 0.04",
           "11.12"
@@ -180,50 +193,46 @@
     ],
     [
       "p",
-      "The best geometry-only seed mean in this comparison is 11.21 ± 0.27 kJ mol−1 for DimeNet++. The reconstructed EGNN feature-message baseline gives 12.08 ± 0.16, and DimeNet++ gives 11.21 ± 0.27. These results should be compared with the released FIA-GNN MAE of 12.11 as a reference point, rather than attributed solely to architecture: the published model has its own optimization history. All new models were initialized from scratch under the stated common selection protocol. The older sampled-cohort accuracy figures are excluded; the SI documents their identity and metric audit."
-    ],
-    [
-      "p",
-      "Removing geometric information gives a composition-control MAE of 28.70 kJ mol−1. The center-conditioned and sum radial readouts give 12.22 and 12.39, respectively. Adding acid electronic quantities gives 12.18 ± 0.04, compared with 20.16 for its geometry-free control. These comparisons quantify the utility of complete input pipelines. They do not isolate a unique orbital or steric mechanism, and the composition control is deliberately weaker than a connectivity model. Its failure cannot establish that a modern 2D GNN requires 3D coordinates."
+      "The composition control has MAE 28.70 kJ mol−1, showing the value of spatial information within the radial-model comparison (Figure 1a). Acid electronic quantities partly recover this information: composition plus acid QM gives 20.16. Combining acid QM with geometry gives 12.18 ± 0.04, close to the geometric radial model alone. Thus geometry and acid electronic descriptors supply overlapping predictive information in this architecture. The composition control does not contain bond connectivity; the released FIA-GNN results demonstrate the additional information available from a connectivity representation."
     ],
     [
       "figure",
       "representation_and_refinement",
-      "Figure 1. Main-test error by input regime. Left: representation controls with neural seed mean ± SD; the dashed line marks the released FIA-GNN reference. Right: adduct-dependent quantum refinement and its raw and bias-correction controls. Separate panels prevent an equal-cost interpretation of the two regimes."
+      "Figure 1. Main-test prediction errors. (a) Acid-geometry models, with mean MAE ± sample SD across three seeds; the dashed line marks released FIA-GNN predictions. (b) Adduct-dependent quantum correction, compared with raw PBEh-3c FIA and training-derived bias controls. The panels correspond to different computational inputs."
     ],
     [
       "p",
-      "The external groups expose limits obscured by an aggregate score. The published FIA-GNN MAE rises to 24.08 kJ mol−1 for bimacrocycles and 17.93 for four-membered rings. Figure 2 reports the corresponding new model results without pooling these groups into a single favorable total. Central-class results include sample counts and target variance, because an R2 decrease within a narrow target range need not imply an equally large increase in absolute error. In particular, phosphorus-class discrepancies remain descriptive; neither error rankings nor fixed-geometry feature messages demonstrate a failure to represent lone-pair anisotropy."
+      "Errors vary substantially across the published chemical groups (Figure 2). Bimacrocycles remain challenging: released FIA-GNN predictions have MAE 24.08 kJ mol−1, compared with 20.76 for the DimeNet++ ensemble and 19.89 for the acid-QM ensemble. The main-test advantage of DimeNet++ therefore does not yield a uniform ordering across all structural groups. Central-class results in the SI provide sample counts and target variances alongside errors. The catalyst sets, with 15 and 31 compounds, are useful checks of individual examples but give limited precision for population-level comparisons."
     ],
     [
       "figure",
       "external_groups",
-      "Figure 2. Error across the six published test groups. Geometric and acid-QM curves use unweighted three-seed ensembles; FIA-GNN uses released predictions. The adduct-dependent correction is identified separately. Catalyst groups with 15 and 31 molecules support case studies, not precise population rankings; complete seed and paired-bootstrap results are supplied in the SI."
+      "Figure 2. MAE across the six published test groups. Geometric and acid-QM predictions are unweighted three-seed ensembles; FIA-GNN uses released predictions. The acid-plus-adduct correction is shown as a separate input regime. Group sample sizes are indicated below the axis."
     ],
     [
       "h",
       2,
-      "Learning reference-method corrections"
+      "Reference-method correction captures a systematic chemical component"
     ],
     [
       "p",
-      "Raw PBEh-3c FIA has main-test MAE 23.33 kJ mol−1 and signed error -23.04, indicating a substantial offset relative to the dataset’s DSD-BLYP target. A training-only global bias correction reduces MAE to 10.06, and class-specific mean corrections reduce it to 7.15. The metadata correction gives 4.84, while the full descriptor correction gives 3.29 with RMSE 4.49 and R2 0.9965. Thus a large part of the apparent difficulty depends on what lower-level information is already available. These gains are measured against appropriate quantum controls; they are not evidence that the refinement is a faster substitute for a connectivity-only screening model."
+      "Raw PBEh-3c FIA has main-test MAE 23.33 kJ mol−1 and signed error -23.04. A global training-set correction lowers MAE to 10.06; center-class corrections lower it further to 7.15 (Figure 1b). A substantial part of the reference-method discrepancy is therefore shared across molecules and varies with the accepting-center class. The metadata model reaches 4.84, and the full descriptor correction reaches 3.29, with RMSE 4.49 and R² 0.9965. Molecular descriptors improve on the class mean by resolving variation within each coordination environment."
     ],
     [
       "table",
-      "Table 2. Quantum-refinement MAE (kJ mol−1) across the six official test groups. Every row uses lower-level FIA or corrects it; all correction parameters are fitted on training data.",
+      "Table 2. Quantum-correction MAE in kJ mol−1 across the official test groups. All corrections are fitted on training molecules; every row uses lower-level acid-plus-adduct FIA.",
       [
-        "Control/model",
+        "Model",
         "Main",
         "CSD",
         "Bimacro",
         "Ring-4",
-        "PT (15)",
-        "Cat. (31)"
+        "PT",
+        "Catalysts"
       ],
       [
         [
-          "PBEh3c_raw",
+          "Raw PBEh-3c",
           "23.33",
           "26.73",
           "29.76",
@@ -232,7 +241,7 @@
           "14.63"
         ],
         [
-          "PBEh3c_global_bias",
+          "Global correction",
           "10.06",
           "10.67",
           "11.31",
@@ -241,7 +250,7 @@
           "9.74"
         ],
         [
-          "PBEh3c_class_bias",
+          "Center-class correction",
           "7.15",
           "8.41",
           "8.33",
@@ -250,7 +259,7 @@
           "6.82"
         ],
         [
-          "delta_metadata",
+          "Metadata Δ model",
           "4.84",
           "6.94",
           "5.00",
@@ -259,7 +268,7 @@
           "3.21"
         ],
         [
-          "delta_RDKit_LA_QM",
+          "Full descriptor Δ model",
           "3.29",
           "3.77",
           "4.03",
@@ -271,43 +280,47 @@
     ],
     [
       "p",
-      "Class dependence is not solely an artifact of comparing unrelated ligand populations. In 34 training ligand sets shared by P(III) and As(III), the mean DSD-BLYP–PBEh-3c correction is 2.66 kJ mol−1 larger for As(III), with a paired ligand-set bootstrap interval of 0.84–4.62. Corresponding differences for 98 Ge(II)/Sn(II) pairs and 103 Sn(II)/Pb(II) pairs are 6.40 and 6.35 kJ mol−1, respectively. These are changes in computational-method discrepancy at matched ligand identity, not isolated measurements of orbital effects or absolute acid strength. The full declared neighboring-center comparison set, including intervals spanning zero, is retained in Figure 3 and the SI."
+      "The central-element trend persists when ligand identity is controlled (Figure 3). For 34 training ligand sets shared by P(III) and As(III), the DSD-BLYP–PBEh-3c correction is on average 2.66 kJ mol−1 larger for As(III), with a paired bootstrap interval of 0.84–4.62. The corresponding differences are 6.40 kJ mol−1 for 98 Ge(II)/Sn(II) pairs and 6.35 kJ mol−1 for 103 Sn(II)/Pb(II) pairs. Some neighboring-center contrasts have intervals spanning zero. These matched comparisons show that the class dependence is not explained solely by different ligand populations, while remaining descriptive comparisons between computational reference levels."
     ],
     [
       "figure",
       "method_corrections",
-      "Figure 3. Reference-method corrections in training data. Upper: class means of FIA(DSD-BLYP) − FIA(PBEh-3c), with within-class SD. Lower: mean paired differences between neighboring central elements at identical canonical ligand sets; bars are 95% ligand-set bootstrap intervals. Sample sizes are shown, and all declared comparisons are included."
+      "Figure 3. Chemical dependence of the reference-method correction in training data. (a) Center-class means of FIA(DSD-BLYP) − FIA(PBEh-3c), with within-class SD. (b) Paired correction differences between neighboring central elements at identical canonical ligand sets, with 95% ligand-set bootstrap intervals. All nine declared contrasts and their sample sizes are shown."
+    ],
+    [
+      "p",
+      "The full correction remains accurate across the external groups, with MAE 3.77 kJ mol−1 for CSD molecules, 4.03 for bimacrocycles and 3.03 for four-membered rings (Table 2). In these groups, the low-level binding calculation supplies acid/adduct information that is absent from an acid-only representation. The practical benefit is consequently greatest when a PBEh-3c FIA calculation is already available and a more expensive reference-level estimate is required."
     ],
     [
       "h",
       2,
-      "Structural and geometry-source generalization"
+      "Transfer across ligand scaffolds and geometry sources"
     ],
     [
       "p",
-      "On the generic ligand-scaffold multiset holdout, the radial-center model has MAE 12.77 ± 0.13 kJ mol−1; acid-QM fusion gives 12.75 ± 0.03. The independently refitted RDKit control gives 19.10. In the separate quantum-refinement regime, the full correction gives 3.35, versus 7.25 for the class-bias control. This secondary experiment tests transfer across whole generic ligand-scaffold combinations, while maintaining shared individual components and central classes. It does not establish generalization to entirely new elements, every unseen ligand or a new electronic-structure method. Near-neighbor and tautomer relationships are also not eliminated by exact canonical-identity checks alone."
+      "On the secondary ligand-scaffold multiset partition, the radial-center model gives MAE 12.77 ± 0.13 kJ mol−1, compared with 19.10 for the independently fitted RDKit control. Acid-QM fusion gives 12.75 ± 0.03. The quantum correction gives 3.35, versus 7.25 for the center-class correction. These results support transfer across complete ligand-scaffold combinations in the defined partition. Individual scaffold components and central elements remain shared, so this test probes a different generalization problem from prediction for entirely new ligands or elements. DimeNet++ is evaluated on the official partition only."
     ],
     [
       "p",
-      "The frozen radial-center ensemble has main-test MAE 11.15 on PBEh-3c structures and 13.02 after substituting xTB structures (Figure 4). The reference labels are unchanged, so this experiment measures sensitivity of a deployed predictor to its input-generation procedure. It does not evaluate equilibrium conformer populations, and the xTB results must not be presented as the achievable accuracy of a separately trained xTB model. Recording and controlling the geometry source is therefore part of model specification, alongside the split and feature normalizer."
+      "Changing the geometry-generation method produces a distinct source of error. With the radial-center ensemble frozen, substitution of GFN2-xTB acid structures increases main-test MAE from 11.15 to 13.02 kJ mol−1 (Figure 4). The target values and molecular identities are unchanged. The difference therefore measures the consequence of supplying a deployed model with a different structural input distribution. It also shows why geometry provenance belongs in the model specification: a cheaper geometry protocol cannot be assumed to preserve the accuracy measured on the training geometry domain."
     ],
     [
       "figure",
       "geometry_source_shift",
-      "Figure 4. Frozen-model response to a change in geometry source. Blue: radial-center ensemble evaluated on its PBEh-3c input domain. Orange: the same weights evaluated on corresponding GFN2-xTB acid geometries. Molecule IDs, elements, targets and partitions are unchanged. No retraining or conformer pooling is performed."
+      "Figure 4. Geometry-source sensitivity of the frozen radial-center ensemble. Blue bars use PBEh-3c acid geometries; orange bars use corresponding GFN2-xTB geometries with the same model weights and targets. Radius graphs are recalculated for each structure."
     ],
     [
       "h",
       2,
-      "Chemical scope and limitations"
+      "Chemical interpretation and practical scope"
     ],
     [
       "p",
-      "A distorted free acid may bind fluoride differently because of changes in both its internal energy and its interaction with the incoming base. An electronic decomposition would require ΔE_def = E_LA(R_LA in adduct) − E_LA(R_LA free) and ΔE_int = E_adduct(R_adduct) − E_LA(R_LA in adduct) − E_F− at a consistent computational level, plus thermal and reference corrections for an enthalpy. Pair-distance changes or a blocked approach direction cannot substitute for those energies. We therefore describe the original constrained-structure cases as hypotheses and provide their identities, depictions and geometry diagnostics without assigning an uncomputed deformation penalty. Gradient-based coordinate sensitivity, when reported, is a local response of the learned function rather than an additive atomic contribution or causal explanation."
+      "FIA reflects the relative enthalpies of the free acid and the fluoride adduct. Acid geometry can encode preorganization and local coordination, while a lower-level FIA additionally includes the energetic response to binding. This distinction helps explain the different prediction regimes: acid-only models estimate binding from reactant information, whereas the correction model refines an existing binding calculation. Acid/adduct pair-distance changes in the SI quantify structural reorganization, but an energetic decomposition would require consistent calculations of acid deformation, acid–fluoride interaction and thermochemical corrections."
     ],
     [
       "p",
-      "All precision values in this study concern the chosen computational target. A separate FIA benchmark has shown that basis-set diffuseness and anchor-point conventions materially affect calculated FIA accuracy. [9] A surrogate can reproduce systematic reference errors, even when its prediction residual is small. Similarly, recent borane calculations show that relative acid rankings can depend on the probe base. [10] Neither a lower FIA error nor a visually plausible saliency map establishes general catalytic utility. Additional independent reference calculations, explicit conformer sampling and prospective chemical validation would address different limitations from those tested here."
+      "All errors reported here measure agreement with the FIA49k computational reference. Independent FIA benchmarks show that basis-set diffuseness and anchor-point conventions can affect the reference values. [9] Moreover, Lewis-acid rankings can change with the probe base. [10] The present models are therefore appropriate to the stated gas-phase fluoride-binding endpoint; extension to other bases or experimental catalytic behavior requires corresponding validation. Explicit conformer sampling and independent reference calculations would address additional sources of uncertainty beyond the structural and geometry-source tests considered here."
     ],
     [
       "h",
@@ -316,7 +329,7 @@
     ],
     [
       "p",
-      "FIA prediction should be assessed with preserved molecular identities, independent selection partitions and explicit input costs. Across the tested geometric models, complete seed and subgroup results provide a more defensible basis for comparison than sampled-cohort accuracy or a universal architecture ranking. The strongest refinement performance comes from learning a reference-level correction when lower-level acid and adduct calculations are available, and remains strong under the declared ligand-scaffold holdout. Matched-ligand discrepancies and geometry-source sensitivity identify actionable limits for deploying these predictors. They support a choice of workflow appropriate to the information already available, while leaving absolute FIA accuracy and broader Lewis-base or catalytic behavior to independent validation."
+      "The information supplied to an FIA predictor determines both its accuracy and its role in a screening workflow. Geometric models give useful predictions from an optimized acid structure, with DimeNet++ performing best among the representations tested on the official partition. Acid electronic descriptors add little to the tested radial model on average, whereas lower-level acid–adduct binding information enables substantially more accurate reference-level correction. The persistence of this gain across held-out ligand-scaffold combinations, together with the matched-ligand central-element trends, supports quantum refinement as a practical route when low-level FIA is available. Geometry-source sensitivity provides a complementary deployment criterion for acid-only predictors. These results connect model selection to the molecular information available in each screening workflow."
     ]
   ],
   "references": [

@@ -33,6 +33,19 @@ def main():
             target = output / (name + suffix)
             shutil.copy2(ROOT / 'manuscript/review' / target.name, target)
             exports.append(target)
+    for source, name in [('digital_discovery.pdf', 'Digital_Discovery_LaTeX.pdf'),
+                         ('jcim.pdf', 'JCIM_LaTeX.pdf'),
+                         ('supporting_information.pdf', 'Supporting_Information_LaTeX.pdf')]:
+        target = output / name
+        shutil.copy2(ROOT / 'manuscript/compiled' / source, target)
+        exports.append(target)
+    latex_archive = output / 'Lewis_Acidity_LaTeX_Sources.zip'
+    with zipfile.ZipFile(latex_archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+        for path in sorted((ROOT / 'manuscript').rglob('*')):
+            if path.is_file() and (path.suffix in {'.tex', '.bib', '.sty', '.bbl', '.md'}
+                                  or path.parent.name == 'figures' and path.suffix == '.pdf'):
+                z.write(path, str(path.relative_to(ROOT / 'manuscript')))
+    exports.append(latex_archive)
     for source, name in [('reports/comment_response_matrix.csv', 'comment_response_matrix.csv'),
                          ('reports/neural/seed_summary.csv', 'neural_seed_summary.csv'),
                          ('reports/refinement/metrics.csv', 'quantum_refinement_metrics.csv')]:
@@ -42,15 +55,17 @@ def main():
     readme = output / 'README_ZH.txt'
     readme.write_text(f'''Lewis acidity 修订交付 · 2026-11-13
 
-代码：https://github.com/PeanutUp/Lewis-Acidity-Prediction/pull/1
-分支：codex/reliable-fia-benchmark
+代码：https://github.com/PeanutUp/Lewis-Acidity-Prediction
+主分支：master
 本次代码提交：{revision}
 主要工作目录：/data2/hsm/Lewis-Acidity-Prediction
 
-先阅读 Revision_notes_ZH.pdf：含18条PDF批注及逐条处理。
-Digital_Discovery 和 JCIM 为同一研究内容的两份英文初投稿审阅稿；
-Supporting_Information 为补充材料。Word可编辑，PDF已检查排版。
-提供TeX源码和RSC官方模板；本机未编译TeX，审阅件以Word/PDF为准。
+正文请阅读 Digital_Discovery_LaTeX.pdf 或 JCIM_LaTeX.pdf；
+Supporting_Information_LaTeX.pdf 是单独的科学补充材料。
+三份PDF均由LaTeX实际编译。Lewis_Acidity_LaTeX_Sources.zip 可用于Overleaf，
+包含tex、bib、样式文件和矢量图；另保留Word作为可编辑的次要导出。
+正文按正常研究论文组织；18条批注记录单独保留在 Revision_notes_ZH.pdf，
+历史审计保留在 reports/，没有混入投稿正文或科学补充材料。
 
 已完成23次神经模型训练。官方主测试6732分子，几何模型三种子MAE：
 DimeNet++ 11.21±0.27；EGNN 12.08±0.16 kJ/mol。
@@ -73,7 +88,7 @@ ZIP含代码、文稿、图、配置、训练日志、全部新预测及模型�
 没有把私人批注原件上传公开仓库。
 
 投稿前仍需作者确认署名、作者分工、资助及利益冲突，并取得新增归档的持久DOI。
-AI辅助已披露。当前是待作者审核的研究稿，PR保持draft，未合并master或提交期刊。
+AI辅助已披露。本轮按用户要求直接推送主分支，尚未提交期刊。
 ''')
     exports.append(readme)
     raw = subprocess.check_output(['git', 'ls-files', '--cached', '--modified', '--others',
@@ -82,7 +97,7 @@ AI辅助已披露。当前是待作者审核的研究稿，PR保持draft，未�
     # Legacy binary training data and weights are accessible in the original Git
     # history; the archive contains the new frozen artifacts and source paths.
     allowed = {'.py', '.md', '.txt', '.json', '.jsonl', '.csv', '.yaml', '.yml',
-               '.toml', '.ini', '.sh', '.tex', '.svg', '.pdf', '.png', '.docx', '.xlsx'}
+               '.toml', '.ini', '.sh', '.tex', '.bib', '.sty', '.bbl', '.svg', '.pdf', '.png', '.docx', '.xlsx'}
     selected = [p for p in paths if (ROOT / p).suffix in allowed
                 or '.part-' in p or Path(p).name in {'.gitignore', 'LICENSE', 'Makefile'}]
     assert 'manuscript/rsc_official_article_template.tex' in selected

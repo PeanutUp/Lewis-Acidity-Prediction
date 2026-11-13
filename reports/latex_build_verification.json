@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-13",
+  "compiler": "Tectonic 0.17.0",
+  "ACS_class": "Document Class: achemso 2021-01-20 v3.13c Submission to ACS journals",
+  "primary_format": "Native LaTeX, with BibTeX and vector figures",
+  "scientific_SI_excludes_internal_revision_audit": true,
+  "PDFs": [
+    {
+      "file": "manuscript/compiled/digital_discovery.pdf",
+      "pages": 6,
+      "bytes": 124093,
+      "sha256": "346cdcbf58a2ed7bf2f22f3c698dff36456662d016c6ca0ebb42d447aece4498",
+      "unresolved_references": 0,
+      "missing_characters": 0,
+      "overfull_boxes": 0
+    },
+    {
+      "file": "manuscript/compiled/jcim.pdf",
+      "pages": 10,
+      "bytes": 156598,
+      "sha256": "4a9f0b675c0a4d07350571139cfdc9e131fa2670960e3b46df156a9d67a7303e",
+      "unresolved_references": 0,
+      "missing_characters": 0,
+      "overfull_boxes": 0
+    },
+    {
+      "file": "manuscript/compiled/supporting_information.pdf",
+      "pages": 6,
+      "bytes": 41244,
+      "sha256": "551c0d134d3407551ab6768ffb928fc8e6ff95113fa9d83c22650dd253aac234",
+      "unresolved_references": 0,
+      "missing_characters": 0,
+      "overfull_boxes": 0
+    }
+  ],
+  "visual_review": "Main manuscripts, figures and SI table layout inspected; TOC size and long-table column widths corrected"
+}

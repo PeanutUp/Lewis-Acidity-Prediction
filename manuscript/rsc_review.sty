@@ -1,0 +1,39 @@
+%% Review layout adapted from the RSC LaTeX Article Template (RSC, 2016).
+%% The unmodified publisher template is retained alongside this file.
+%% Publisher logos and placeholder DOI/acceptance dates are omitted in this draft.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc_review}[2026/11/13 RSC article review layout]
+\usepackage{extsizes}
+\usepackage[super,sort&compress,comma]{natbib}
+\usepackage[version=3]{mhchem}
+\usepackage[left=1.5cm,right=1.5cm,top=1.785cm,bottom=2cm]{geometry}
+\usepackage{balance,mathptmx,sectsty,graphicx,lastpage}
+\usepackage[format=plain,justification=justified,singlelinecheck=false,font={stretch=1.125,small,sf},labelfont=bf,labelsep=space]{caption}
+\usepackage{float,fancyhdr,array,droidsans,charter}
+\usepackage[T1]{fontenc}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{setspace}
+\usepackage[compact]{titlesec}
+\definecolor{cream}{RGB}{222,217,201}
+\makeatletter
+\renewcommand\LARGE{\@setfontsize\LARGE{15pt}{17}}
+\renewcommand\Large{\@setfontsize\Large{12pt}{14}}
+\renewcommand\large{\@setfontsize\large{10pt}{12}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{7pt}{10}}
+\renewcommand\@biblabel[1]{#1}
+\makeatother
+\renewcommand*\rmdefault{bch}
+\sectionfont{\sffamily\Large}
+\subsectionfont{\normalsize}
+\subsubsectionfont{\bfseries}
+\setstretch{1.125}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titlespacing*{\subsection}{0pt}{12pt}{2pt}
+\setlength{\columnsep}{6.5mm}
+\setlength\bibsep{1pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[LO,RE]{\footnotesize\sffamily Digital Discovery\quad Manuscript}
+\fancyfoot[RO,LE]{\footnotesize\sffamily\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}

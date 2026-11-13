@@ -161,7 +161,8 @@ See `checkpoints/manifest.json` and `artifacts/storage_manifest.json` for exact
 contents and hashes. Prepared data and original run directories remain local
 under `.data/` and `runs/`; regenerate the input arrays with the command above.
 Manuscript sources, figures and journal variants are under `manuscript/`;
-editable documents and rendered review PDFs are in `manuscript/review/`.
+native PDFs are in `manuscript/compiled/`. Optional Word exports are generated
+locally in the ignored `manuscript/review/` directory.
 An immutable archive DOI must be minted before publication.
 
 Regenerate the tables and manuscript from completed run directories with:
@@ -171,11 +172,15 @@ python scripts/evaluate_completed.py
 python -m lewis_acidity.analysis
 python scripts/plot_results.py
 python scripts/build_manuscripts.py
+bash scripts/compile_manuscripts.sh
 ```
 
-The final article generator refuses a partial analysis. Word exports use
-`python-docx`; PDF exports are rendered separately with LibreOffice. See the
-Chinese revision report for the 18 PDF comments and author-only submission fields.
+The article generator refuses a partial analysis. LaTeX is the primary manuscript
+format: the RSC article layout and ACS `achemso` variant share the scientific text,
+BibTeX bibliography and vector figures. `manuscript/compiled/` contains PDFs
+compiled directly with Tectonic. See `manuscript/README.md` for Overleaf and local
+build instructions. Word files are secondary editable exports. Reviewer comments
+and the historical audit are separate from the article and scientific SI.
 
 Data: Sigmund et al., FIA49k, CC BY 4.0,
 [targets](https://doi.org/10.6084/m9.figshare.24635136.v1),

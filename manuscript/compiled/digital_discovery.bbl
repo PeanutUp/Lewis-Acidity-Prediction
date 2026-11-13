@@ -1,0 +1,142 @@
+\providecommand*{\mcitethebibliography}{\thebibliography}
+\csname @ifundefined\endcsname{endmcitethebibliography}
+{\let\endmcitethebibliography\endthebibliography}{}
+\begin{mcitethebibliography}{15}
+\providecommand*{\natexlab}[1]{#1}
+\providecommand*{\mciteSetBstSublistMode}[1]{}
+\providecommand*{\mciteSetBstMaxWidthForm}[2]{}
+\providecommand*{\mciteBstWouldAddEndPuncttrue}
+  {\def\EndOfBibitem{\unskip.}}
+\providecommand*{\mciteBstWouldAddEndPunctfalse}
+  {\let\EndOfBibitem\relax}
+\providecommand*{\mciteSetBstMidEndSepPunct}[3]{}
+\providecommand*{\mciteSetBstSublistLabelBeginEnd}[3]{}
+\providecommand*{\EndOfBibitem}{}
+\mciteSetBstSublistMode{f}
+\mciteSetBstMaxWidthForm{subitem}
+{(\emph{\alph{mcitesubitemcount}})}
+\mciteSetBstSublistLabelBeginEnd{\mcitemaxwidthsubitemform\space}
+{\relax}{\relax}
+
+\bibitem[Sigmund \emph{et~al.}(2024)Sigmund, Sowndarya S.~V., Albers, Erdmann,
+  Paton, and Greb]{sigmund2024fia}
+L.~M. Sigmund, S.~Sowndarya S.~V., A.~Albers, P.~Erdmann, R.~S. Paton and
+  L.~Greb, \emph{Angewandte Chemie International Edition}, 2024, \textbf{63},
+  e202401084\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Erdmann \emph{et~al.}(2020)Erdmann, Leitner, Schwarz, and
+  Greb]{erdmann2020fia}
+P.~Erdmann, J.~Leitner, J.~Schwarz and L.~Greb, \emph{ChemPhysChem}, 2020,
+  \textbf{21}, 987--994\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Fenogli \emph{et~al.}(2025)Fenogli, Grimaud, and
+  Vuilleumier]{fenogli2025boron}
+J.~Fenogli, L.~Grimaud and R.~Vuilleumier, \emph{Digital Discovery}, 2025,
+  \textbf{4}, 3623--3634\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Garcia~Satorras \emph{et~al.}(2021)Garcia~Satorras, Hoogeboom, and
+  Welling]{satorras2021egnn}
+V.~Garcia~Satorras, E.~Hoogeboom and M.~Welling, Proceedings of the 38th
+  International Conference on Machine Learning, 2021, pp. 9323--9332\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Gasteiger \emph{et~al.}(2020)Gasteiger, Giri, Margraf, and
+  G{\"u}nnemann]{gasteiger2020dimenet}
+J.~Gasteiger, S.~Giri, J.~T. Margraf and S.~G{\"u}nnemann, \emph{Fast and
+  Uncertainty-Aware Directional Message Passing for Non-Equilibrium Molecules},
+  arXiv:2011.14115, 2020\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Sch{\"u}tt \emph{et~al.}(2017)Sch{\"u}tt, Kindermans, Sauceda,
+  Chmiela, Tkatchenko, and M{\"u}ller]{schutt2017schnet}
+K.~T. Sch{\"u}tt, P.-J. Kindermans, H.~E. Sauceda, S.~Chmiela, A.~Tkatchenko
+  and K.-R. M{\"u}ller, Advances in Neural Information Processing Systems,
+  2017\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Ramakrishnan \emph{et~al.}(2015)Ramakrishnan, Dral, Rupp, and von
+  Lilienfeld]{ramakrishnan2015delta}
+R.~Ramakrishnan, P.~O. Dral, M.~Rupp and O.~A. von Lilienfeld, \emph{Journal of
+  Chemical Theory and Computation}, 2015, \textbf{11}, 2087--2096\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Sigmund(2024)]{fia49ktargets}
+L.~M. Sigmund, \emph{{FIA49k.csv.gz}}, Figshare, version 1, 2024\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Sigmund(2024)]{fia49kgeometries}
+L.~M. Sigmund, \emph{{FIA49k.zip}}, Figshare, version 1, 2024\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Sigmund(2024)]{fia49kpredictions}
+L.~M. Sigmund, \emph{{FIA49k\_predictions.csv.gz}}, Figshare, version 1,
+  2024\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[{RDKit developers}(2026)]{rdkit}
+{RDKit developers}, \emph{{RDKit}: Open-source cheminformatics}, 2026,
+  \url{https://www.rdkit.org/}, Version 2026.09.2\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Pedregosa \emph{et~al.}(2011)Pedregosa, Varoquaux, Gramfort, Michel,
+  Thirion, Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{pedregosa2011sklearn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot and E.~Duchesnay, \emph{Journal of
+  Machine Learning Research}, 2011, \textbf{12}, 2825--2830\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Zhu \emph{et~al.}(2024)Zhu, Hwang, Adams, Liu, Nan, Stenfors, Du,
+  Chauhan, Wiest, Isayev, Coley, Sun, and Wang]{zhu2024marcel}
+Y.~Zhu, J.~Hwang, K.~Adams, Z.~Liu, B.~Nan, B.~Stenfors, Y.~Du, J.~Chauhan,
+  O.~Wiest, O.~Isayev, C.~W. Coley, Y.~Sun and W.~Wang, International
+  Conference on Learning Representations, 2024\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Lehmann \emph{et~al.}(2025)Lehmann, Balogun, Reimann, and
+  Kaupp]{lehmann2025fia}
+M.~Lehmann, S.~N. Balogun, M.~Reimann and M.~Kaupp, \emph{Chemistry -- A
+  European Journal}, 2025, \textbf{31}, e202404662\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Mahdian \emph{et~al.}(2026)Mahdian, Laasonen, and
+  Farshadfar]{mahdian2026base}
+A.~Mahdian, K.~Laasonen and K.~Farshadfar, \emph{Inorganic Chemistry}, 2026,
+  \textbf{65}, 25557--25566\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\end{mcitethebibliography}

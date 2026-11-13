@@ -6,7 +6,7 @@ C02,1,"本研究采用了 FIA49k 数据集进行机器学习，最终得到了R^
 raw atomic coordinates. Trained from scratch on the FIA49k dataset, our approach achieves state-of-
 the-art accuracy (R2 =0.96, MAE = 7.52 kJ/mol). Comparative analysis highlights two key findings.
 First, 3D-native architectures (EGNN and DimeNet++,R 2 ≥0.94) outperform classical ML base-
-lines (R2 ≈0.92), confirming the necessity of end-to-end geometric learning. Second, the lightweight",已核对原预测、标签和已保存配置；新实验完全独立,Methods; SI original-run audit,原 DimeNet 配置重建为1813训练/105验证/82测试，原EGNN训练清单仍缺失；明确重建假设。新结果只采用官方32333训练、7001验证及六组完整测试。
+lines (R2 ≈0.92), confirming the necessity of end-to-end geometric learning. Second, the lightweight",已核对原预测、标签和已保存配置；新实验完全独立,Methods; reports/original_prediction_cohort_audit.json（内部审计）,原 DimeNet 配置重建为1813训练/105验证/82测试，原EGNN训练清单仍缺失；明确重建假设。新结果只采用官方32333训练、7001验证及六组完整测试。
 C03,1,"1）领域先行工作已存在：Sigmund/Greb/Paton 等 2024 已系统发布 FIA49k 并训练了 FIA-GNN（2D/SMILES 输入）用于 FIA 预测。有该工作珠玉在前，本文应从 “我也预测 FIA”提升为：(i) 3D 端到端几何学习相比 2D 的增益在严格 OOD 评测下成立；(ii) 哪类化学体系必须依赖 3D；(iii) 可解释与失效机理。
 2）标题里的 “Conformation-Aware” 目前证据不足。模型确实使用了 3D 坐标，但全文看起来是每个分子单构象直接回归 FIA；并没有证明模型对“构象集合/构象分布”是 aware 的（例如多构象采样、Boltzmann 加权池化、构象不确定性等）。Action: 把 Conformation-Aware 改为 3D Geometry-Based / Conformation-Dependent。或者：测试下真正的“conformation-aware”，找一组分子，对测试集分子生成 N 个构象（ETKDG/CREST 均可），用 attention / set pooling 聚合构象表征；比较单构象 vs 多构象的性能与不确定性。",,题目、研究问题和泛化实验已重写,Title; Introduction; structural generalization,最终题名为 Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity。只有单一优化结构，不声称多构象学习；新增完整配体骨架组合留出、输入成本控制及几何源敏感性。
 C04,1,"研究结果： EGNN优于DimeNet++及XGBoost，但尚缺少与已有FIA-GNN在相同测试集上的严格比较。
@@ -31,7 +31,7 @@ can block nucleophiles—such as fluoride ions used in measuring Fluoride Ion Af
 approaching the central atom between the rings to form coordination bonds.",删除立体共振说法；结构重组量已经计算，未冒充变形能,Geometry diagnostics; limitations,不再把F-进攻方向受阻直接解释为FIA降低，区分反应焓与反应动力学；提出同层级deformation/interaction分解并补热修正。
 C08,7,最后能否给出宏观结论，什么模型侧重什么内容，适合模拟什么类型的结构,"Dimenet++ becomes significantly poorer than that of EGNN, evidenced by a notably lowerR 2 (with the",已完成六个官方组、配体骨架留出及子组统计,Generalization; SI,按输入成本、适用域、各组样本量和不确定性描述结果；两组催化剂只有15/31个样本。骨架留出重训为径向模型和acid-QM融合，未声称DimeNet已在该划分验证。
 C09,7,"文章中对于""Trivalent Phosphorus Bias""提出了一个假说，但是其无法解释为何VA族元素的预测偏差比IVA族元素更大，以及P原子连接到一个缺电子芳环上时 DimeNet++ 显著高估 FIA 的事实。那么这个不完美的假说在本研究中的意义是什么？如果不能解释，最好在论文中承认并明确说明目前暂时不能解释""Trivalent Phosphorus Bias""。","Trivalent Phosphorus Bias
-Beyond the aforementioned scenarios where both models are inadequate, we observed that DimeNet++",撤回旧物理解释；完整子组统计已归档,Chemical scope and limitations; SI S6/S8/S9; reports/neural/by_class.csv,删去球谐函数不能解析孤对电子和pseudo-repulsion机制。上游QM9 EGNN坐标固定；报告新模型各中心类误差、标签方差、种子与匹配配体方法偏差，不把残差直接解释为孤对电子效应。
+Beyond the aforementioned scenarios where both models are inadequate, we observed that DimeNet++",撤回旧物理解释；完整子组统计已归档,Results and discussion; reports/neural/by_class.csv; reports/original_prediction_cohort_audit.json,删去球谐函数不能解析孤对电子和pseudo-repulsion机制。上游QM9 EGNN坐标固定；报告新模型各中心类误差、标签方差、种子与匹配配体方法偏差，不把残差直接解释为孤对电子效应。
 C10,7,目前问题不大，但是审稿人可能会要求拿出更多证据与推理。,"rameters (≈0.75M vs.≈0.9M). This finding challenges the assumption that explicit angular encoding
 is necessary for this task. The “lighter” EGNN architecture benefits from a dynamic input layer, adapt-",已完成三种子与读出控制，保存参数量和训练日志,Representation comparison,按相同验证选模规则和声明预算比较；DimeNet批量与实现不同，未作普遍架构排名。共享GPU墙钟时间不能证明独立测速优势；删除轻量或动态输入必然更优的结论。
 C11,9,原子大小和键长的比例有些不美观，建议用ChemDraw重新绘制，很方便的,"(d) P_3_ZB016799
@@ -41,7 +41,7 @@ C12,10,论文中提到 EGNN 和 DimeNet++ 均无法准确预测 Transannular Rep
 effect, leading to an overestimation of the FIA in the model predictions.(see Table 5)",完成量化差值校正；新增acid-only电子与几何融合实验,Refinement tier; limitations,不再声称两架构从根本上无法描述跨环/共轭，也不据此否定ML。改为验证适用域，低置信度候选交由量化计算；是否加入电子描述符由受控比较与成本决定。
 C13,10,这是啥？,"P_3_ZT017132 140.55 192.63 213.82
 As_3_ZT018788 106.54 121.54 120.35
-As_3_ZT018778 406.10 —— 258.64",已校正缺值和误差方向；缺失历史原因仍无法确认,SI original case provenance,旧DimeNet横线保留not available，不填零或猜值。As_3_ZT018778旧EGNN为低估147.46 kJ/mol；As_3_ZT018788并非误差超100。未取得缺值对应历史日志，不能断定预处理失败。
+As_3_ZT018778 406.10 —— 258.64",已校正缺值和误差方向；缺失历史原因仍无法确认,reports/original_case_provenance.csv（内部审计）,旧DimeNet横线保留not available，不填零或猜值。As_3_ZT018778旧EGNN为低估147.46 kJ/mol；As_3_ZT018788并非误差超100。未取得缺值对应历史日志，不能断定预处理失败。
 C14,10,"对特殊结构Lewis酸的FIA变化存在物理有机化学概念错误。“steric resonance forms”不是正确的化学概念。不同方向的氟离子配位可能形成不同的配位构型，但不属于共振结构。其次，FIA是Lewis酸与F⁻形成加合物的热力学反应焓指标，而不是氟离子进攻的动力学难易程度。因此，氟离子只能从某一方向进攻，并不能直接证明FIA降低。
 
 建议重新分析这两个分子的FIA异常：比较配位前后中心原子的几何变化、反应物和加合物的相对稳定性，以及笼状结构引起的变形能和位阻排斥。通过计算deformation energy及interaction energy，判断FIA降低究竟来自加合物形成时的几何重组代价，还是加合物中不利的空间相互作用。
@@ -63,4 +63,4 @@ C18,11,"目前的结论能够证明：EGNN预测FIA的效果优于DimeNet++，�
 EGNN虽然没有显式输入键角，但它可以通过多个原子之间的距离关系以及信息传递间接学习角度信息。因此，EGNN预测得更好，并不意味着键角不重要。
 
 DimeNet++表现较差也可能是因为参数没有充分优化，而不是因为显式角度编码本身不适合Lewis酸性预测。","heavy DimeNet++ (R2 ≈0.94). This suggests that Lewis acidity is governed primarily by electro-
-static interactions and steric crowding—properties efficiently captured by pairwise distances—rendering",已撤回距离决定酸性结论并完成受控重训,Abstract; Discussion,距离可隐含角度，坐标消息传递不代表物理运动。新DimeNet++三种子平均误差更低；没有架构调参穷举、物理因果验证或普遍架构结论。
+static interactions and steric crowding—properties efficiently captured by pairwise distances—rendering",已撤回距离决定酸性结论并完成受控重训,Introduction; representation results; chemical interpretation,距离可隐含角度，坐标消息传递不代表物理运动。新DimeNet++三种子平均误差更低；没有架构调参穷举、物理因果验证或普遍架构结论。

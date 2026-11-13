@@ -285,3 +285,7 @@ manuscript/*.pdf
 !/artifacts/predictions/
 !/artifacts/predictions/*.part-*
 !/manuscript/rsc_official_article_template.tex
+/manuscript/compiled/*
+!/manuscript/compiled/*.pdf
+!/manuscript/compiled/*.bbl
+/manuscript/review/

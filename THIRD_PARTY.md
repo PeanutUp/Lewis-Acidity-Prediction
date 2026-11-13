@@ -17,3 +17,16 @@ https://doi.org/10.6084/m9.figshare.24635157.v1,
 https://doi.org/10.6084/m9.figshare.24635187.v1.
 Use the attribution and scientific citation in the manuscript when reusing them.
 Bulk files are downloaded with checksum verification, rather than copied into Git.
+# Manuscript typography and compilation
+
+`manuscript/rsc_official_article_template.tex` retains the Royal Society of
+Chemistry author template and its original copyright notice. `rsc_review.sty`
+adapts the article typography for this manuscript, omitting publisher logos and
+placeholder production metadata. The official author-template guidance is at
+https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/article-templates.
+
+The JCIM source uses the ACS `achemso` class and bibliography support from the TeX
+distribution, maintained at https://github.com/josephwright/achemso under LPPL
+1.3c or later. The class is a compilation dependency rather than copied project
+code. Tectonic 0.17.0 is used for the checked PDFs; local compiler/cache files
+remain outside version control under `work/tex/`.

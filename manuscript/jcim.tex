@@ -1,7 +1,12 @@
-% Review source; Word/PDF exports are rendered and checked. The RSC official template is supplied separately.
-\documentclass[journal=jcisd8,manuscript=article]{achemso}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx,booktabs,hyperref}
+% ACS manuscript class, journal identifier jcisd8.
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[journal=jcisd8,manuscript=article,layout=twocolumn]{achemso}
+\usepackage{amsmath,graphicx,booktabs,tabularx,array}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\emergencystretch=2em
+\setkeys{acs}{articletitle=true,doi=true}
 \title{Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity}
 \author{Simin Huang}
 \email{hsm24@mails.tsinghua.edu.cn}
@@ -12,14 +17,23 @@
 \affiliation{Tanwei College, Tsinghua University, Beijing 100086, China}
 \begin{document}
 \begin{abstract}
-Fluoride ion affinity (FIA) prediction depends on molecular representation, chemical coverage and the computational reference level. We compare fixed-geometry message-passing models, descriptor controls and quantum-assisted refinement on all 48,986 FIA49k molecules, using preserved identities, validation-only selection and a separate ligand-scaffold holdout. The lowest mean test MAE among the geometry-only models is 11.21 kJ mol-1, compared with 12.11 kJ mol-1 from released FIA-GNN predictions, whereas learning the DSD-BLYP--PBEh-3c FIA correction achieves 3.29 kJ mol-1 and 3.35 kJ mol-1 under the scaffold holdout. Matched-ligand corrections and frozen-model geometry-source tests delimit these gains: the refinement requires fluoride-adduct calculations, and increased agreement with computed labels does not establish absolute or base-independent Lewis-acidity accuracy.
+Predicting fluoride ion affinity (FIA) across diverse Lewis acids requires a balance between molecular information and the cost of obtaining it. We evaluate geometric neural networks, molecular descriptors and quantum-chemical correction models on 48,986 FIA49k molecules, including a separate holdout of ligand-scaffold combinations. DimeNet++ gives a main-test mean absolute error of 11.21 $\pm$ 0.27 kJ\,mol$^{-1}$ across three training seeds, while a correction to PBEh-3c FIA reduces the error from 23.33 to 3.29 kJ\,mol$^{-1}$ and retains an error of 3.35 kJ\,mol$^{-1}$ on the scaffold holdout. Matched-ligand comparisons reveal systematic central-element dependence in the reference-method correction, and a frozen-model geometry-source test identifies an additional deployment error, together defining distinct workflows for acid-geometry prediction and adduct-assisted quantum refinement.
 \end{abstract}
 \input{body}
-\section*{Data and software availability}
-Versioned FIA49k data and code: see the complete statements in the Word/PDF manuscript and README. A persistent DOI for the new frozen archive must be supplied before publication.
+\begin{suppinfo}
+Dataset and geometry provenance, partition definitions, neural configurations, seed and ensemble errors, classical controls, paired uncertainty, geometry-source tests and matched-ligand reference-method corrections (PDF).
+\end{suppinfo}
+
 \section*{Conflicts of interest}
-The authors will provide their declaration before submission.
+The authors will supply their declaration before submission.
+
+\section*{Data availability}
+FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 from Figshare. \cite{fia49ktargets,fia49kgeometries,fia49kpredictions} Code, frozen models, complete predictions, split manifests and training configurations are available at \url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}. Source archives and restored artifacts are verified by checksums.
 \section*{Acknowledgements}
-OpenAI Codex assisted with drafting, code inspection, computational experiments and analysis scripts; author review is required.
-\input{references}
+OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.
+
+\bibliography{references}
+\begin{tocentry}
+\includegraphics[width=3.00in]{figures/toc_graphic.pdf}
+\end{tocentry}
 \end{document}

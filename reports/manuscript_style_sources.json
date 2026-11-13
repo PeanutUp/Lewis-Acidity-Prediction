@@ -1,0 +1,21 @@
+{
+  "accessed": "2026-11-13",
+  "purpose": "Research-article organization, result-led narrative, and native journal LaTeX formats",
+  "papers": [
+    {
+      "doi": "10.1039/D5DD00212E",
+      "source": "https://arxiv.org/pdf/2501.01576",
+      "read": "Full preprint, including introduction, results/discussion and conclusion"
+    },
+    {
+      "doi": "10.1021/acs.jcim.5c02079",
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12648658/fullTextXML",
+      "read": "Full-text XML; research-article structure and results/discussion examined"
+    }
+  ],
+  "formats": {
+    "RSC": "Official LaTeX article template, retained verbatim; review style follows its article typography without publisher metadata placeholders",
+    "ACS": "achemso journal=jcisd8, manuscript=article; BibTeX article titles and DOI enabled"
+  },
+  "integration": "Scientific corrections are incorporated into the research narrative; comment-by-comment responses and historical audit remain separate"
+}
