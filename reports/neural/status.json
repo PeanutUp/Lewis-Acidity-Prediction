@@ -1,0 +1,17 @@
+{
+  "partial": true,
+  "available": {
+    "radial-site": 3,
+    "radial-sum": 3,
+    "egnn-sum": 1,
+    "dimenet": 0,
+    "acid-qm": 1,
+    "scaffold-site": 1,
+    "scaffold-qm": 0,
+    "composition": 1,
+    "composition-qm": 0
+  },
+  "uncertainty": "2000 paired, central-class-stratified bootstrap samples of fixed test predictions; not training uncertainty or prospective coverage",
+  "ensembles": "Unweighted mean of all declared seeds; seed mean/SD separately reported",
+  "timing": "Observed epoch wall time on a shared host; no isolated architecture-speed ranking"
+}

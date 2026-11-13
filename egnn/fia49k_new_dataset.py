@@ -17,7 +17,7 @@ class FIA49kNewDataset(Dataset):
     
     def __init__(self, data_path: str, split: str = 'train', 
                  train_ratio: float = 0.8, val_ratio: float = 0.1,
-                 property_name: str = 'fia_gas-DSDBLYP'):
+                 property_name: str = 'fia_gas-DSDBLYP', seed: int = 42):
         """
         初始化数据集
         
@@ -31,9 +31,12 @@ class FIA49kNewDataset(Dataset):
         self.data_path = data_path
         self.split = split
         self.property_name = property_name
+        self.seed = seed
         
         # 加载数据
-        self.data = torch.load(data_path, map_location='cpu')
+        self.data = torch.load(data_path, map_location='cpu', weights_only=True)
+        if self.data.get('target_property', 'fia_gas-DSDBLYP') != property_name:
+            raise ValueError('Requested property differs from stored targets')
         
         # 获取数据统计
         self.n_molecules = len(self.data['targets'])
@@ -50,11 +53,19 @@ class FIA49kNewDataset(Dataset):
     def _split_dataset(self, train_ratio: float, val_ratio: float):
         """分割数据集"""
         n_total = self.n_molecules
+        if not 0 < train_ratio < 1 or not 0 < val_ratio < 1 or train_ratio + val_ratio >= 1:
+            raise ValueError('Invalid split proportions')
+        if 'split_assignments' in self.data:
+            label = 'validate' if self.split == 'val' else self.split
+            self.indices = torch.tensor([i for i, s in enumerate(self.data['split_assignments']) if s == label])
+            if not len(self.indices):
+                raise ValueError(f'No records for explicit split {label}')
+            return
         n_train = int(n_total * train_ratio)
         n_val = int(n_total * val_ratio)
         
         # 随机打乱索引
-        indices = torch.randperm(n_total)
+        indices = torch.randperm(n_total, generator=torch.Generator().manual_seed(self.seed))
         
         if self.split == 'train':
             self.indices = indices[:n_train]
@@ -126,6 +137,7 @@ def collate_fn(batch: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
     for i in range(batch_size):
         n_atoms_i = n_atoms[i].item()
         edge_masks[i, :n_atoms_i, :n_atoms_i] = 1.0
+        edge_masks[i].fill_diagonal_(0)
     
     return {
         'positions': positions,

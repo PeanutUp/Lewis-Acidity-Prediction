@@ -1,0 +1,102 @@
+[
+  {
+    "model": "metadata",
+    "features": [
+      "ca",
+      "denticity_class",
+      "ca_ox_number",
+      "ca_period",
+      "ca_group",
+      "ligand_count"
+    ],
+    "estimator": {
+      "categorical_features": "from_dtype",
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "loss": "squared_error",
+      "max_bins": 255,
+      "max_depth": null,
+      "max_features": 1.0,
+      "max_iter": 1000,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 20,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "quantile": null,
+      "random_state": 20261113,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "candidate_iterations": [
+      100,
+      400,
+      1000
+    ],
+    "validation_mae": {
+      "100": 37.59582368849833,
+      "400": 37.598718489025565,
+      "1000": 37.598636266496214
+    },
+    "selected_iteration": 100,
+    "elapsed_seconds": 2.7313807532191277,
+    "sklearn_version": "1.7.2"
+  },
+  {
+    "model": "metadata_plus_LA_QM",
+    "features": [
+      "ca",
+      "denticity_class",
+      "ca_ox_number",
+      "ca_period",
+      "ca_group",
+      "ligand_count",
+      "la-ca_loewdin_charge-PBEh3c",
+      "la-ca_mulliken_charge-PBEh3c",
+      "la-dipole-PBEh3c",
+      "la-global_electrophilicity-PBEh3c",
+      "la-homo_energy-PBEh3c",
+      "la-lumo_energy-PBEh3c"
+    ],
+    "estimator": {
+      "categorical_features": "from_dtype",
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "loss": "squared_error",
+      "max_bins": 255,
+      "max_depth": null,
+      "max_features": 1.0,
+      "max_iter": 1000,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 20,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "quantile": null,
+      "random_state": 20261113,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "candidate_iterations": [
+      100,
+      400,
+      1000
+    ],
+    "validation_mae": {
+      "100": 25.260206519350664,
+      "400": 23.561380023293715,
+      "1000": 23.026954923986615
+    },
+    "selected_iteration": 1000,
+    "elapsed_seconds": 2.7039399910718203,
+    "sklearn_version": "1.7.2"
+  }
+]

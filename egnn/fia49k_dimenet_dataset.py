@@ -12,7 +12,7 @@ class FIA49kDimeNetDataset(Dataset):
     
     def __init__(self, npz_path: str, split: str = 'train', 
                  num_train: int = 45000, num_valid: int = 2000,
-                 seed: int = 42, max_atoms: int = 100,
+                 seed: int = 42, max_atoms: int = None,
                  fixed_atoms: List[int] = None, atom_order: List[int] = None):
         """
         Args:
@@ -43,6 +43,9 @@ class FIA49kDimeNetDataset(Dataset):
         self.R = self.data['R']  # Coordinates (total_atoms, 3)
         self.Z = self.data['Z']  # Atomic numbers (total_atoms,)
         self.N = self.data['N']  # Num atoms per molecule (num_molecules,)
+        self.max_atoms = int(self.N.max()) if max_atoms is None else max_atoms
+        if int(self.N.max()) > self.max_atoms:
+            raise ValueError('Atom cap would truncate a molecule; increase max_atoms')
         self.ids = self.data['id'] # Molecule IDs (num_molecules,)
         self.targets = self.data['fia_gas-DSDBLYP'] # Targets (num_molecules,)
         
@@ -116,7 +119,7 @@ class FIA49kDimeNetDataset(Dataset):
                 
         self.indices = np.array(valid_indices)
         if dropped_count > 0:
-            print(f"WARNING: Filtered out {dropped_count} molecules containing unknown atoms.")
+            raise ValueError(f'Atom vocabulary excludes {dropped_count} molecules; use the complete vocabulary')
 
     def __len__(self):
         return len(self.indices)
@@ -138,11 +141,7 @@ class FIA49kDimeNetDataset(Dataset):
         
         # Filter if n_atoms > max_atoms (though DimeNet data might not need this if clean)
         if n_atoms > self.max_atoms:
-            # Basic truncation or error - usually better to filter out beforehand
-            # For now, just truncate to keep things running, but warn conceptually
-            n_atoms = self.max_atoms
-            coords = coords[:n_atoms]
-            atoms = atoms[:n_atoms]
+            raise ValueError('Atom truncation is prohibited')
             
         # Prepare tensors with padding
         positions = torch.zeros((self.max_atoms, 3), dtype=torch.float32)

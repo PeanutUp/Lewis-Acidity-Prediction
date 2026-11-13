@@ -1,0 +1,7 @@
+{
+  "n_checked": 48986,
+  "correspondence": "N_adduct=N_acid+1; all preceding Z equal; final Z=9; xTB Z equal",
+  "caveat": "Element-sequence equality checks the archive order convention; identical-element atom permutations cannot be excluded by Z alone.",
+  "quantities": "Pair distances of heavy atoms; reported in Angstrom. Not energies. Not model inputs.",
+  "shell": "All non-H atoms within 2.7 Angstrom of verified central atom; geometric shell, not assigned covalent bonds."
+}

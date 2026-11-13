@@ -1,0 +1,8 @@
+{
+  "experiment": "Frozen-model robustness to xTB vs PBEh-3c geometry, NOT conformer ensembles.\n\nIntentional geometry shift is explicit; identity, element ordering, targets and\npartition labels must remain identical. Model selection/normalization are frozen.\nOnly geometry-only radial-site models are probed, so PBEh electronic descriptors\nare not silently mixed into an alleged low-cost xTB screening workflow.\n",
+  "target": "fia_gas-DSDBLYP unchanged",
+  "retraining": false,
+  "input_geometry": "la-GFN2xTB",
+  "training_geometry": "la-PBEh3c",
+  "interpretation": "Deployment geometry-source shift; not an xTB-trained model, conformer uncertainty, or energy decomposition"
+}

@@ -6,11 +6,13 @@ from .data_container import index_keys
 
 class DataProvider:
     def __init__(self, data_container, ntrain, nvalid, batch_size=1,
-                 seed=None, randomized=False):
+                 seed=None, randomized=False, split_indices=None):
         self.data_container = data_container
         self._ndata = len(data_container)
         self.nsamples = {'train': ntrain, 'val': nvalid, 'test': len(data_container) - ntrain - nvalid}
         self.batch_size = batch_size
+        if batch_size < 1 or ntrain < 1 or nvalid < 1 or ntrain+nvalid >= self._ndata:
+            raise ValueError('Invalid partition sizes or batch size')
 
         # Random state parameter, such that random operations are reproducible if wanted
         self._random_state = np.random.RandomState(seed=seed)
@@ -24,6 +26,12 @@ class DataProvider:
         self.idx = {'train': all_idx[0:ntrain],
                     'val': all_idx[ntrain:ntrain+nvalid],
                     'test': all_idx[ntrain+nvalid:]}
+        if split_indices is not None:
+            self.idx = {k: np.asarray(split_indices[k], dtype=np.int64) for k in ('train', 'val', 'test')}
+            combined = np.concatenate(list(self.idx.values()))
+            if len(np.unique(combined)) != len(combined) or set(combined) != set(range(self._ndata)):
+                raise ValueError('Explicit partitions must be disjoint and cover every record')
+            self.nsamples = {k: len(v) for k, v in self.idx.items()}
 
         # Index for retrieving batches
         self.idx_in_epoch = {'train': 0, 'val': 0, 'test': 0}

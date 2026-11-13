@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lewis-acidity-benchmark"
+version = "0.2.0"
+description = "Reproducible, ID-aligned FIA49k geometry and quantum-refinement benchmarks"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "pandas>=2.2", "torch>=2.6"]
+
+[tool.setuptools.packages.find]
+include = ["lewis_acidity*"]

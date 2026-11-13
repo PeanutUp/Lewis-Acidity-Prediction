@@ -1,0 +1,110 @@
+[
+  {
+    "id": "C01",
+    "page": 1,
+    "comment": "化学上可能不太确切。抛去机器学习本身，影响LA的因素有非常多。直接把模型性能差异解释为Lewis酸性主要由距离依赖相互作用而不是复杂角度特征决定，这个过于武断。目前的数据还无法支持。",
+    "anchor_context_approximate": "architecture with the chemical task: Lewis acidity is driven primarily by distance-dependent interac-\ntions rather than complex angular features. Finally, interpretability analysis confirms that the model"
+  },
+  {
+    "id": "C02",
+    "page": 1,
+    "comment": "本研究采用了 FIA49k 数据集进行机器学习，最终得到了R^2 = 0.96、MAE = 7.52 kJ/mol的准确性。但是这个预测准确性是怎么得到的？研究中设立了训练集之外的测试集、验证集吗？文章中并没有谈论这一点，而如果没有的话，则在 FIA49k 数据集上有过拟合的风险。我个人觉得，在文章中补充上这一点可以使论文结果更加可信。\n",
+    "anchor_context_approximate": "ing strategy, enabling the model to generalize across over 20 element types by learning directly from\nraw atomic coordinates. Trained from scratch on the FIA49k dataset, our approach achieves state-of-\nthe-art accuracy (R2 =0.96, MAE = 7.52 kJ/mol). Comparative analysis highlights two key findings.\nFirst, 3D-native architectures (EGNN and DimeNet++,R 2 ≥0.94) outperform classical ML base-\nlines (R2 ≈0.92), confirming the necessity of end-to-end geometric learning. Second, the lightweight"
+  },
+  {
+    "id": "C03",
+    "page": 1,
+    "comment": "1）领域先行工作已存在：Sigmund/Greb/Paton 等 2024 已系统发布 FIA49k 并训练了 FIA-GNN（2D/SMILES 输入）用于 FIA 预测。有该工作珠玉在前，本文应从 “我也预测 FIA”提升为：(i) 3D 端到端几何学习相比 2D 的增益在严格 OOD 评测下成立；(ii) 哪类化学体系必须依赖 3D；(iii) 可解释与失效机理。\n2）标题里的 “Conformation-Aware” 目前证据不足。模型确实使用了 3D 坐标，但全文看起来是每个分子单构象直接回归 FIA；并没有证明模型对“构象集合/构象分布”是 aware 的（例如多构象采样、Boltzmann 加权池化、构象不确定性等）。Action: 把 Conformation-Aware 改为 3D Geometry-Based / Conformation-Dependent。或者：测试下真正的“conformation-aware”，找一组分子，对测试集分子生成 N 个构象（ETKDG/CREST 均可），用 attention / set pooling 聚合构象表征；比较单构象 vs 多构象的性能与不确定性。",
+    "anchor_context_approximate": ""
+  },
+  {
+    "id": "C04",
+    "page": 1,
+    "comment": "研究结果： EGNN优于DimeNet++及XGBoost，但尚缺少与已有FIA-GNN在相同测试集上的严格比较。\n机器学习： 将3D GNN应用于主族Lewis酸性预测，比较不同几何表征架构的性能；但EGNN、DimeNet++及特征编码均不是新方法，整体属于增量创新。\n化学发现：P(III)等特定元素中心及部分笼状、共轭结构存在异常预测误差，但尚未证明这些误差与孤对电子、共轭效应、位阻或结构重组之间的因果关系。\n可解释性贡献：梯度分析主要表明模型关注Lewis酸中心及邻近原子，尚未揭示新的、可定量验证的Lewis酸性构效关系。\n建议的核心创新方向： 重点回答“3D相比2D究竟改善了哪些Lewis酸的预测，以及为什么”，通过结构分类、消融实验和代表性分子的量子化学分析，将模型性能差异转化为有化学意义的结论。\n\n目前最需要的是【机器学习导出的新化学认识】。",
+    "anchor_context_approximate": "Simin Huang*1, Shenqi Zong1, and Han Chen1\n1Tanwei College, Tsinghua University, Beijing 100086, China"
+  },
+  {
+    "id": "C05",
+    "page": 4,
+    "comment": "qi代表什么？按照正文定义，qi是 nuclear charge，实际上等同于原子序数，而非 Mulliken、AIM、NPA 等部分电荷。\n\n如果使用的是原子序数，应统一符号。同时应通过 ablation study 验证这种编码相比单纯 one-hot encoding 是否确实改善预测性能。\n\n如果使用的是部分电荷，则必须说明计算方法、理论水平及数据来源，并评估使用量子化学计算特征对模型实际预测成本的影响。",
+    "anchor_context_approximate": "where∥denotes vector concatenation, andq i represents the nuclear charge associated with the atom type."
+  },
+  {
+    "id": "C06",
+    "page": 5,
+    "comment": "3.2 里写了 XGBoost 用三类特征：DFT 标量（LUMO、亲电指数、partial charges）+ 3D 物化描述符 + 组合，但 Table 1 只给了 “2D/3D/Combined RDKit descriptors” 的结果。   \n\n要么把“DFT 标量 baseline”删掉，要么把这一组 baseline 的结果补进 Table 1，并说明计算层级与成本。",
+    "anchor_context_approximate": "3.2 Classical Machine Learning Baselines (XGBoost)\nTo establish a performance baseline and validate the necessity of deep geometric learning, we constructed"
+  },
+  {
+    "id": "C07",
+    "page": 7,
+    "comment": "我会有点担心这个解释是不是合适，因为FIA是个热力学概念吧",
+    "anchor_context_approximate": "rigidity of the ring structures often brings certain rings into close spatial proximity. This proximity\ncan block nucleophiles—such as fluoride ions used in measuring Fluoride Ion Affinity (FIA)—from\napproaching the central atom between the rings to form coordination bonds."
+  },
+  {
+    "id": "C08",
+    "page": 7,
+    "comment": "最后能否给出宏观结论，什么模型侧重什么内容，适合模拟什么类型的结构",
+    "anchor_context_approximate": "Dimenet++ becomes significantly poorer than that of EGNN, evidenced by a notably lowerR 2 (with the"
+  },
+  {
+    "id": "C09",
+    "page": 7,
+    "comment": "文章中对于\"Trivalent Phosphorus Bias\"提出了一个假说，但是其无法解释为何VA族元素的预测偏差比IVA族元素更大，以及P原子连接到一个缺电子芳环上时 DimeNet++ 显著高估 FIA 的事实。那么这个不完美的假说在本研究中的意义是什么？如果不能解释，最好在论文中承认并明确说明目前暂时不能解释\"Trivalent Phosphorus Bias\"。",
+    "anchor_context_approximate": "Trivalent Phosphorus Bias\nBeyond the aforementioned scenarios where both models are inadequate, we observed that DimeNet++"
+  },
+  {
+    "id": "C10",
+    "page": 7,
+    "comment": "目前问题不大，但是审稿人可能会要求拿出更多证据与推理。",
+    "anchor_context_approximate": "rameters (≈0.75M vs.≈0.9M). This finding challenges the assumption that explicit angular encoding\nis necessary for this task. The “lighter” EGNN architecture benefits from a dynamic input layer, adapt-"
+  },
+  {
+    "id": "C11",
+    "page": 9,
+    "comment": "原子大小和键长的比例有些不美观，建议用ChemDraw重新绘制，很方便的",
+    "anchor_context_approximate": "(d) P_3_ZB016799\n (e) P_3_ZT026756\nFigure 3: Examples ofTrivalent Phosphorus Bias."
+  },
+  {
+    "id": "C12",
+    "page": 10,
+    "comment": "论文中提到 EGNN 和 DimeNet++ 均无法准确预测 Transannular Repulsion 和 Long-range Conjugation 对 FIA 的影响，那么目前有没有能够准确预测两者的机器学习模型？如果有，能否将其与本研究结合起来，实现出一个更加完备、准确的机器学习模型？如果没有，那能否说明在路易斯酸性预测方面，机器学习根本无法取代 DFT 计算，本研究意义有限？文章对此还应该加以补充相关信息。",
+    "anchor_context_approximate": "However, neither EGNN nor DimeNet++ is able to adequately capture this long-range electron-donating\neffect, leading to an overestimation of the FIA in the model predictions.(see Table 5)"
+  },
+  {
+    "id": "C13",
+    "page": 10,
+    "comment": "这是啥？",
+    "anchor_context_approximate": "P_3_ZT017132 140.55 192.63 213.82\nAs_3_ZT018788 106.54 121.54 120.35\nAs_3_ZT018778 406.10 —— 258.64"
+  },
+  {
+    "id": "C14",
+    "page": 10,
+    "comment": "对特殊结构Lewis酸的FIA变化存在物理有机化学概念错误。“steric resonance forms”不是正确的化学概念。不同方向的氟离子配位可能形成不同的配位构型，但不属于共振结构。其次，FIA是Lewis酸与F⁻形成加合物的热力学反应焓指标，而不是氟离子进攻的动力学难易程度。因此，氟离子只能从某一方向进攻，并不能直接证明FIA降低。\n\n建议重新分析这两个分子的FIA异常：比较配位前后中心原子的几何变化、反应物和加合物的相对稳定性，以及笼状结构引起的变形能和位阻排斥。通过计算deformation energy及interaction energy，判断FIA降低究竟来自加合物形成时的几何重组代价，还是加合物中不利的空间相互作用。\n\n在没有定量证据前，不应将“氟离子进攻受阻”直接作为FIA降低的原因。",
+    "anchor_context_approximate": "tion, reducing the number of accessible steric resonance forms. A similar steric constraint occurs in"
+  },
+  {
+    "id": "C15",
+    "page": 11,
+    "comment": "看受众吧，受众化学的话还是建议补充点化学结论，比如：方法——参数——适用范围——优缺点。\n\n另外，文章对比了 EGNN 和 DimeNet++ 两种模型在预测 FIA 的性能，最终确定 EGNN 在该方面更为准确。那么在论文中测试性能较差的 DimeNet++ 模型的意义何在，甚至由此引出后面 DimeNet++ 对此表现不佳的、难以解释的\"Trivalent Phosphorus Bias\"？可以适当对进行 EGNN 和 DimeNet++ 对比的原因加以说明。",
+    "anchor_context_approximate": "tures yield better results. The coordinate-based EGNN outperformed the angle-aware, parameter-\nheavy DimeNet++ (R2 ≈0.94). This suggests that Lewis acidity is governed primarily by electro-"
+  },
+  {
+    "id": "C16",
+    "page": 11,
+    "comment": "两个化合物的 3_D map 黑色背景放在这里有点突兀、不美观，还有这键也有点太细了。我觉得，把 3_D map 换成 ChemDraw 结构式，或者把键加粗一些，可能会好一些。",
+    "anchor_context_approximate": "(a) B_3_ZT009074\n (b) P_3_ZT017132\nFigure 6: 3_D map of several typical error samples.Three-dimensional coordinates come from the"
+  },
+  {
+    "id": "C17",
+    "page": 11,
+    "comment": "参考文献的格式投稿前再处理",
+    "anchor_context_approximate": "References\n[1] K. N. et al. Yuan. Recent advances in alcl3-promoted organic reactions.Chin. J. Org. Chem.,"
+  },
+  {
+    "id": "C18",
+    "page": 11,
+    "comment": "目前的结论能够证明：EGNN预测FIA的效果优于DimeNet++，但是推导除Lewis酸性主要取决于原子间距离、不需要使用更复杂的角度编码，似乎不充分？\n\n从化学角度，Lewis酸性与配位几何有关。例如，配体的bite angle、中心原子的平面化或锥化，以及F⁻配位前后的结构重组都可能显著影响FIA。\n\nEGNN虽然没有显式输入键角，但它可以通过多个原子之间的距离关系以及信息传递间接学习角度信息。因此，EGNN预测得更好，并不意味着键角不重要。\n\nDimeNet++表现较差也可能是因为参数没有充分优化，而不是因为显式角度编码本身不适合Lewis酸性预测。",
+    "anchor_context_approximate": "heavy DimeNet++ (R2 ≈0.94). This suggests that Lewis acidity is governed primarily by electro-\nstatic interactions and steric crowding—properties efficiently captured by pairwise distances—rendering"
+  }
+]

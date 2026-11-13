@@ -1,0 +1,91 @@
+{
+  "locked_at": "2026-11-13, before evaluating new neural test predictions",
+  "primary_partition": "official FIA49k assignments, all48986 molecules",
+  "primary_endpoint": "fia_gas-DSDBLYP kJ/mol",
+  "fixed_training": {
+    "epochs_max": 100,
+    "early_stop_patience": 25,
+    "batch_size": 64,
+    "dimenet_batch_size": 32,
+    "optimizer": "AdamW",
+    "lr_initial": 0.001,
+    "weight_decay": 1e-06,
+    "selection": "minimum official validation MAE",
+    "lr_schedule": "validation plateau8 factor0.5"
+  },
+  "planned_neural_models": {
+    "radial_site": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "layers": 4,
+      "hidden": 128
+    },
+    "radial_sum": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "layers": 4,
+      "hidden": 128
+    },
+    "egnn_sum": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "layers": 7,
+      "hidden": 128
+    },
+    "dimenet": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "layers": 4,
+      "hidden": 128
+    },
+    "composition_only": {
+      "seeds": [
+        1
+      ],
+      "graph": "complete, no coordinates in messages",
+      "layers": 4,
+      "hidden": 128
+    }
+  },
+  "secondary_partition": "generic ligand-scaffold multiset holdout; train33460 val6379 test6227, allgroups disjoint; same radial site configuration seeds1,2,3",
+  "primary_neural_reporting": "all per-seed results; three-seed mean and SD; unweighted within-model ensemble also reported separately",
+  "claim_limits": "No novel-architecture, ensemble-conformer, exact-old-run, DFT-energy-decomposition, or experimental-validation claim.",
+  "secondary_acid_QM_extension": {
+    "status": "exploratory extension; preregistered here before evaluating any fused-model test predictions",
+    "motivation": "Optimized PBEh-3c acid geometry and acid electronic scalars arise from the same calculation; test complementarity of geometry and electronic descriptors",
+    "model": "radial site readout, hidden128 layers4; six acid PBEh-3c scalars plus four chemical metadata features; no FIA/adduct input",
+    "controls": "same model without coordinates on complete graph, identical global features",
+    "partitions": "official and scaffold, seeds1,2,3 for geometry fusion; seed1 for composition+QM control",
+    "budget": "same100epochs validation-only selection, train-only feature standardization"
+  },
+  "geometry_source_probe": {
+    "status": "exploratory robustness analysis, defined before inspecting source-shift predictions",
+    "models": "three frozen radial-site seeds",
+    "selection": "all six official test groups, no filtering",
+    "shift": "acid la-PBEh3c to acid la-GFN2xTB, same atoms/IDs/targets, recompute radius graph",
+    "prohibited_claims": "not conformer ensembles; not low-cost model accuracy after xTB retraining; no test-based tuning"
+  },
+  "matched_tabular_budget": {
+    "max_stages": 1000,
+    "candidates": [
+      100,
+      400,
+      1000
+    ],
+    "selection": "minimum validation MAE only",
+    "scope": "all main and grouped HGB models use the same stage budget",
+    "history": "initial400-stage reference experiments archived locally; stage extension fixes comparison-budget mismatch, no test-based hyperparameter tuning"
+  }
+}

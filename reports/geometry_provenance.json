@@ -1,0 +1,48 @@
+{
+  "geometry": "la-PBEh3c",
+  "geometry_fallback": false,
+  "center_index_convention": "first atom; checked for every record",
+  "n_molecules": 48986,
+  "total_atoms": 1617147,
+  "max_atoms": 118,
+  "atom_types": [
+    1,
+    5,
+    6,
+    7,
+    8,
+    9,
+    13,
+    14,
+    15,
+    16,
+    17,
+    31,
+    32,
+    33,
+    35,
+    49,
+    50,
+    51,
+    52,
+    53,
+    82,
+    83
+  ],
+  "split_counts": {
+    "train": 32333,
+    "validate": 7001,
+    "test": 6732,
+    "test_2": 1200,
+    "test_4": 911,
+    "test_3": 763,
+    "test_6": 31,
+    "test_5": 15
+  },
+  "input_checksums": {
+    "FIA49k.csv.gz": "ec7120770184d0879b7e077343901ad88921baea1b087133adb7df8f136e411d",
+    "FIA49k_predictions.csv.gz": "df6d42359db9a70eae0070b55749a8299a9c5c0f20cbd0c08a5fcf05b3eea1d6",
+    "FIA49k.zip": "87087d73300d6480c4e36c2e1db1553c265b46fb387e71a0d8469dfdbf2f9c90"
+  },
+  "output_sha256": "d301fa666039627a30dd9481c334b186e704c8da45573b52ed77e268eda28bb2"
+}

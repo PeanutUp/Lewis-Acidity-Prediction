@@ -1,0 +1,11 @@
+{
+  "original_n": 48986,
+  "new_n": 48986,
+  "id_type": "int64",
+  "original_max_atoms": 118,
+  "label_arrays_same_shape": true,
+  "max_target_difference": 0.0,
+  "atom_counts_equal": true,
+  "atomic_numbers_equal": true,
+  "coordinate_max_difference": 0.0
+}

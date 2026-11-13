@@ -166,8 +166,6 @@ cython_debug/
 
 # *.npy
 # *.npz
-*.json
-*.csv
 # *.xlsx
 *.h5
 *.pkl
@@ -186,9 +184,7 @@ egnn/best_predictions_analysis/
 egnn/fia49k_full_converted/
 egnn/fia49k_new_converted/
 egnn/fia49k_new_logs/
-egnn/models/
 egnn/n_body_system/
-egnn/qm9/
 logs/
 
 # Temporary and cache files
@@ -266,3 +262,18 @@ dmypy.json
 .pytype/
 cython_debug/
 site/
+
+# Reproducible runs: small manifests/reports are tracked, bulk data are regenerated.
+.data/
+runs/
+work/
+*.joblib
+*.partial
+
+# Bulk per-molecule exports are included in the reproducibility archive.
+reports/*/*_test*.csv
+reports/*/*_validate.csv
+reports/grouped*/manifest.csv
+reports/geometry_diagnostics.csv
+manuscript/*.docx
+manuscript/*.pdf

@@ -1,0 +1,16 @@
+# Python 3.10; install a PyTorch wheel appropriate to your CUDA/CPU first.
+torch==2.6.0
+numpy==1.26.4
+pandas==2.3.3
+scipy==1.15.3
+scikit-learn==1.7.2
+rdkit==2026.9.2
+matplotlib==3.10.9
+threadpoolctl==3.8.0
+joblib==1.6.0
+pytest==9.2.0
+python-docx==1.2.0
+# Optional DimeNet++ comparison:
+torch-geometric==2.6.1
+# Binary torch-cluster, torch-scatter, torch-sparse wheels must match torch/CUDA.
+# See scripts/install_directional.sh and THIRD_PARTY.md.

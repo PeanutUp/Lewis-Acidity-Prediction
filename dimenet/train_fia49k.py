@@ -56,6 +56,8 @@ def train(config):
     evaluation_interval = config['evaluation_interval']
     save_interval = config['save_interval']
     restart = config['restart']
+    if restart in ('None', 'none', 'null', ''):
+        restart = None
     targets = config['targets']
     comment = config['comment']
     logdir = config['logdir']

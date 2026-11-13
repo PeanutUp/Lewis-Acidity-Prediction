@@ -1,0 +1,19 @@
+{
+  "protocol": "Canonical ligand-set holdout, distinct from the published FIA49k partition.\n\nThe complete disconnected ligand SMILES is canonicalized with stereochemistry;\nthe central element is deliberately excluded from the grouping key. A stable\nseeded SHA256 hash assigns whole groups (70/15/15). Individual ligands may still\nbe shared: this is NOT an unseen-individual-ligand or generic-scaffold split.\nOnly original train/validate/test records enter this secondary experiment;\nthe five external test groups are reserved for the primary benchmark.\n",
+  "grouping": "scaffold",
+  "scaffold_definition": "Sorted multiset of generic Bemis-Murcko ligand scaffolds; generic full ligand graph for acyclic fragments; center excluded",
+  "n_groups": 12448,
+  "largest_group": 1219,
+  "n_molecules": 46066,
+  "n_ligand_sets": 43226,
+  "counts": {
+    "train": 33460,
+    "validate": 6379,
+    "test": 6227
+  },
+  "canonical_acid_cross_partition_records": 0,
+  "individual_ligand_overlap": {
+    "validate": 0.8081203950462454,
+    "test": 0.8458326642042717
+  }
+}

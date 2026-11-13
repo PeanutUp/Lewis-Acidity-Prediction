@@ -1,0 +1,111 @@
+{
+  "rows": 48986,
+  "unique_compounds": 48986,
+  "unique_exact_smiles": 48986,
+  "exact_smiles_crossing_splits": 0,
+  "canonical_identity_audit": "Not performed; exact-string uniqueness is not a chemical leakage test.",
+  "split_counts": {
+    "train": 32333,
+    "validate": 7001,
+    "test": 6732,
+    "test_2": 1200,
+    "test_4": 911,
+    "test_3": 763,
+    "test_6": 31,
+    "test_5": 15
+  },
+  "source_split_counts": {
+    "test": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 0,
+      "fia31_cat": 0,
+      "fia44k": 6732,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    },
+    "test_2": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 1200,
+      "fia31_cat": 0,
+      "fia44k": 0,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    },
+    "test_3": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 0,
+      "fia31_cat": 0,
+      "fia44k": 0,
+      "fia763_bimacro": 763,
+      "fia911_ring4": 0
+    },
+    "test_4": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 0,
+      "fia31_cat": 0,
+      "fia44k": 0,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 911
+    },
+    "test_5": {
+      "fia15_ptcat": 15,
+      "fia2k_csd": 0,
+      "fia31_cat": 0,
+      "fia44k": 0,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    },
+    "test_6": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 0,
+      "fia31_cat": 31,
+      "fia44k": 0,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    },
+    "train": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 920,
+      "fia31_cat": 0,
+      "fia44k": 31413,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    },
+    "validate": {
+      "fia15_ptcat": 0,
+      "fia2k_csd": 269,
+      "fia31_cat": 0,
+      "fia44k": 6732,
+      "fia763_bimacro": 0,
+      "fia911_ring4": 0
+    }
+  },
+  "classes": {
+    "B(III)": 3197,
+    "Si(IV)": 3013,
+    "Ge(IV)": 2977,
+    "Sb(III)": 2824,
+    "Te(IV)": 2810,
+    "Bi(III)": 2774,
+    "Sb(V)": 2571,
+    "Sn(IV)": 2517,
+    "As(V)": 2501,
+    "P(V)": 2472,
+    "Ga(III)": 2406,
+    "As(III)": 2330,
+    "Al(III)": 2215,
+    "Bi(V)": 2182,
+    "In(III)": 2139,
+    "P(III)": 1803,
+    "Si(II)": 1719,
+    "Pb(IV)": 1697,
+    "Ge(II)": 1658,
+    "Sn(II)": 1609,
+    "Pb(II)": 1572
+  },
+  "target_missing": {
+    "fia_gas-DSDBLYP": 0,
+    "fia_solv-DSDBLYP": 0
+  },
+  "provenance": "Figshare v1, DOI 10.6084/m9.figshare.24635136.v1 and 10.6084/m9.figshare.24635187.v1; predictions recomputed, no retraining"
+}

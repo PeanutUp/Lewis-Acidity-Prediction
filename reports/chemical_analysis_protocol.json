@@ -1,0 +1,6 @@
+{
+  "selection": "Training partition only; all available exact canonical ligand sets for the declared neighboring-center pairs",
+  "units": "kJ/mol",
+  "uncertainty": "2000 paired ligand-set bootstrap samples; fixed seed20261113; descriptive, no multiple-testing claim",
+  "interpretation": "Difference between two calculated FIA methods at matched ligand identity; not a causal orbital assignment"
+}

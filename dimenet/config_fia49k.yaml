@@ -35,6 +35,6 @@ decay_steps: 4000000
 batch_size: 32
 evaluation_interval: 1000
 save_interval: 1000
-restart: None
+restart: null
 comment: "fia49k_training"
 targets: ['fia_gas-DSDBLYP']

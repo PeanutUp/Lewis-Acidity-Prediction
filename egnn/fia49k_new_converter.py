@@ -12,35 +12,27 @@ import torch
 from collections import defaultdict
 import argparse
 from tqdm import tqdm
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lewis_acidity.prepare import ATOMIC_NUMBER, SYMBOLS, parse_xyz
 
 def parse_xyz_content(xyz_content):
     """解析XYZ格式的坐标内容"""
-    lines = xyz_content.strip().split('\n')
-    n_atoms = int(lines[0])
-    
-    atoms = []
-    coords = []
-    
-    for i in range(2, 2 + n_atoms):  # 跳过第一行(原子数)和第二行(注释)
-        parts = lines[i].split()
-        if len(parts) >= 4:
-            atom = parts[0]
-            x, y, z = float(parts[1]), float(parts[2]), float(parts[3])
-            atoms.append(atom)
-            coords.append([x, y, z])
-    
-    return atoms, np.array(coords)
+    z, r = parse_xyz(xyz_content)
+    return [SYMBOLS[i] for i in z], r
 
 def get_atomic_number(atom_symbol):
     """获取原子序数"""
-    atomic_numbers = {
-        'H': 1, 'C': 6, 'N': 7, 'O': 8, 'F': 9, 'S': 16, 'Cl': 17, 'Br': 35, 'Al': 13
-    }
-    return atomic_numbers.get(atom_symbol, 0)
+    if atom_symbol not in ATOMIC_NUMBER or ATOMIC_NUMBER[atom_symbol] == 0:
+        raise ValueError(f'Unknown element: {atom_symbol}')
+    return ATOMIC_NUMBER[atom_symbol]
 
-def load_json_coordinates(json_files):
+def load_json_coordinates(json_files, geometry='la-PBEh3c'):
     """加载JSON坐标文件"""
     all_coords = {}
+    if geometry not in {'la-PBEh3c', 'la-GFN2xTB'}:
+        raise ValueError('Only explicitly selected unbound-acid geometries are supported')
     
     for json_file in json_files:
         print(f"Loading coordinates from {json_file}...")
@@ -50,11 +42,15 @@ def load_json_coordinates(json_files):
         for mol_id, mol_data in tqdm(data.items(), desc=f"Processing {json_file}"):
             # 优先使用la-PBEh3c坐标，如果没有则使用其他
             coords_data = None
-            for key in ['la-PBEh3c', 'la-GFN2xTB', 'fa-PBEh3c', 'fa-GFN2xTB']:
+            for key in [geometry]:
                 if key in mol_data:
                     coords_data = mol_data[key]
                     break
             
+            if not coords_data:
+                raise ValueError(f'Missing {geometry} for {mol_id}; fallback prohibited')
+            if mol_id in all_coords:
+                raise ValueError(f'Duplicate geometry ID: {mol_id}')
             if coords_data:
                 try:
                     atoms, coords = parse_xyz_content(coords_data)
@@ -63,8 +59,7 @@ def load_json_coordinates(json_files):
                         'coords': coords
                     }
                 except Exception as e:
-                    print(f"Error parsing {mol_id}: {e}")
-                    continue
+                    raise ValueError(f'Invalid geometry for {mol_id}') from e
     
     return all_coords
 
@@ -95,12 +90,13 @@ def create_one_hot_encoding(atoms_list):
     
     return atom_to_idx, unique_atoms
 
-def process_molecule(mol_id, atoms, coords, properties, atom_to_idx, max_atoms=100):
+def process_molecule(mol_id, atoms, coords, properties, atom_to_idx, max_atoms=118,
+                     target_name='fia_gas-DSDBLYP'):
     """处理单个分子"""
     n_atoms = len(atoms)
     
     if n_atoms > max_atoms:
-        return None  # 跳过过大的分子
+        raise ValueError(f'{mol_id}: {n_atoms} atoms exceed max_atoms={max_atoms}; no silent exclusion')
     
     # 获取原子序数
     atomic_numbers = [get_atomic_number(atom) for atom in atoms]
@@ -125,13 +121,11 @@ def process_molecule(mol_id, atoms, coords, properties, atom_to_idx, max_atoms=1
     
     # 获取性质值
     target_property = None
-    if 'fia_gas-DSDBLYP' in properties.columns:
-        target_property = properties[properties['Compound'] == mol_id]['fia_gas-DSDBLYP'].iloc[0]
-    elif 'fia_gas-PBEh3c' in properties.columns:
-        target_property = properties[properties['Compound'] == mol_id]['fia_gas-PBEh3c'].iloc[0]
+    if target_name in properties.columns:
+        target_property = properties[properties['Compound'] == mol_id][target_name].iloc[0]
     
     if target_property is None or pd.isna(target_property):
-        return None
+        raise ValueError(f'Missing {target_name} for {mol_id}')
     
     return {
         'mol_id': mol_id,
@@ -149,14 +143,17 @@ def main():
                        help='Path to CSV properties file')
     parser.add_argument('--json_files', nargs='+', 
                        default=['ae_datasets/FIA49k_01.json', 'ae_datasets/FIA49k_02.json', 
-                               'ae_datasets/FIA49k_03.json', 'ae_datasets/FIA49k_04.json'],
+                               'ae_datasets/FIA49k_03.json', 'ae_datasets/FIA49k_04.json',
+                               'ae_datasets/FIA49k_05.json'],
                        help='Paths to JSON coordinate files')
     parser.add_argument('--output_dir', type=str, default='fia49k_new_converted',
                        help='Output directory for converted data')
-    parser.add_argument('--max_atoms', type=int, default=100,
+    parser.add_argument('--max_atoms', type=int, default=118,
                        help='Maximum number of atoms per molecule')
     parser.add_argument('--target_property', type=str, default='fia_gas-DSDBLYP',
+                       choices=['fia_gas-DSDBLYP', 'fia_gas-PBEh3c'],
                        help='Target property to predict')
+    parser.add_argument('--geometry', choices=['la-PBEh3c', 'la-GFN2xTB'], default='la-PBEh3c')
     
     args = parser.parse_args()
     
@@ -171,7 +168,9 @@ def main():
     properties_df = load_csv_properties(args.csv_file)
     
     # 2. 加载JSON坐标
-    coords_data = load_json_coordinates(args.json_files)
+    coords_data = load_json_coordinates(args.json_files, args.geometry)
+    if not properties_df.Compound.is_unique or set(coords_data) != set(properties_df.Compound):
+        raise ValueError('Require unique and exactly matching property/geometry IDs; no silent exclusions')
     
     print(f"Loaded coordinates for {len(coords_data)} molecules")
     
@@ -204,7 +203,7 @@ def main():
         
         processed_mol = process_molecule(
             mol_id, atoms, coords, properties_df, 
-            atom_to_idx, args.max_atoms
+            atom_to_idx, args.max_atoms, args.target_property
         )
         
         if processed_mol is not None:
@@ -241,7 +240,9 @@ def main():
         'n_atoms': n_atoms,
         'mol_ids': mol_ids,
         'atom_to_idx': atom_to_idx,
-        'unique_atoms': unique_atoms
+        'unique_atoms': unique_atoms,
+        'target_property': args.target_property,
+        'split_assignments': properties_df.set_index('Compound').loc[mol_ids, 'set_assignment'].tolist()
     }
     
     torch.save(data_dict, os.path.join(args.output_dir, 'fia49k_data.pt'))
