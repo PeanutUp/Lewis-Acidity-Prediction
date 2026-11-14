@@ -1,24 +1,17 @@
 # Lewis Acidity Prediction
 
 Reproducible prediction of gas-phase fluoride ion affinity (FIA) across p-block
-Lewis acids. The original EGNN and TensorFlow DimeNet work is retained in Git
-history and the existing model directories. The revision integrates preparation,
-training, validation, classical controls and chemical analysis into one package.
+Lewis acids, integrating geometry-based neural networks, quantum refinement,
+chemical diagnostics and native LaTeX manuscript sources.
 
-## Scientific status
+## Study and endpoint
 
-The original paper's accuracy figures must not be interpreted as verified held-out
-performance. The committed 2,000-molecule prediction spreadsheets reproduce its
-rounded RMSE values, but the saved DimeNet configuration reconstructs 1,813 of
-those molecules in training, 105 in validation and only 82 in test. The EGNN
-training manifest is missing. See `scripts/audit_original.py` and
-`reports/original_prediction_cohort_audit.json`; the reconstruction assumptions
-are explicit. New runs use the official published partition and saved IDs.
-
-This project uses one optimized geometry per molecule. It does not yet establish
-conformer-ensemble modeling, causal orbital explanations, physical coordinate
-relaxation or experimental accuracy. All new comparisons are to calculated
-`fia_gas-DSDBLYP` labels in kJ/mol.
+The study uses all 48,986 FIA49k molecules and the published gas-phase
+`fia_gas-DSDBLYP` reference in kJ/mol. Official and ligand-scaffold partitions,
+frozen checkpoints, complete predictions and training histories accompany the
+results. Each geometric input is one optimized acid structure. Chemical analyses
+cover ligand denticity, P(III), constrained coordination environments,
+matched-ligand periodic trends and geometry-source sensitivity.
 
 ## Environment
 
@@ -170,7 +163,9 @@ Regenerate the tables and manuscript from completed run directories with:
 ```bash
 python scripts/evaluate_completed.py
 python -m lewis_acidity.analysis
+python -m lewis_acidity.chemistry_insights
 python scripts/plot_results.py
+PYTHONPATH=. python scripts/plot_chemistry.py
 python scripts/build_manuscripts.py
 bash scripts/compile_manuscripts.sh
 ```
@@ -179,8 +174,9 @@ The article generator refuses a partial analysis. LaTeX is the primary manuscrip
 format: the RSC article layout and ACS `achemso` variant share the scientific text,
 BibTeX bibliography and vector figures. `manuscript/compiled/` contains PDFs
 compiled directly with Tectonic. See `manuscript/README.md` for Overleaf and local
-build instructions. Word files are secondary editable exports. Reviewer comments
-and the historical audit are separate from the article and scientific SI.
+build instructions. Word files are secondary editable exports. Install `cairosvg` to rebuild the
+chemical structure drawings from released SMILES. Chemical diagnostic tables
+and source definitions are in `reports/chemistry/`.
 
 Data: Sigmund et al., FIA49k, CC BY 4.0,
 [targets](https://doi.org/10.6084/m9.figshare.24635136.v1),
@@ -188,3 +184,15 @@ Data: Sigmund et al., FIA49k, CC BY 4.0,
 [released predictions](https://doi.org/10.6084/m9.figshare.24635187.v1).
 Scientific reference: Sigmund et al., *Angew. Chem. Int. Ed.* 2024, 63, e202401084,
 [doi:10.1002/anie.202401084](https://doi.org/10.1002/anie.202401084).
+
+
+## Writing and figure review resources
+
+Manuscript organization, evidence checks and figure review consulted the
+scientific-writing, scientific-critical-thinking and scientific-visualization
+guidance from [Scientific Agent Skills](https://github.com/K-Dense-AI/scientific-agent-skills).
+Reference: T. Kassis, V. Agarwal, Y. He, D. Patel and A. M. Brueckner,
+*Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*,
+arXiv (2026), [doi:10.48550/arXiv.2609.00065](https://doi.org/10.48550/arXiv.2609.00065).
+These resources support editing and review; numerical results come from the
+versioned computational records in this repository.

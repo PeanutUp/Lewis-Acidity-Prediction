@@ -8,10 +8,11 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
 \emergencystretch=2em
+\renewcommand{\thefigure}{S\arabic{figure}}
 \begin{document}
 \begin{center}
 {\LARGE Supporting Information}\\[8pt]
-{\large Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity}\\[6pt]
+{\large Coordination Constraints and Information Content in Predicting Lewis Acidity}\\[6pt]
 Simin Huang, Shenqi Zong, and Han Chen\\
 Tanwei College, Tsinghua University, Beijing 100086, China
 \end{center}
@@ -62,9 +63,9 @@ Generic ligand-scaffold multiset: 12,448 groups containing 46,066 molecules, ass
 
 Exact complete ligand set: 43,226 groups containing 46,066 molecules, assigned as 32,184 training, 6,899 validation and 6,983 test records. Individual-ligand overlap with training is 81.1\% in validation and 80.3\% in test.
 
-Canonical acid identity auditing found zero records crossing partitions under the defined RDKit canonicalization. This does not prove the absence of related ligand families, tautomeric relationships, protonation variants or near-duplicate geometry. The full canonical grouping keys and original/reassigned molecule identities are included in the machine-readable manifests. Generic scaffold keys retain the multiset of ligand scaffolds; an individual scaffold may recur in a different multiset.
+Canonical acid identity checking found zero records crossing partitions under the defined RDKit canonicalization. The full canonical grouping keys and molecule identities are included in the machine-readable manifests. Generic scaffold keys retain the multiset of ligand scaffolds; an individual scaffold may recur in a different multiset. Related ligand families and other chemical relationships can consequently span these partitions.
 
-The regression suite checks disjoint and reproducible legacy splits; strict prediction identity and target matching; malformed geometries and unknown elements; rotation, translation and permutation invariance; independent batching; exact checkpoint restoration; train-only target normalization; train-only electronic-feature standardization and source fingerprint validation; and deterministic ligand grouping. The validation record accompanies the code. Tests of geometric invariance cover the new invariant models; they are not a proof of physical causality.
+Regression checks cover reproducible disjoint splits, prediction identities and targets, strict geometry parsing, geometric invariance, independent batching, exact checkpoint restoration, training-derived preprocessing, source fingerprints and deterministic ligand grouping. The validation record accompanies the code.
 
 \section*{S3. Neural configurations and seed-level test results}
 
@@ -103,7 +104,7 @@ composition-qm-s1 & 413,061 & 64 & 39 & 19.732 & 20.155 & 29.017 \\
 \end{longtable}
 }
 
-Scaffold runs use their separate scaffold test, not the official main test. All errors are kJ/mol. An unweighted ensemble and a seed-average MAE are different estimands and are reported separately. Runtime is observed shared-host epoch wall time, not an isolated speed comparison. CUDA index\_\allowbreak{}add may produce nondeterministic rounding even with fixed RNG seeds. Full configurations, data fingerprints and history logs accompany each checkpoint.
+Scaffold runs report their respective scaffold test. All errors are kJ/mol. Ensemble and seed-average MAEs are reported separately. Runtime records describe observed shared-host epoch wall time. CUDA index\_\allowbreak{}add may produce nondeterministic rounding with fixed RNG seeds. Full configurations, data fingerprints and history logs accompany each checkpoint.
 
 \section*{S4. Neural ensemble errors across partitions}
 
@@ -405,4 +406,190 @@ The correction is FIA(DSD-BLYP) minus FIA(PBEh-3c), in kJ/mol. Comparisons use o
 \section*{S9. Reproduction and provenance}
 
 README.md gives the preparation, training, evaluation and analysis commands. reports/experiment\_\allowbreak{}plan.json distinguishes the initial fixed comparisons from exploratory acid-QM and geometry-source extensions. requirements-benchmark.txt and run configurations record the software environment; THIRD\_\allowbreak{}PARTY.md records upstream code commits and licenses. A frozen archive contains split identities, all prediction exports, histories and checkpoints, together with a checksum manifest. The storage manifest provides SHA256 verification for each restored file.
+
+\section*{S10. Chemical environments and paired-structure analysis}
+
+Chemical subgroup analyses are exploratory evaluations of frozen models on all 6,732 main-test molecules. Bins use training-set percentiles. The binding-induced heavy-atom pair-distance RMS thresholds are 0.278968, 0.532265, 0.837720, 1.173082 Å. The PBEh-3c/GFN2-xTB geometry-disagreement thresholds are 0.127501, 0.226552, 0.386364 Å. Intervals use 2,000 central-class-stratified molecule bootstrap samples with seed 20261114 and fixed fitted models.
+
+All main-test molecules by ligand denticity
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endfirsthead
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endhead
+bi & FIA-GNN & 2610 & 10.646 & 10.264 & 11.059 \\
+bi & DimeNet++ & 2610 & 8.873 & 8.535 & 9.221 \\
+bi & Refinement & 2610 & 3.022 & 2.930 & 3.124 \\
+bi & 3D gain over FIA-GNN & 2610 & 1.773 & 1.456 & 2.107 \\
+mono & FIA-GNN & 2247 & 10.511 & 10.126 & 10.917 \\
+mono & DimeNet++ & 2247 & 9.070 & 8.729 & 9.403 \\
+mono & Refinement & 2247 & 3.354 & 3.235 & 3.489 \\
+mono & 3D gain over FIA-GNN & 2247 & 1.441 & 1.120 & 1.794 \\
+tri & FIA-GNN & 1875 & 16.071 & 15.132 & 17.038 \\
+tri & DimeNet++ & 1875 & 13.718 & 12.912 & 14.587 \\
+tri & Refinement & 1875 & 3.584 & 3.434 & 3.741 \\
+tri & 3D gain over FIA-GNN & 1875 & 2.353 & 1.768 & 2.943 \\
+\bottomrule
+\end{longtable}
+}
+
+P(III) by ligand denticity
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endfirsthead
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endhead
+bi & FIA-GNN & 83 & 21.010 & 17.089 & 25.895 \\
+bi & DimeNet++ & 83 & 17.978 & 14.447 & 22.138 \\
+bi & Refinement & 83 & 3.599 & 2.945 & 4.317 \\
+bi & 3D gain over FIA-GNN & 83 & 3.031 & 0.115 & 6.003 \\
+mono & FIA-GNN & 59 & 16.356 & 12.476 & 20.562 \\
+mono & DimeNet++ & 59 & 18.766 & 15.038 & 22.482 \\
+mono & Refinement & 59 & 2.619 & 2.074 & 3.217 \\
+mono & 3D gain over FIA-GNN & 59 & -2.410 & -5.820 & 0.750 \\
+tri & FIA-GNN & 77 & 20.544 & 15.421 & 26.455 \\
+tri & DimeNet++ & 77 & 15.970 & 11.875 & 20.561 \\
+tri & Refinement & 77 & 3.890 & 3.197 & 4.622 \\
+tri & 3D gain over FIA-GNN & 77 & 4.574 & 0.903 & 8.308 \\
+\bottomrule
+\end{longtable}
+}
+
+P(III) by training-defined angle-sum quartile
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endfirsthead
+\toprule
+Group & Model / contrast & n & MAE / gain & 95\% lower & 95\% upper \\ \midrule
+\endhead
+Q4 & FIA-GNN & 44 & 21.906 & 13.952 & 31.227 \\
+Q4 & DimeNet++ & 44 & 20.186 & 14.239 & 26.796 \\
+Q4 & Refinement & 44 & 3.129 & 2.397 & 3.913 \\
+Q4 & 3D gain over FIA-GNN & 44 & 1.720 & -3.458 & 7.080 \\
+Q1 & FIA-GNN & 66 & 21.592 & 16.529 & 27.110 \\
+Q1 & DimeNet++ & 66 & 17.945 & 13.746 & 22.957 \\
+Q1 & Refinement & 66 & 3.521 & 2.780 & 4.367 \\
+Q1 & 3D gain over FIA-GNN & 66 & 3.647 & 0.303 & 6.897 \\
+Q2 & FIA-GNN & 66 & 16.690 & 13.312 & 20.444 \\
+Q2 & DimeNet++ & 66 & 14.887 & 11.514 & 18.331 \\
+Q2 & Refinement & 66 & 3.075 & 2.513 & 3.714 \\
+Q2 & 3D gain over FIA-GNN & 66 & 1.802 & -0.966 & 4.527 \\
+Q3 & FIA-GNN & 43 & 18.609 & 14.529 & 23.061 \\
+Q3 & DimeNet++ & 43 & 17.999 & 13.426 & 23.672 \\
+Q3 & Refinement & 43 & 4.182 & 3.206 & 5.257 \\
+Q3 & 3D gain over FIA-GNN & 43 & 0.610 & -4.098 & 4.988 \\
+\bottomrule
+\end{longtable}
+}
+
+Gain is FIA-GNN absolute error minus DimeNet++ absolute error on the same molecules. Positive values favor the geometric predictor. Local geometry is represented by the sum of three first-shell interligand angles; P(III) quartile thresholds are 291.6494, 295.6974, 300.1256 degrees. First-shell assignments match the reported element composition with the nearest atoms of each element. Across 19,691 three-coordinate structures, the maximum assigned distance divided by the sum of covalent radii is 1.1924. Assigned atom indices and geometry descriptors are regenerated by lewis\_\allowbreak{}acidity.chemistry\_\allowbreak{}insights.
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
+\toprule
+Center & n & DimeNet++ & EGNN & Acid QM & Refinement \\ \midrule
+\endfirsthead
+\toprule
+Center & n & DimeNet++ & EGNN & Acid QM & Refinement \\ \midrule
+\endhead
+Al(III) & 325 & 7.183 & 8.022 & 7.828 & 2.672 \\
+As(III) & 339 & 12.509 & 11.764 & 13.172 & 3.978 \\
+As(V) & 363 & 11.216 & 12.436 & 13.283 & 3.910 \\
+B(III) & 428 & 11.984 & 13.102 & 13.356 & 3.051 \\
+Bi(III) & 383 & 9.256 & 9.920 & 9.179 & 3.223 \\
+Bi(V) & 314 & 10.766 & 11.125 & 11.500 & 4.378 \\
+Ga(III) & 331 & 7.761 & 8.464 & 8.867 & 2.629 \\
+Ge(II) & 221 & 7.087 & 7.482 & 6.820 & 2.349 \\
+Ge(IV) & 400 & 10.392 & 11.184 & 12.020 & 3.377 \\
+In(III) & 285 & 7.312 & 8.022 & 7.478 & 2.785 \\
+P(III) & 219 & 17.484 & 17.544 & 17.759 & 3.438 \\
+P(V) & 323 & 14.079 & 16.312 & 16.127 & 4.684 \\
+Pb(II) & 235 & 6.068 & 6.578 & 5.625 & 2.377 \\
+Pb(IV) & 244 & 10.489 & 10.532 & 11.128 & 3.461 \\
+Sb(III) & 408 & 9.022 & 10.309 & 9.914 & 2.905 \\
+Sb(V) & 343 & 10.935 & 11.797 & 12.133 & 3.529 \\
+Si(II) & 244 & 7.493 & 7.793 & 7.776 & 2.361 \\
+Si(IV) & 393 & 12.865 & 13.213 & 13.787 & 3.497 \\
+Sn(II) & 228 & 5.684 & 5.851 & 5.067 & 2.245 \\
+Sn(IV) & 321 & 10.479 & 11.947 & 12.187 & 3.587 \\
+Te(IV) & 385 & 12.589 & 13.977 & 13.277 & 3.581 \\
+\bottomrule
+\end{longtable}
+}
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.310\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}@{}}
+\toprule
+Source percentile & n & MAE increase & 95\% lower & 95\% upper \\ \midrule
+\endfirsthead
+\toprule
+Source percentile & n & MAE increase & 95\% lower & 95\% upper \\ \midrule
+\endhead
+P0--50 & 3378.0 & 1.045 & 0.867 & 1.232 \\
+P50--75 & 1623.0 & 1.882 & 1.531 & 2.244 \\
+P75--90 & 1028.0 & 2.486 & 1.934 & 3.088 \\
+P90--100 & 703.0 & 4.915 & 3.963 & 5.852 \\
+\bottomrule
+\end{longtable}
+}
+
+Giving each of the 21 center classes equal weight yields geometry-source penalties of 1.679 kJ/mol below the training upper-decile threshold and 3.761 kJ/mol above it. Paired-geometry disagreement is evaluated where both protocols are available. The source-change experiment retains PBEh-trained weights; independent xTB-domain training is a separate modeling task.
+
+\section*{S11. Relationship to contemporary studies}
+
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.160\textwidth}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.280\textwidth}@{}}
+\toprule
+Study & Endpoint and domain & Molecular information & Contribution and relationship \\ \midrule
+\endfirsthead
+\toprule
+Study & Endpoint and domain & Molecular information & Contribution and relationship \\ \midrule
+\endhead
+Sigmund et al. \cite{sigmund2024fia} & Gas/solution FIA; 48,986 p-block acids & Connectivity and chemical metadata & FIA49k and broad FIA-GNN prediction. Released predictions provide the same-molecule reference in the present work. \\
+Fenogli et al. \cite{fenogli2025boron} & FIA; 594 boron acids in four scaffold families & Quantum, substituent-based and cheminformatics descriptors & Interpretable substituent design rules in focused chemical spaces. The present study evaluates broad p-block coordination classes and ligand-combination transfer. \\
+Kirsch et al. \cite{kirsch2025pnictogen} & FIA and electronic/steric properties; 16 pincer frameworks and four pnictogens & Quantum-chemical structures and electronic analysis & Geometry and ligand-dependent pnictogen chemistry. The present analysis examines predictive information across the broader FIA49k population. \\
+Mahdian et al. \cite{mahdian2026base} & 3,927 adduct free energies; 816 boranes and five bases & DFT and chemically informed descriptors & Quantifies substituent effects and base-dependent acidity rankings. The present target is gas-phase fluoride-binding enthalpy. \\
+Bhattacharya et al. \cite{bhattacharya2026proton} & Gas-phase proton affinities; experimental and DFT references & PM7 binding estimates, electronic and cheminformatics descriptors & Multi-fidelity correction and prospective screening. The present work applies established correction learning to FIA and resolves coordination, central-element and geometry-source dependence. \\
+\bottomrule
+\end{longtable}
+}
+
+These studies use different chemical populations, reference methods and endpoints. Their reported errors are interpreted within those settings. Direct numerical comparisons here use released FIA-GNN predictions aligned to the identical FIA49k test molecules; the acid-plus-adduct refinement is reported as a separate computational input regime. $\Delta$-learning follows the established formulation. \cite{ramakrishnan2015delta}
+
+\clearpage\section*{S12. External test groups}
+\begin{figure}[ht]\centering
+\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/external_groups.pdf}
+\caption{Ensemble MAE across all published test groups. The final row uses acid-plus-adduct quantum input; the other neural rows use optimized acid input.}
+\end{figure}
+
+\clearpage\section*{S13. Pnictogen-center comparison}
+\begin{figure}[ht]\centering
+\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/pnictogen_prediction.pdf}
+\caption{Main-test class MAE for frozen ensembles and the quantum correction, with sample counts. Full 21-class exports accompany the code.}
+\end{figure}
+
+\clearpage\section*{S14. Molecular structure atlas}
+\begin{figure}[ht]\centering
+\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/chemical_structure_atlas.pdf}
+\caption{Nine chemically diverse FIA49k structures redrawn from released SMILES, with reference FIA, first-shell angle sum and partition membership. Training structures are illustrations; their fitted predictions are omitted.}
+\end{figure}
+
+\clearpage\section*{S15. Geometry-source overview}
+\begin{figure}[ht]\centering
+\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/geometry_source_shift.pdf}
+\caption{Frozen radial-ensemble errors for all six official test groups with PBEh-3c and GFN2-xTB acid coordinates.}
+\end{figure}
+
+\clearpage\bibliographystyle{unsrt}\bibliography{references}
 \end{document}

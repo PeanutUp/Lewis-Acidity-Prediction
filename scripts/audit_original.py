@@ -40,7 +40,8 @@ def main():
             reconstructed_saved_dimenet_membership=pd.Series([membership[i] for i in frame.mol_id]).value_counts().to_dict(),
             max_label_rounding_difference=float(max(abs(meta.loc[frame.mol_id,'fia_gas-DSDBLYP'].to_numpy()-frame.true_value))),
             caveat='DimeNet membership reconstructed from saved config and verified NPZ ordering; EGNN membership remains unknown'))
-    (ROOT/'reports/original_prediction_cohort_audit.json').write_text(json.dumps(records, indent=2)+'\n')
+    (ROOT/'work/original_review').mkdir(parents=True, exist_ok=True)
+    (ROOT/'work/original_review/original_prediction_cohort_audit.json').write_text(json.dumps(records, indent=2)+'\n')
     print(json.dumps(records, indent=2))
 
 

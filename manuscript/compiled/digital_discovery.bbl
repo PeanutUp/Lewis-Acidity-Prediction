@@ -1,7 +1,7 @@
 \providecommand*{\mcitethebibliography}{\thebibliography}
 \csname @ifundefined\endcsname{endmcitethebibliography}
 {\let\endmcitethebibliography\endthebibliography}{}
-\begin{mcitethebibliography}{15}
+\begin{mcitethebibliography}{17}
 \providecommand*{\natexlab}[1]{#1}
 \providecommand*{\mciteSetBstSublistMode}[1]{}
 \providecommand*{\mciteSetBstMaxWidthForm}[2]{}
@@ -43,6 +43,22 @@ J.~Fenogli, L.~Grimaud and R.~Vuilleumier, \emph{Digital Discovery}, 2025,
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
+\bibitem[Mahdian \emph{et~al.}(2026)Mahdian, Laasonen, and
+  Farshadfar]{mahdian2026base}
+A.~Mahdian, K.~Laasonen and K.~Farshadfar, \emph{Inorganic Chemistry}, 2026,
+  \textbf{65}, 25557--25566\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Kirsch \emph{et~al.}(2025)Kirsch, Hannah, and
+  Chitnis]{kirsch2025pnictogen}
+T.~Z. Kirsch, T.~J. Hannah and S.~S. Chitnis, \emph{Chemistry -- A European
+  Journal}, 2025, \textbf{31}, e202403258\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
 \bibitem[Garcia~Satorras \emph{et~al.}(2021)Garcia~Satorras, Hoogeboom, and
   Welling]{satorras2021egnn}
 V.~Garcia~Satorras, E.~Hoogeboom and M.~Welling, Proceedings of the 38th
@@ -73,6 +89,14 @@ K.~T. Sch{\"u}tt, P.-J. Kindermans, H.~E. Sauceda, S.~Chmiela, A.~Tkatchenko
   Lilienfeld]{ramakrishnan2015delta}
 R.~Ramakrishnan, P.~O. Dral, M.~Rupp and O.~A. von Lilienfeld, \emph{Journal of
   Chemical Theory and Computation}, 2015, \textbf{11}, 2087--2096\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Bhattacharya \emph{et~al.}(2026)Bhattacharya, Liu, Cooper, and
+  Reinhart]{bhattacharya2026proton}
+D.~Bhattacharya, Y.~Liu, V.~R. Cooper and W.~F. Reinhart, \emph{Digital
+  Discovery}, 2026\relax
 \mciteBstWouldAddEndPuncttrue
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
@@ -114,15 +138,6 @@ F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
-\bibitem[Zhu \emph{et~al.}(2024)Zhu, Hwang, Adams, Liu, Nan, Stenfors, Du,
-  Chauhan, Wiest, Isayev, Coley, Sun, and Wang]{zhu2024marcel}
-Y.~Zhu, J.~Hwang, K.~Adams, Z.~Liu, B.~Nan, B.~Stenfors, Y.~Du, J.~Chauhan,
-  O.~Wiest, O.~Isayev, C.~W. Coley, Y.~Sun and W.~Wang, International
-  Conference on Learning Representations, 2024\relax
-\mciteBstWouldAddEndPuncttrue
-\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
-{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
-\EndOfBibitem
 \bibitem[Lehmann \emph{et~al.}(2025)Lehmann, Balogun, Reimann, and
   Kaupp]{lehmann2025fia}
 M.~Lehmann, S.~N. Balogun, M.~Reimann and M.~Kaupp, \emph{Chemistry -- A
@@ -131,10 +146,11 @@ M.~Lehmann, S.~N. Balogun, M.~Reimann and M.~Kaupp, \emph{Chemistry -- A
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
-\bibitem[Mahdian \emph{et~al.}(2026)Mahdian, Laasonen, and
-  Farshadfar]{mahdian2026base}
-A.~Mahdian, K.~Laasonen and K.~Farshadfar, \emph{Inorganic Chemistry}, 2026,
-  \textbf{65}, 25557--25566\relax
+\bibitem[Zhu \emph{et~al.}(2024)Zhu, Hwang, Adams, Liu, Nan, Stenfors, Du,
+  Chauhan, Wiest, Isayev, Coley, Sun, and Wang]{zhu2024marcel}
+Y.~Zhu, J.~Hwang, K.~Adams, Z.~Liu, B.~Nan, B.~Stenfors, Y.~Du, J.~Chauhan,
+  O.~Wiest, O.~Isayev, C.~W. Coley, Y.~Sun and W.~Wang, International
+  Conference on Learning Representations, 2024\relax
 \mciteBstWouldAddEndPuncttrue
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax

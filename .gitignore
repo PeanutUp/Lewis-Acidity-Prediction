@@ -289,3 +289,7 @@ manuscript/*.pdf
 !/manuscript/compiled/*.pdf
 !/manuscript/compiled/*.bbl
 /manuscript/review/
+
+# Full chemical diagnostics are reproducibly regenerated and included in the archive.
+/reports/chemistry/center_geometry.csv
+/reports/chemistry/test_diagnostics.csv.gz

@@ -8,7 +8,7 @@
 \providecommand*\mcitethebibliography{\thebibliography}
 \csname @ifundefined\endcsname{endmcitethebibliography}
   {\let\endmcitethebibliography\endthebibliography}{}
-\begin{mcitethebibliography}{16}
+\begin{mcitethebibliography}{18}
 \providecommand*\natexlab[1]{#1}
 \providecommand*\mciteSetBstSublistMode[1]{}
 \providecommand*\mciteSetBstMaxWidthForm[2]{}
@@ -57,6 +57,26 @@ Fenogli,~J.; Grimaud,~L.; Vuilleumier,~R. Constructing and explaining machine
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
+\bibitem[Mahdian \latin{et~al.}(2026)Mahdian, Laasonen, and
+  Farshadfar]{mahdian2026base}
+Mahdian,~A.; Laasonen,~K.; Farshadfar,~K. Quantifying Base-Dependent Lewis
+  Acidity in Substituted Boranes through {DFT} and Machine Learning.
+  \emph{Inorganic Chemistry} \textbf{2026}, \emph{65}, 25557--25566, DOI:
+  \doi{10.1021/acs.inorgchem.6c04676}\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Kirsch \latin{et~al.}(2025)Kirsch, Hannah, and
+  Chitnis]{kirsch2025pnictogen}
+Kirsch,~T.~Z.; Hannah,~T.~J.; Chitnis,~S.~S. Influence of Pnictogen and Ligand
+  Framework on the Lewis Acidity and Steric Environment in Pnictogen Pincer
+  Complexes. \emph{Chemistry -- A European Journal} \textbf{2025}, \emph{31},
+  e202403258, DOI: \doi{10.1002/chem.202403258}\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
 \bibitem[Garcia~Satorras \latin{et~al.}(2021)Garcia~Satorras, Hoogeboom, and
   Welling]{satorras2021egnn}
 Garcia~Satorras,~V.; Hoogeboom,~E.; Welling,~M. E(n) Equivariant Graph Neural
@@ -91,6 +111,15 @@ Ramakrishnan,~R.; Dral,~P.~O.; Rupp,~M.; von Lilienfeld,~O.~A. Big Data Meets
   Quantum Chemistry Approximations: The {$\Delta$}-Machine Learning Approach.
   \emph{Journal of Chemical Theory and Computation} \textbf{2015}, \emph{11},
   2087--2096, DOI: \doi{10.1021/acs.jctc.5b00099}\relax
+\mciteBstWouldAddEndPuncttrue
+\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
+{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
+\EndOfBibitem
+\bibitem[Bhattacharya \latin{et~al.}(2026)Bhattacharya, Liu, Cooper, and
+  Reinhart]{bhattacharya2026proton}
+Bhattacharya,~D.; Liu,~Y.; Cooper,~V.~R.; Reinhart,~W.~F. Accelerating proton
+  affinity prediction with multi-fidelity machine learning. \emph{Digital
+  Discovery} \textbf{2026}, DOI: \doi{10.1039/D6DD00362A}, In press\relax
 \mciteBstWouldAddEndPuncttrue
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
@@ -130,16 +159,6 @@ Pedregosa,~F. \latin{et~al.}  Scikit-learn: Machine Learning in {Python}.
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
-\bibitem[Zhu \latin{et~al.}(2024)Zhu, Hwang, Adams, Liu, Nan, Stenfors, Du,
-  Chauhan, Wiest, Isayev, Coley, Sun, and Wang]{zhu2024marcel}
-Zhu,~Y.; Hwang,~J.; Adams,~K.; Liu,~Z.; Nan,~B.; Stenfors,~B.; Du,~Y.;
-  Chauhan,~J.; Wiest,~O.; Isayev,~O.; Coley,~C.~W.; Sun,~Y.; Wang,~W. Learning
-  Over Molecular Conformer Ensembles: Datasets and Benchmarks. International
-  Conference on Learning Representations. 2024\relax
-\mciteBstWouldAddEndPuncttrue
-\mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
-{\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
-\EndOfBibitem
 \bibitem[Lehmann \latin{et~al.}(2025)Lehmann, Balogun, Reimann, and
   Kaupp]{lehmann2025fia}
 Lehmann,~M.; Balogun,~S.~N.; Reimann,~M.; Kaupp,~M. The Fluoride Ion Affinity
@@ -150,12 +169,12 @@ Lehmann,~M.; Balogun,~S.~N.; Reimann,~M.; Kaupp,~M. The Fluoride Ion Affinity
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax
 \EndOfBibitem
-\bibitem[Mahdian \latin{et~al.}(2026)Mahdian, Laasonen, and
-  Farshadfar]{mahdian2026base}
-Mahdian,~A.; Laasonen,~K.; Farshadfar,~K. Quantifying Base-Dependent Lewis
-  Acidity in Substituted Boranes through {DFT} and Machine Learning.
-  \emph{Inorganic Chemistry} \textbf{2026}, \emph{65}, 25557--25566, DOI:
-  \doi{10.1021/acs.inorgchem.6c04676}\relax
+\bibitem[Zhu \latin{et~al.}(2024)Zhu, Hwang, Adams, Liu, Nan, Stenfors, Du,
+  Chauhan, Wiest, Isayev, Coley, Sun, and Wang]{zhu2024marcel}
+Zhu,~Y.; Hwang,~J.; Adams,~K.; Liu,~Z.; Nan,~B.; Stenfors,~B.; Du,~Y.;
+  Chauhan,~J.; Wiest,~O.; Isayev,~O.; Coley,~C.~W.; Sun,~Y.; Wang,~W. Learning
+  Over Molecular Conformer Ensembles: Datasets and Benchmarks. International
+  Conference on Learning Representations. 2024\relax
 \mciteBstWouldAddEndPuncttrue
 \mciteSetBstMidEndSepPunct{\mcitedefaultmidpunct}
 {\mcitedefaultendpunct}{\mcitedefaultseppunct}\relax

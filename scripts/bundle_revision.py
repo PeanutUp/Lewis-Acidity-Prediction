@@ -1,123 +1,98 @@
-"""Export the checked manuscripts and a reproducible source/model archive."""
+"""Export native LaTeX articles and a verified reproducibility archive."""
 import argparse
-import hashlib
-import json
+from datetime import date
+import hashlib,json,shutil,subprocess,zipfile
 from pathlib import Path
-import shutil
-import subprocess
-import zipfile
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[1]
 
 
 def digest(path):
-    h = hashlib.sha256()
-    with path.open('rb') as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b''):
-            h.update(block)
-    return h.hexdigest()
+ h=hashlib.sha256()
+ with path.open('rb') as stream:
+  for block in iter(lambda:stream.read(1024*1024),b''):h.update(block)
+ return h.hexdigest()
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, required=True)
-    args = parser.parse_args()
-    output = args.output.resolve()
-    output.mkdir(parents=True, exist_ok=True)
-    revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT).decode().strip()
-    verification = json.loads((ROOT / 'reports/archive_verification.json').read_text())
-    assert len(verification['models']) == 23
-    exports = []
-    for name in ['Digital_Discovery', 'JCIM', 'Supporting_Information', 'Revision_notes_ZH']:
-        for suffix in ['.docx', '.pdf']:
-            target = output / (name + suffix)
-            shutil.copy2(ROOT / 'manuscript/review' / target.name, target)
-            exports.append(target)
-    for source, name in [('digital_discovery.pdf', 'Digital_Discovery_LaTeX.pdf'),
-                         ('jcim.pdf', 'JCIM_LaTeX.pdf'),
-                         ('supporting_information.pdf', 'Supporting_Information_LaTeX.pdf')]:
-        target = output / name
-        shutil.copy2(ROOT / 'manuscript/compiled' / source, target)
-        exports.append(target)
-    latex_archive = output / 'Lewis_Acidity_LaTeX_Sources.zip'
-    with zipfile.ZipFile(latex_archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
-        for path in sorted((ROOT / 'manuscript').rglob('*')):
-            if path.is_file() and (path.suffix in {'.tex', '.bib', '.sty', '.bbl', '.md'}
-                                  or path.parent.name == 'figures' and path.suffix == '.pdf'):
-                z.write(path, str(path.relative_to(ROOT / 'manuscript')))
-    exports.append(latex_archive)
-    for source, name in [('reports/comment_response_matrix.csv', 'comment_response_matrix.csv'),
-                         ('reports/neural/seed_summary.csv', 'neural_seed_summary.csv'),
-                         ('reports/refinement/metrics.csv', 'quantum_refinement_metrics.csv')]:
-        target = output / name
-        shutil.copy2(ROOT / source, target)
-        exports.append(target)
-    readme = output / 'README_ZH.txt'
-    readme.write_text(f'''Lewis acidity 修订交付 · 2026-11-13
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--output',type=Path,required=True)
+ parser.add_argument('--date',default=date.today().isoformat())
+ args=parser.parse_args();output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
+ revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip()
+ verification=json.loads((ROOT/'reports/archive_verification.json').read_text())
+ assert len(verification['models'])==23
+ exports=[]
+ for source,name in [('digital_discovery.pdf','Digital_Discovery_LaTeX.pdf'),('jcim.pdf','JCIM_LaTeX.pdf'),('supporting_information.pdf','Supporting_Information_LaTeX.pdf')]:
+  target=output/name;shutil.copy2(ROOT/'manuscript/compiled'/source,target);exports.append(target)
+ latex_archive=output/'Lewis_Acidity_LaTeX_Sources.zip'
+ with zipfile.ZipFile(latex_archive,'w',compression=zipfile.ZIP_DEFLATED) as z:
+  for path in sorted((ROOT/'manuscript').rglob('*')):
+   if path.is_file() and (path.suffix in {'.tex','.bib','.sty','.bbl','.md'} or path.parent.name=='figures' and path.suffix=='.pdf'):
+    z.write(path,str(path.relative_to(ROOT/'manuscript')))
+ exports.append(latex_archive)
+ for source,name in [('reports/chemistry/by_center.csv','chemical_center_metrics.csv'),('reports/chemistry/by_denticity.csv','chemical_denticity_metrics.csv'),('reports/chemistry/geometry_shift_penalty.csv','geometry_source_penalty.csv'),('reports/neural/seed_summary.csv','neural_seed_summary.csv'),('reports/refinement/metrics.csv','quantum_refinement_metrics.csv')]:
+  target=output/name;shutil.copy2(ROOT/source,target);exports.append(target)
+ readme=output/'README_ZH.txt'
+ readme.write_text(f'''Lewis acidity 研究文稿与复现资料 · {args.date}
 
-代码：https://github.com/PeanutUp/Lewis-Acidity-Prediction
+仓库：https://github.com/PeanutUp/Lewis-Acidity-Prediction
 主分支：master
-本次代码提交：{revision}
-主要工作目录：/data2/hsm/Lewis-Acidity-Prediction
+代码提交：{revision}
+工作目录：/data2/hsm/Lewis-Acidity-Prediction
 
-正文请阅读 Digital_Discovery_LaTeX.pdf 或 JCIM_LaTeX.pdf；
-Supporting_Information_LaTeX.pdf 是单独的科学补充材料。
-三份PDF均由LaTeX实际编译。Lewis_Acidity_LaTeX_Sources.zip 可用于Overleaf，
-包含tex、bib、样式文件和矢量图；另保留Word作为可编辑的次要导出。
-正文按正常研究论文组织；18条批注记录单独保留在 Revision_notes_ZH.pdf，
-历史审计保留在 reports/，没有混入投稿正文或科学补充材料。
+正文：Digital_Discovery_LaTeX.pdf 或 JCIM_LaTeX.pdf。
+科学补充材料：Supporting_Information_LaTeX.pdf。
+LaTeX源文件：Lewis_Acidity_LaTeX_Sources.zip，包含tex、bib、样式与矢量图，
+可上传Overleaf。两份期刊正文共享科学内容，采用对应RSC/ACS版式。
 
-已完成23次神经模型训练。官方主测试6732分子，几何模型三种子MAE：
-DimeNet++ 11.21±0.27；EGNN 12.08±0.16 kJ/mol。
-种子平均与模型集成分开报告，不能混用。
-量子校正主测试MAE 3.29，配体骨架组合留出3.35 kJ/mol；
-此任务需要低级别酸与氟加合物FIA，输入成本高于只提供未配位酸的模型。
-数值针对DSD-BLYP计算标签，不代表绝对实验精度。
+本研究的主要结果：
+1. 三齿配体环境的几何增益：同一1875分子测试子集，FIA-GNN集成参考
+   MAE 16.07，DimeNet++三种子集成13.72 kJ/mol；配对改善2.35，
+   95%区间1.77–2.94。此比较包含两种工作流各自的训练过程。
+2. P(III)对未配位酸信息的特殊敏感性：三种几何模型与酸电子特征融合
+   的集成误差均约17.5 kJ/mol，而酸—氟加合物量子精修为3.44。
+   结构案例及21类中心完整统计分别展示局部配位、扩展配体环境和输入信息的作用。
+3. 几何生成方法的影响集中在结构不一致的分子：结构差异低半区的
+   冻结模型误差增加1.05 kJ/mol，上十分位增加4.92（95%区间3.96–5.85）。
+   分中心等权后同样保留差异；该检验需要验证分子的两套几何。
+4. 完整配体一致时，中心元素变化仍改变参考方法校正，支持按中心与
+   分子环境共同进行量子精修；独立配体骨架组合测试MAE 3.35 kJ/mol。
 
-修订替换了旧稿未经验证的精度和物理解释。原DimeNet保存配置重建出
-旧2000分子中1813训练、105验证、82测试；此结论含明确重建假设，
-EGNN历史训练清单仍缺失。新版实验采用独立划分并保存完整身份。
+正文含六幅矢量图，补充材料含九个分子结构的完整图谱、全类指标、
+化学分组与配对区间，以及相关研究比较。比较覆盖FIA-GNN、硼Lewis酸
+可解释学习、pnictogen pincer化学、多碱探针及2026年质子亲和力多精度学习。
+数值对应FIA49k气相计算参考；量子精修需要低级别酸与加合物计算。
 
-ZIP含代码、文稿、图、配置、训练日志、全部新预测及模型存储分块。
-解压后先运行 python scripts/restore_artifacts.py，恢复73个压缩文件；
-再按README安装Python3.10环境并准备公开数据。原始FIA49k几何与目标
-未重复打入ZIP，可按版本化Figshare来源下载并校验。ZIP内附逐文件SHA256。
-20项回归测试通过；23个权重与训练原件一致，分块恢复及3类模型预测往返已验证。
+复现压缩包含代码、文稿、图、配置、训练记录、预测与模型存储分块。
+解压后运行 python scripts/restore_artifacts.py，再按README准备版本化公开数据。
+完整化学诊断表也包含在压缩包中；它们可从源码再生成。
+模型训练已完成23次；本次新增化学分析使用冻结预测，未重新选择模型。
+23项回归检查通过，三份LaTeX文稿经过编译与版面检查。
+逐文件SHA256校验记录随压缩包和交付文件提供。
 
-旧的独立修订目录已融合并删除。原始批注PDF保留在用户附件及仓库work中，
-没有把私人批注原件上传公开仓库。
-
-投稿前仍需作者确认署名、作者分工、资助及利益冲突，并取得新增归档的持久DOI。
-AI辅助已披露。本轮按用户要求直接推送主分支，尚未提交期刊。
+作者署名、分工、资助和利益冲突声明及正式归档DOI需在投稿前由作者确认。
+本交付尚未向期刊投稿。
 ''')
-    exports.append(readme)
-    raw = subprocess.check_output(['git', 'ls-files', '--cached', '--modified', '--others',
-                                   '--exclude-standard', '-z'], cwd=ROOT).decode()
-    paths = sorted({p for p in raw.split('\0') if p and (ROOT / p).is_file()})
-    # Legacy binary training data and weights are accessible in the original Git
-    # history; the archive contains the new frozen artifacts and source paths.
-    allowed = {'.py', '.md', '.txt', '.json', '.jsonl', '.csv', '.yaml', '.yml',
-               '.toml', '.ini', '.sh', '.tex', '.bib', '.sty', '.bbl', '.svg', '.pdf', '.png', '.docx', '.xlsx'}
-    selected = [p for p in paths if (ROOT / p).suffix in allowed
-                or '.part-' in p or Path(p).name in {'.gitignore', 'LICENSE', 'Makefile'}]
-    assert 'manuscript/rsc_official_article_template.tex' in selected
-    manifest = {p: dict(bytes=(ROOT / p).stat().st_size, sha256=digest(ROOT / p))
-                for p in selected}
-    archive = output / 'Lewis_Acidity_Revision_2026-11-13.zip'
-    with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
-        for p in selected:
-            z.write(ROOT / p, p)
-        z.writestr('ARCHIVE_MANIFEST.json', json.dumps(dict(revision=revision, files=manifest),
-                                                      ensure_ascii=False, indent=2) + '\n')
-        z.write(readme, 'README_ZH.txt')
-    with zipfile.ZipFile(archive) as z:
-        assert z.testzip() is None
-        for p, record in manifest.items():
-            assert hashlib.sha256(z.read(p)).hexdigest() == record['sha256']
-    exports.append(archive)
-    (output / 'SHA256SUMS.txt').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in exports))
-    print(f'Exported {len(exports)} deliverables; archive {archive.stat().st_size:,} bytes; {len(manifest)} verified entries')
+ exports.append(readme)
+ raw=subprocess.check_output(['git','ls-files','--cached','--modified','--others','--exclude-standard','-z'],cwd=ROOT).decode()
+ paths={p for p in raw.split('\0') if p and (ROOT/p).is_file()}
+ paths.update(p for p in ['reports/chemistry/center_geometry.csv','reports/chemistry/test_diagnostics.csv.gz'] if (ROOT/p).exists())
+ allowed={'.py','.md','.txt','.json','.jsonl','.csv','.yaml','.yml','.toml','.ini','.sh','.tex','.bib','.sty','.bbl','.svg','.pdf','.png','.xlsx','.gz'}
+ selected=sorted(p for p in paths if (ROOT/p).suffix in allowed or '.part-' in p or Path(p).name in {'.gitignore','LICENSE','Makefile'})
+ assert 'manuscript/rsc_official_article_template.tex' in selected
+ manifest={p:dict(bytes=(ROOT/p).stat().st_size,sha256=digest(ROOT/p)) for p in selected}
+ archive=output/f'Lewis_Acidity_Research_{args.date}.zip'
+ with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
+  for p in selected:z.write(ROOT/p,p)
+  z.writestr('ARCHIVE_MANIFEST.json',json.dumps(dict(revision=revision,files=manifest),ensure_ascii=False,indent=2)+'\n')
+  z.write(readme,'README_ZH.txt')
+ with zipfile.ZipFile(archive) as z:
+  assert z.testzip() is None
+  for p,record in manifest.items():assert hashlib.sha256(z.read(p)).hexdigest()==record['sha256']
+ exports.append(archive)
+ (output/'SHA256SUMS.txt').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in exports))
+ print(f'Exported {len(exports)} deliverables; archive {archive.stat().st_size:,} bytes; {len(manifest)} verified entries')
 
 
-if __name__ == '__main__':
-    main()
+if __name__=='__main__':main()

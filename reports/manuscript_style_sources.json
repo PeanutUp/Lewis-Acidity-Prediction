@@ -1,5 +1,5 @@
 {
-  "accessed": "2026-11-13",
+  "accessed": "2026-11-14",
   "purpose": "Research-article organization, result-led narrative, and native journal LaTeX formats",
   "papers": [
     {
@@ -17,5 +17,19 @@
     "RSC": "Official LaTeX article template, retained verbatim; review style follows its article typography without publisher metadata placeholders",
     "ACS": "achemso journal=jcisd8, manuscript=article; BibTeX article titles and DOI enabled"
   },
-  "integration": "Scientific corrections are incorporated into the research narrative; comment-by-comment responses and historical audit remain separate"
+  "integration": "Literature-grounded chemical narrative, exact result provenance and final-size figure review",
+  "writing_resources": [
+    {
+      "name": "scientific-writing",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/scientific-writing/SKILL.md"
+    },
+    {
+      "name": "scientific-critical-thinking",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/scientific-critical-thinking/SKILL.md"
+    },
+    {
+      "name": "scientific-visualization",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/scientific-visualization/SKILL.md"
+    }
+  ]
 }

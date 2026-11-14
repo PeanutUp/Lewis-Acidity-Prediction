@@ -1,0 +1,35 @@
+{
+  "analysis": "Exploratory diagnostics of fixed models, after model fitting",
+  "n_test": 6732,
+  "n_centers": 21,
+  "thresholds_from": "Official training partition only",
+  "thresholds": {
+    "reorganization": [
+      0.2789681851863861,
+      0.5322645306587219,
+      0.8377196788787842,
+      1.1730823040008544
+    ],
+    "geometry_source": [
+      0.1275008767843246,
+      0.2265516072511673,
+      0.38636393547058095
+    ],
+    "phosphorus_angles": [
+      291.6493669449403,
+      295.6973602192468,
+      300.1256290966477
+    ]
+  },
+  "angle_assignment": "Nearest atoms of each element matching recorded first-shell composition; atom 0 is center",
+  "n_angle_assignments": 19691,
+  "max_bond_radius_ratio": 1.1924492302883887,
+  "intervals": "2000 molecule bootstrap resamples, stratified by central class, seed 20261114; fixed models",
+  "geometry_shift_class_standardized": {
+    "non_tail": 1.6791773975308262,
+    "tail": 3.7611706168558277,
+    "n_classes": 21
+  },
+  "scope": "Association and representation diagnostics; structural displacement is distinct from deformation energy; paired adduct geometry is diagnostic only",
+  "case_selection": "Nine structurally diverse illustrations; all original selected identifiers retained; memberships explicit; no training predictions displayed"
+}

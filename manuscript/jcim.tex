@@ -6,8 +6,12 @@
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 \emergencystretch=2em
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{.90}
+\renewcommand{\textfraction}{.07}
+\renewcommand{\dblfloatpagefraction}{.75}
 \setkeys{acs}{articletitle=true,doi=true}
-\title{Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity}
+\title{Coordination Constraints and Information Content in Predicting Lewis Acidity}
 \author{Simin Huang}
 \email{hsm24@mails.tsinghua.edu.cn}
 \affiliation{Tanwei College, Tsinghua University, Beijing 100086, China}
@@ -17,15 +21,12 @@
 \affiliation{Tanwei College, Tsinghua University, Beijing 100086, China}
 \begin{document}
 \begin{abstract}
-Predicting fluoride ion affinity (FIA) across diverse Lewis acids requires a balance between molecular information and the cost of obtaining it. We evaluate geometric neural networks, molecular descriptors and quantum-chemical correction models on 48,986 FIA49k molecules, including a separate holdout of ligand-scaffold combinations. DimeNet++ gives a main-test mean absolute error of 11.21 $\pm$ 0.27 kJ\,mol$^{-1}$ across three training seeds, while a correction to PBEh-3c FIA reduces the error from 23.33 to 3.29 kJ\,mol$^{-1}$ and retains an error of 3.35 kJ\,mol$^{-1}$ on the scaffold holdout. Matched-ligand comparisons reveal systematic central-element dependence in the reference-method correction, and a frozen-model geometry-source test identifies an additional deployment error, together defining distinct workflows for acid-geometry prediction and adduct-assisted quantum refinement.
+Molecular geometry and electronic descriptors provide complementary routes to predicting the fluoride ion affinity (FIA) of Lewis acids, but their value depends on coordination constraints and the information available about binding. Across 48,986 FIA49k molecules, DimeNet++ achieves a main-test MAE of 11.21 $\pm$ 0.27 kJ\,mol$^{-1}$ over three training seeds, with ensemble analysis showing the largest absolute gain over released connectivity predictions for tridentate ligand environments. P(III) compounds remain difficult across acid-geometry representations, whereas refinement of a PBEh-3c acid--fluoride calculation gives MAE 3.44 kJ\,mol$^{-1}$ for this class and 3.29 kJ\,mol$^{-1}$ overall, retaining 3.35 kJ\,mol$^{-1}$ on held-out ligand-scaffold combinations. Paired molecular structures reveal a second, distinct sensitivity: the loss of accuracy upon changing geometry source is concentrated in acids whose optimized structures disagree, connecting chemical coordination, quantum refinement and structural provenance in the choice of an FIA prediction workflow.
 \end{abstract}
 \input{body}
 \begin{suppinfo}
 Dataset and geometry provenance, partition definitions, neural configurations, seed and ensemble errors, classical controls, paired uncertainty, geometry-source tests and matched-ligand reference-method corrections (PDF).
 \end{suppinfo}
-
-\section*{Conflicts of interest}
-The authors will supply their declaration before submission.
 
 \section*{Data availability}
 FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 from Figshare. \cite{fia49ktargets,fia49kgeometries,fia49kpredictions} Code, frozen models, complete predictions, split manifests and training configurations are available at \url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}. Source archives and restored artifacts are verified by checksums.

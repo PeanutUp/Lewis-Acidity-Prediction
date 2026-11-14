@@ -1,9 +1,5 @@
 # Manuscript sources
 
-The article is written as a research paper. Reviewer-comment responses and the
-historical implementation audit remain in `reports/` and the separate Chinese
-revision notes; they are not sections of the article or submission SI.
-
 - `digital_discovery.tex`: RSC two-column article layout, using `rsc_review.sty`.
   The original RSC template is retained in `rsc_official_article_template.tex`.
   Publisher logos and placeholder DOI/acceptance dates are omitted from the draft.

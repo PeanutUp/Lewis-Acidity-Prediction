@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="195.75pt" height="112.64775pt" viewBox="0 0 195.75 112.64775" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="234pt" height="126pt" viewBox="0 0 234 126" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-11-13T15:17:44.035486</dc:date>
+    <dc:date>2026-11-14T13:02:04.341233</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
-      <dc:title>Matplotlib v3.10.6, https://matplotlib.org/</dc:title>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
      </cc:Agent>
     </dc:creator>
    </cc:Work>
@@ -21,76 +21,76 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 112.64775 
-L 195.75 112.64775 
-L 195.75 0 
-L 0 0 
+   <path d="M 0 126
+L 234 126
+L 234 0
+L 0 0
 z
 " style="fill: #ffffff"/>
   </g>
   <g id="axes_1">
    <g id="text_1">
     <g id="patch_2">
-     <path d="M 17.059687 55.571541 
-L 57.790312 55.571541 
-Q 61.040312 55.571541 61.040312 52.321541 
-L 61.040312 46.030759 
-Q 61.040312 42.780759 57.790312 42.780759 
-L 17.059687 42.780759 
-Q 13.809687 42.780759 13.809687 46.030759 
-L 13.809687 52.321541 
-Q 13.809687 55.571541 17.059687 55.571541 
+     <path d="M 40.049625 61.968619
+L 78.900375 61.968619
+Q 82.000375 61.968619 82.000375 58.868619
+L 82.000375 52.868181
+Q 82.000375 49.768181 78.900375 49.768181
+L 40.049625 49.768181
+Q 36.949625 49.768181 36.949625 52.868181
+L 36.949625 58.868619
+Q 36.949625 61.968619 40.049625 61.968619
 z
-" style="fill: #2877a6"/>
+" style="fill: #0072b2"/>
     </g>
-    <text style="font-size: 6.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="37.425" y="50.969744" transform="rotate(-0 37.425 50.969744)">Connectivity</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="59.475" y="57.579213" transform="rotate(-0 59.475 57.579213)">Connectivity</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(32.762344 79.489031)">FIA</text>
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(22.814531 86.207719)">screening</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(50.693766 86.124491)">Rapid</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(44.377516 93.067134)">screening</text>
    </g>
    <g id="text_3">
     <g id="patch_3">
-     <path d="M 73.461406 55.571541 
-L 122.288594 55.571541 
-Q 125.538594 55.571541 125.538594 52.321541 
-L 125.538594 46.030759 
-Q 125.538594 42.780759 122.288594 42.780759 
-L 73.461406 42.780759 
-Q 70.211406 42.780759 70.211406 46.030759 
-L 70.211406 52.321541 
-Q 70.211406 55.571541 73.461406 55.571541 
+     <path d="M 97.315828 61.968619
+L 142.534172 61.968619
+Q 145.634172 61.968619 145.634172 58.868619
+L 145.634172 52.868181
+Q 145.634172 49.768181 142.534172 49.768181
+L 97.315828 49.768181
+Q 94.215828 49.768181 94.215828 52.868181
+L 94.215828 58.868619
+Q 94.215828 61.968619 97.315828 61.968619
 z
-" style="fill: #16806a"/>
+" style="fill: #009e73"/>
     </g>
-    <text style="font-size: 6.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="97.875" y="50.969744" transform="rotate(-0 97.875 50.969744)">Optimized acid</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="119.925" y="57.579213" transform="rotate(-0 119.925 57.579213)">Acid geometry</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(82.915781 79.489031)">Geometry</text>
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(78.108281 86.207719)">+ electronics</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(105.541969 86.124491)">Chemical</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(97.192797 93.067134)">representation</text>
    </g>
    <g id="text_5">
     <g id="patch_4">
-     <path d="M 130.759922 55.571541 
-L 185.890078 55.571541 
-Q 189.140078 55.571541 189.140078 52.321541 
-L 189.140078 46.030759 
-Q 189.140078 42.780759 185.890078 42.780759 
-L 130.759922 42.780759 
-Q 127.509922 42.780759 127.509922 46.030759 
-L 127.509922 52.321541 
-Q 127.509922 55.571541 130.759922 55.571541 
+     <path d="M 158.486578 61.968619
+L 202.263422 61.968619
+Q 205.363422 61.968619 205.363422 58.868619
+L 205.363422 52.868181
+Q 205.363422 49.768181 202.263422 49.768181
+L 158.486578 49.768181
+Q 155.386578 49.768181 155.386578 52.868181
+L 155.386578 58.868619
+Q 155.386578 61.968619 158.486578 61.968619
 z
-" style="fill: #d37828"/>
+" style="fill: #d55e00"/>
     </g>
-    <text style="font-size: 6.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="158.325" y="50.969744" transform="rotate(-0 158.325 50.969744)">Acid + F⁻ adduct</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="180.375" y="57.579213" transform="rotate(-0 180.375 57.579213)">Acid + adduct</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(135.002344 79.489031)">Reference-level</text>
-    <text style="font-size: 6px; font-family: 'DejaVu Sans'" transform="translate(141.831094 86.207719)">refinement</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(165.906234 86.124491)">Quantum</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'" transform="translate(163.331297 93.067134)">refinement</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="97.875" y="13.27875" transform="rotate(-0 97.875 13.27875)">Fluoride ion affinity: input and prediction</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="119.925" y="19.971" transform="rotate(-0 119.925 19.971)">Fluoride binding across the p-block</text>
    </g>
   </g>
  </g>

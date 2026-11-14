@@ -12,6 +12,7 @@ from docx.shared import Inches,Pt,RGBColor
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from article_content import ROOT,TITLE,AUTHORS,AFFILIATION,REFS,content
+from latex_manuscripts import build_latex
 MAN=ROOT/'manuscript'
 
 
@@ -60,14 +61,8 @@ def endmatter(doc,journal):
  if journal=='JCIM':
   doc.add_heading('Supporting Information',1)
   doc.add_paragraph('Dataset and geometry provenance; split definitions and identity checks; model configurations and seed-level errors; subgroup and paired-bootstrap comparisons; geometry-source robustness; matched-ligand reference-method comparisons (PDF). Machine-readable manifests, predictions and frozen checkpoints accompany the reproducibility archive.')
- if journal=='Digital Discovery':
-  doc.add_heading('Conflicts of interest',1)
-  doc.add_paragraph('The authors will provide their conflict-of-interest declaration before submission.')
  doc.add_heading('Data and software availability' if journal=='JCIM' else 'Data availability',1)
  doc.add_paragraph('FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 at https://doi.org/10.6084/m9.figshare.24635136.v1, https://doi.org/10.6084/m9.figshare.24635157.v1 and https://doi.org/10.6084/m9.figshare.24635187.v1. Preparation, training and analysis code, configurations and machine-readable result tables are available at https://github.com/PeanutUp/Lewis-Acidity-Prediction, main development branch master. The prepared data can be regenerated from versioned sources with checksum validation. Frozen models, prediction exports and split manifests accompany the source code.')
- if journal=='JCIM':
-  doc.add_heading('Conflicts of interest',1)
-  doc.add_paragraph('The authors will provide their conflict-of-interest declaration before submission.')
  doc.add_heading('Acknowledgements',1)
  doc.add_paragraph('OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.')
  doc.add_heading('References',1)
@@ -111,8 +106,8 @@ def si():
   counts=a['counts'];overlap=a['individual_ligand_overlap']
   groups=a.get('n_groups',a['n_ligand_sets'])
   doc.add_paragraph(f'{label}: {groups:,} groups containing {a["n_molecules"]:,} molecules, assigned as {counts["train"]:,} training, {counts["validate"]:,} validation and {counts["test"]:,} test records. Individual-ligand overlap with training is {100*overlap["validate"]:.1f}% in validation and {100*overlap["test"]:.1f}% in test.')
- doc.add_paragraph('Canonical acid identity auditing found zero records crossing partitions under the defined RDKit canonicalization. This does not prove the absence of related ligand families, tautomeric relationships, protonation variants or near-duplicate geometry. The full canonical grouping keys and original/reassigned molecule identities are included in the machine-readable manifests. Generic scaffold keys retain the multiset of ligand scaffolds; an individual scaffold may recur in a different multiset.')
- doc.add_paragraph('The regression suite checks disjoint and reproducible legacy splits; strict prediction identity and target matching; malformed geometries and unknown elements; rotation, translation and permutation invariance; independent batching; exact checkpoint restoration; train-only target normalization; train-only electronic-feature standardization and source fingerprint validation; and deterministic ligand grouping. The validation record accompanies the code. Tests of geometric invariance cover the new invariant models; they are not a proof of physical causality.')
+ doc.add_paragraph('Canonical acid identity checking found zero records crossing partitions under the defined RDKit canonicalization. The full canonical grouping keys and molecule identities are included in the machine-readable manifests. Generic scaffold keys retain the multiset of ligand scaffolds; an individual scaffold may recur in a different multiset. Related ligand families and other chemical relationships can consequently span these partitions.')
+ doc.add_paragraph('Regression checks cover reproducible disjoint splits, prediction identities and targets, strict geometry parsing, geometric invariance, independent batching, exact checkpoint restoration, training-derived preprocessing, source fingerprints and deterministic ligand grouping. The validation record accompanies the code.')
  doc.add_heading('S3. Neural configurations and seed-level test results',1)
  runmeta=json.loads((ROOT/'reports/neural/run_metadata.json').read_text())
  seed=pd.read_csv(ROOT/'reports/neural/per_seed_metrics.csv')
@@ -121,7 +116,7 @@ def si():
   main=seed[(seed.run==r['run'])&(seed.split=='test')].iloc[0]
   rows.append([r['run'],f'{r["parameters"]:,}',r['epochs'],r['best_epoch'],f'{r["best_validation_mae"]:.3f}',f'{main.mae:.3f}',f'{main.rmse:.3f}'])
  add_table(doc,['Run','Parameters','Epochs','Selected','Val MAE','Test MAE','Test RMSE'],rows)
- doc.add_paragraph('Scaffold runs use their separate scaffold test, not the official main test. All errors are kJ/mol. An unweighted ensemble and a seed-average MAE are different estimands and are reported separately. Runtime is observed shared-host epoch wall time, not an isolated speed comparison. CUDA index_add may produce nondeterministic rounding even with fixed RNG seeds. Full configurations, data fingerprints and history logs accompany each checkpoint.')
+ doc.add_paragraph('Scaffold runs report their respective scaffold test. All errors are kJ/mol. Ensemble and seed-average MAEs are reported separately. Runtime records describe observed shared-host epoch wall time. CUDA index_add may produce nondeterministic rounding with fixed RNG seeds. Full configurations, data fingerprints and history logs accompany each checkpoint.')
  doc.add_heading('S4. Neural ensemble errors across partitions',1)
  e=pd.read_csv(ROOT/'reports/neural/ensemble_metrics.csv')
  add_table(doc,['Model','Split','n','MAE','RMSE','R2'],[[r.model,r.split,r.n,f'{r.mae:.3f}',f'{r.rmse:.3f}',f'{r.r2:.4f}'] for r in e.itertuples() if r.split!='validate'])
@@ -147,42 +142,30 @@ def si():
  doc.add_paragraph('The correction is FIA(DSD-BLYP) minus FIA(PBEh-3c), in kJ/mol. Comparisons use only training molecules. Repeated records are averaged within each canonical ligand-set/center-class cell before pairing. The nine neighboring-center contrasts were defined before inspection and are all retained. Intervals use 2,000 bootstrap samples over matched ligand sets with seed 20261113; they are descriptive, without a multiple-testing significance claim.')
  doc.add_heading('S9. Reproduction and provenance',1)
  doc.add_paragraph('README.md gives the preparation, training, evaluation and analysis commands. reports/experiment_plan.json distinguishes the initial fixed comparisons from exploratory acid-QM and geometry-source extensions. requirements-benchmark.txt and run configurations record the software environment; THIRD_PARTY.md records upstream code commits and licenses. A frozen archive contains split identities, all prediction exports, histories and checkpoints, together with a checksum manifest. The storage manifest provides SHA256 verification for each restored file.')
+ doc.add_heading('S10. Chemical environments and paired-structure analysis',1)
+ protocol=json.loads((ROOT/'reports/chemistry/protocol.json').read_text())
+ doc.add_paragraph('Chemical subgroup analyses are exploratory evaluations of frozen models on all 6,732 main-test molecules. Bins use training-set percentiles. The binding-induced heavy-atom pair-distance RMS thresholds are '+', '.join(f'{x:.6f}' for x in protocol['thresholds']['reorganization'])+' Å. The PBEh-3c/GFN2-xTB geometry-disagreement thresholds are '+', '.join(f'{x:.6f}' for x in protocol['thresholds']['geometry_source'])+' Å. Intervals use 2,000 central-class-stratified molecule bootstrap samples with seed 20261114 and fixed fitted models.')
+ for source,label in [('by_denticity','All main-test molecules by ligand denticity'),('phosphorus_denticity','P(III) by ligand denticity'),('phosphorus_angles','P(III) by training-defined angle-sum quartile')]:
+  d=pd.read_csv(ROOT/f'reports/chemistry/{source}.csv')
+  d=d[d.model.isin(['FIA-GNN','DimeNet++','Refinement','3D gain over FIA-GNN'])]
+  doc.add_paragraph(label)
+  add_table(doc,['Group','Model / contrast','n','MAE / gain','95% lower','95% upper'],[[r.group,r.model,r.n,f'{r.mae:.3f}',f'{r.ci95_low:.3f}',f'{r.ci95_high:.3f}'] for r in d.itertuples()])
+ doc.add_paragraph('Gain is FIA-GNN absolute error minus DimeNet++ absolute error on the same molecules. Positive values favor the geometric predictor. Local geometry is represented by the sum of three first-shell interligand angles; P(III) quartile thresholds are '+', '.join(f'{x:.4f}' for x in protocol['thresholds']['phosphorus_angles'])+' degrees. First-shell assignments match the reported element composition with the nearest atoms of each element. Across 19,691 three-coordinate structures, the maximum assigned distance divided by the sum of covalent radii is '+f'{protocol["max_bond_radius_ratio"]:.4f}'+'. Assigned atom indices and geometry descriptors are regenerated by lewis_acidity.chemistry_insights.')
+ d=pd.read_csv(ROOT/'reports/chemistry/by_center.csv')
+ classes=sorted(d.group.unique());lookup=d.set_index(['group','model'])
+ add_table(doc,['Center','n','DimeNet++','EGNN','Acid QM','Refinement'],[[cl,int(lookup.loc[(cl,'DimeNet++'),'n'])]+[f'{lookup.loc[(cl,m),"mae"]:.3f}' for m in ['DimeNet++','EGNN','Acid QM','Refinement']] for cl in classes])
+ d=pd.read_csv(ROOT/'reports/chemistry/geometry_shift_penalty.csv').set_index('group').loc[['P0–50','P50–75','P75–90','P90–100']]
+ add_table(doc,['Source percentile','n','MAE increase','95% lower','95% upper'],[[g,r.n,f'{r.mae_increase:.3f}',f'{r.ci95_low:.3f}',f'{r.ci95_high:.3f}'] for g,r in d.iterrows()])
+ doc.add_paragraph('Giving each of the 21 center classes equal weight yields geometry-source penalties of 1.679 kJ/mol below the training upper-decile threshold and 3.761 kJ/mol above it. Paired-geometry disagreement is evaluated where both protocols are available. The source-change experiment retains PBEh-trained weights; independent xTB-domain training is a separate modeling task.')
+ doc.add_heading('S11. Relationship to contemporary studies',1)
+ add_table(doc,['Study','Endpoint and domain','Molecular information','Contribution and relationship'],[
+  ['Sigmund et al. [1]','Gas/solution FIA; 48,986 p-block acids','Connectivity and chemical metadata','FIA49k and broad FIA-GNN prediction. Released predictions provide the same-molecule reference in the present work.'],
+  ['Fenogli et al. [3]','FIA; 594 boron acids in four scaffold families','Quantum, substituent-based and cheminformatics descriptors','Interpretable substituent design rules in focused chemical spaces. The present study evaluates broad p-block coordination classes and ligand-combination transfer.'],
+  ['Kirsch et al. [17]','FIA and electronic/steric properties; 16 pincer frameworks and four pnictogens','Quantum-chemical structures and electronic analysis','Geometry and ligand-dependent pnictogen chemistry. The present analysis examines predictive information across the broader FIA49k population.'],
+  ['Mahdian et al. [10]','3,927 adduct free energies; 816 boranes and five bases','DFT and chemically informed descriptors','Quantifies substituent effects and base-dependent acidity rankings. The present target is gas-phase fluoride-binding enthalpy.'],
+  ['Bhattacharya et al. [16]','Gas-phase proton affinities; experimental and DFT references','PM7 binding estimates, electronic and cheminformatics descriptors','Multi-fidelity correction and prospective screening. The present work applies established correction learning to FIA and resolves coordination, central-element and geometry-source dependence.']])
+ doc.add_paragraph('These studies use different chemical populations, reference methods and endpoints. Their reported errors are interpreted within those settings. Direct numerical comparisons here use released FIA-GNN predictions aligned to the identical FIA49k test molecules; the acid-plus-adduct refinement is reported as a separate computational input regime. Δ-learning follows the established formulation. [7]')
  doc.save(MAN/'Supporting_Information.docx')
-
-
-def chinese_report():
- doc=Document();style_document(doc,small=True,chinese=True)
- doc.add_heading('论文与代码修订说明',0)
- doc.add_paragraph('本版以原仓库为唯一代码入口，采用独立划分重新训练，并将原稿中的化学解释与实际证据对齐。它是供作者审阅的研究稿；期刊录用和“完美”无法保证。')
- doc.add_heading('已经完成的实质修改',1)
- seed=pd.read_csv(ROOT/'reports/neural/seed_summary.csv');main=seed[seed.split.eq('test')]
- for r in main.itertuples():
-  sd='' if pd.isna(r.mae_sd) else f' ± {r.mae_sd:.2f}'
-  doc.add_paragraph(f'{r.model}：MAE {r.mae_mean:.2f}{sd} kJ/mol，{r.n_seeds} 个随机种子，测试 n={r.n}。')
- doc.add_paragraph('量化差值校正：主测试 MAE 3.29 kJ/mol，配体骨架组合留出测试 3.35；但输入包含低级别 FIA，需要酸与氟加合物计算，不能宣称为 SMILES-only 模型或与其等成本。')
- doc.add_paragraph('原两份 2000 分子预测的 RMSE 与旧稿吻合。按已保存的 DimeNet 配置及已核对的数据顺序重建，1813 个属于训练部分、105 个属于验证部分、82 个属于测试部分。EGNN 原训练清单仍缺失，不能将这个重建结论直接套到 EGNN 的历史训练。原数值不再作为独立测试成绩。')
- doc.add_paragraph('所有 48,986 个分子均保留，最大 118 原子，22 种原子类型。数据准备不再混用未配位酸与氟加合物；训练、验证、测试身份固定，归一化和分子清单保存在检查点中。旧的独立脚本已经融合到原仓库 lewis_acidity/ 与 scripts/；原始结果审计作为补充证据保留。')
- doc.add_heading('老师批注逐条对应',1)
- comments=json.loads((ROOT/'reports/pdf_comments.json').read_text())
- response=pd.read_csv(ROOT/'reports/comment_response_matrix.csv').set_index('id')
- for c in comments:
-  doc.add_heading(f'{c["id"]} · 原 PDF 第 {c["page"]} 页',2)
-  doc.add_paragraph('批注：'+c['comment'])
-  r=response.loc[c['id']]
-  doc.add_paragraph('处理：'+str(r['status'])+'。'+str(r['action']))
-  doc.add_paragraph('定位：'+str(r['revised_location']))
- doc.add_heading('投稿定位与仍需作者确认的内容',1)
- doc.add_paragraph('建议优先按 Digital Discovery 研究论文定位，突出输入成本、几何来源敏感性、配体骨架泛化和参考方法校正；不将既有 GNN 或 Δ-learning 包装成新算法。两份正文均生成 LaTeX 源文件：Digital Discovery 使用 RSC 双栏模板的排版设置，JCIM 使用 ACS achemso 文档类；编译后提供 PDF 和完整源码。单一已知终点上的模型应用仍有新颖性审稿风险，外部参考或前瞻性化学验证会进一步增强工作，但本版没有虚构这些验证。')
- doc.add_paragraph('作者、单位和通讯邮箱按原 PDF 保留。投稿前需要作者确认署名顺序及全体同意、真实作者分工、资助与利益冲突声明；正文中的利益冲突声明目前明确待作者填写。AI 使用已经如实披露，不能替作者声称已经完成独立人工核验。')
- doc.add_paragraph('Digital Discovery 要求代码和数据可访问，并在发表前获得持久归档 DOI。当前公开 GitHub 主分支和版本化源数据可复现计算；新增权重与完整预测已经打包，需在作者账户下持久归档。尚未创建 Zenodo DOI，也未提交期刊；本轮按用户要求直接更新 master。')
- doc.add_paragraph('论文没有新的 DFT 单点、变形能分解、Boltzmann 构象平均或实验结果。xTB/PBEh 两种优化方法不是同义构象集合；坐标梯度也不是因果贡献。投稿结论只针对所选计算 FIA 标尺，不外推到所有 Lewis 碱或催化活性。')
- doc.add_heading('官方要求和相关工作',1)
- for text,url in [('Digital Discovery 作者要求','https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/digital-discovery'),('JCIM 作者要求（2026-11-09 更新）','https://researcher-resources.acs.org/publish/author_guidelines?coden=jcisd8')]:doc.add_paragraph(text+'：'+url)
- doc.add_paragraph('重点对照：FIA-GNN（2024，宽化学空间）、Fenogli 等（Digital Discovery 2025，限定硼骨架与解释性）、MARCEL（ICLR 2024，真正的构象集合学习）、FIA71（2025，参考方法与基组误差）、Mahdian 等（2026，Lewis 酸性对探针碱的依赖）以及 Δ-learning（2015，差值学习的既有方法）。完整引用见英文稿。')
- doc.save(MAN/'Revision_notes_ZH.docx')
-
-
-from latex_manuscripts import build_latex
 
 
 def main():
@@ -190,8 +173,8 @@ def main():
  abstract,blocks=content()
  (MAN/'article_content.json').write_text(json.dumps(dict(title=TITLE,authors=AUTHORS,abstract=abstract,blocks=blocks,references=REFS),ensure_ascii=False,indent=2)+'\n')
  for journal in ['Digital Discovery','JCIM']:article(journal,abstract,blocks)
- si();chinese_report();build_latex(abstract,blocks)
+ si();build_latex(abstract,blocks)
  review=MAN/'review';review.mkdir(exist_ok=True)
  for path in MAN.glob('*.docx'):shutil.copy2(path,review/path.name)
- print('Built both journal manuscripts, SI, response report and TeX sources',flush=True)
+ print('Built both journal manuscripts, SI and TeX sources',flush=True)
 if __name__=='__main__':main()

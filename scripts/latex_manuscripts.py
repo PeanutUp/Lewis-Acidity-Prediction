@@ -1,9 +1,6 @@
 """Native journal manuscripts with shared prose, BibTeX and separate SI."""
 from pathlib import Path
 import re
-from docx import Document
-from docx.table import Table
-from docx.text.paragraph import Paragraph
 
 ROOT = Path(__file__).resolve().parents[1]
 MAN = ROOT / 'manuscript'
@@ -11,7 +8,7 @@ KEYS = ['sigmund2024fia', 'erdmann2020fia', 'fenogli2025boron',
         'satorras2021egnn', 'gasteiger2020dimenet', 'schutt2017schnet',
         'ramakrishnan2015delta', 'zhu2024marcel', 'lehmann2025fia',
         'mahdian2026base', 'fia49ktargets', 'fia49kgeometries',
-        'fia49kpredictions', 'rdkit', 'pedregosa2011sklearn']
+        'fia49kpredictions', 'rdkit', 'pedregosa2011sklearn', 'bhattacharya2026proton', 'kirsch2025pnictogen']
 
 
 def tex_text(value):
@@ -49,8 +46,8 @@ def body_tex(blocks):
         elif kind == 'equation':
             parts.append('\\begin{equation}\n' + block[1] + '\n\\end{equation}')
         elif kind == 'figure':
-            width = '.80' if block[1] == 'method_corrections' else '.96'
-            parts.append(r'\begin{figure*}[t]' + '\n' + r'\centering' + '\n' +
+            width = '.98'
+            parts.append(r'\begin{figure*}[tp]' + '\n' + r'\centering' + '\n' +
                          r'\includegraphics[width=' + width + r'\textwidth]{figures/' +
                          block[1] + '.pdf}\n\\caption{' + tex_text(block[2].split('. ', 1)[1]) +
                          '}\n\\label{fig:' + block[1] + '}\n\\end{figure*}')
@@ -63,7 +60,7 @@ def body_tex(blocks):
                 spec += 'r' * (len(headers)-1) + '@{}'
             lines = [' & '.join(tex_text(v) for v in headers) + r' \\ \midrule']
             lines += [' & '.join(tex_text(v) for v in row) + r' \\' for row in rows]
-            parts.append(r'\begin{table*}[t]' + '\n' + r'\centering\small' + '\n' +
+            parts.append(r'\begin{table*}[tp]' + '\n' + r'\centering\small' + '\n' +
                          r'\caption{' + tex_text(block[1].split('. ', 1)[1]) + '}\n' +
                          r'\begin{tabularx}{\textwidth}{' + spec + '}\n\\toprule\n' +
                          '\n'.join(lines) + '\n\\bottomrule\n\\end{tabularx}\n\\end{table*}')
@@ -72,6 +69,9 @@ def body_tex(blocks):
 
 def si_tex():
     """Export the scientific SI, without the private revision/audit response."""
+    from docx import Document
+    from docx.table import Table
+    from docx.text.paragraph import Paragraph
     doc = Document(MAN / 'Supporting_Information.docx')
     parts = []
     for child in doc.element.body.iterchildren():
@@ -84,7 +84,7 @@ def si_tex():
                 if text.startswith('S8.'):
                     parts.append(r'\clearpage')
                 parts.append(r'\section*{' + tex_text(text) + '}')
-            elif text.startswith('Geometry and Quantum-Chemical') or text.startswith('Simin Huang'):
+            elif text == __import__('article_content').TITLE or text.startswith('Simin Huang'):
                 continue
             else:
                 parts.append(tex_text(text))
@@ -96,6 +96,8 @@ def si_tex():
             widths = [first] + [(1-first-.025*n)/(n-1)]*(n-1) if n > 1 else [.92]
             if rows[0] == ['File', 'Figshare file ID', 'Verified MD5']:
                 widths = [.30, .19, .45]
+            if rows[0][0] == 'Study':
+                widths = [.16, .24, .24, .28]
             columns = ''.join(r'>{\raggedright\arraybackslash}p{' + f'{w:.3f}' + r'\textwidth}' for w in widths)
             header = ' & '.join(tex_text(v) for v in rows[0]) + r' \\ \midrule'
             lines = [' & '.join(tex_text(v) for v in row) + r' \\' for row in rows[1:]]
@@ -113,14 +115,28 @@ def si_tex():
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
 \emergencystretch=2em
+\renewcommand{\thefigure}{S\arabic{figure}}
 \begin{document}
 \begin{center}
 {\LARGE Supporting Information}\\[8pt]
-{\large Geometry and Quantum-Chemical Corrections in Predicting Fluoride Ion Affinity}\\[6pt]
+{\large ARTICLE_TITLE}\\[6pt]
 Simin Huang, Shenqi Zong, and Han Chen\\
 Tanwei College, Tsinghua University, Beijing 100086, China
 \end{center}
 '''
+    from article_content import TITLE
+    front = front.replace('ARTICLE_TITLE', tex_text(TITLE))
+    displays = [
+        ('S12. External test groups', 'external_groups', 'Ensemble MAE across all published test groups. The final row uses acid-plus-adduct quantum input; the other neural rows use optimized acid input.'),
+        ('S13. Pnictogen-center comparison', 'pnictogen_prediction', 'Main-test class MAE for frozen ensembles and the quantum correction, with sample counts. Full 21-class exports accompany the code.'),
+        ('S14. Molecular structure atlas', 'chemical_structure_atlas', 'Nine chemically diverse FIA49k structures redrawn from released SMILES, with reference FIA, first-shell angle sum and partition membership. Training structures are illustrations; their fitted predictions are omitted.'),
+        ('S15. Geometry-source overview', 'geometry_source_shift', 'Frozen radial-ensemble errors for all six official test groups with PBEh-3c and GFN2-xTB acid coordinates.')]
+    for heading, name, caption in displays:
+        parts.append(r'\clearpage\section*{' + tex_text(heading) + '}\n' +
+                     r'\begin{figure}[ht]\centering' + '\n' +
+                     r'\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/' + name + '.pdf}\n' +
+                     r'\caption{' + tex_text(caption) + '}\n' + r'\end{figure}')
+    parts.append(r'\clearpage\bibliographystyle{unsrt}\bibliography{references}')
     (MAN / 'supporting_information.tex').write_text(front + '\n\n'.join(parts) + '\n\\end{document}\n')
 
 
@@ -132,12 +148,15 @@ def build_latex(abstract, blocks):
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 \emergencystretch=2em
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{.90}
+\renewcommand{\textfraction}{.07}
+\renewcommand{\dblfloatpagefraction}{.75}
 '''
     availability = ('FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 from Figshare. [11–13] '
                     'Code, frozen models, complete predictions, split manifests and training configurations are available at '
                     'https://github.com/PeanutUp/Lewis-Acidity-Prediction. Source archives and restored artifacts are verified by checksums.')
-    ending = '\n\\section*{Conflicts of interest}\nThe authors will supply their declaration before submission.\n'
-    ending += '\n\\section*{Data availability}\n' + tex_text(availability).replace('https://github.com/PeanutUp/Lewis-Acidity-Prediction.', r'\url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}.') + '\n'
+    ending = '\n\\section*{Data availability}\n' + tex_text(availability).replace('https://github.com/PeanutUp/Lewis-Acidity-Prediction.', r'\url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}.') + '\n'
     ending += r'''\section*{Acknowledgements}
 OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.
 '''
