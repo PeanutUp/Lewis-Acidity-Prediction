@@ -3,16 +3,24 @@
   "documents": {
     "digital_discovery": {
       "pages": 8,
-      "bytes": 186848,
-      "sha256": "e804d0ad65c3a2cf69a959772665b6b2b884a5c097a0bf555b4d472eaf4c92fa",
+      "bytes": 186846,
+      "sha256": "bd0f4405223f8a4493f2901a3e3a433cbdf499e9f209eca5ecf8a2fe7ebe2b8c",
+      "missing_glyphs": 0,
+      "undefined_references": 0,
+      "overfull_boxes": 0
+    },
+    "digital_discovery_si": {
+      "pages": 13,
+      "bytes": 175508,
+      "sha256": "afd34c8202b15b01ac2fe65c755bb92d9e45849985c4f14876f86e6b9b648c5f",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0
     },
     "jcim": {
       "pages": 13,
-      "bytes": 220778,
-      "sha256": "e50224aea661dbbe013ae2b5c74cfabbe4bf4d6be1d24b598b47a948bdc61845",
+      "bytes": 220779,
+      "sha256": "ca630cf8a435767c81b2ccd8db6fa02e0054199cf0455a484a4c6c5235501527",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0
@@ -20,7 +28,7 @@
     "supporting_information": {
       "pages": 13,
       "bytes": 175450,
-      "sha256": "223349d31235607c3887870afcf420ad9a2b00de2d5faa62f8c7facba1a3e1c0",
+      "sha256": "783ab611af87781414a395bf85c4935e736f3060262c3297c11b8a22be77d5f4",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0

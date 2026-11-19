@@ -6,7 +6,10 @@
     "Han Chen",
     "Shaoguang Zhang"
   ],
-  "affiliation": "Tsinghua University, Beijing 100084, China",
+  "affiliations": {
+    "digital_discovery": "Tsinghua University, Beijing, China",
+    "jcim": "Tsinghua University, Beijing 100084, China"
+  },
   "corresponding_author": {
     "name": "Shaoguang Zhang",
     "department": "Department of Chemistry",

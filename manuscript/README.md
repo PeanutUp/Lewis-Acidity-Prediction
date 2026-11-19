@@ -6,7 +6,9 @@
 - `jcim.tex`: ACS `achemso` class, journal code `jcisd8`, two-column preview.
 - `body.tex`: shared scientific text, equations, figures and tables.
 - `references.bib`: BibTeX bibliography used by both journal variants.
-- `supporting_information.tex`: separate scientific supporting information.
+- `digital_discovery_si.tex` and `supporting_information.tex`: separate
+  supplementary PDFs for Digital Discovery and JCIM, respectively.
+- `supporting_information_body.tex`: shared scientific content for both supplements.
 - `compiled/`: PDFs compiled directly from these LaTeX sources.
 - [`submission/`](submission/README.md): journal-specific cover letters, TOC assets,
   and the remaining author checks.
@@ -22,8 +24,8 @@ bash scripts/compile_manuscripts.sh
 Install `python-docx` and `pandas` for the source generator. The compile script
 uses Tectonic (or the executable in `TECTONIC`); it downloads missing TeX packages
 on first use. Alternatively, upload the whole manuscript directory to Overleaf,
-choose either journal root file, and use XeLaTeX with BibTeX. The SI has its own
-root file. Include the vector figure PDFs and both local style/BibTeX files.
+choose the article or supplement root file for the target journal, and use XeLaTeX
+with BibTeX. Include the vector figure PDFs and both local style/BibTeX files.
 
 Official guidance:
 [Digital Discovery](https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/digital-discovery),

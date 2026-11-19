@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 from article_content import (
-    AFFILIATION, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
+    AFFILIATIONS, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
     CORRESPONDING_AUTHOR, CORRESPONDING_DEPARTMENT, CORRESPONDING_EMAIL,
     DATA_AVAILABILITY, DATA_SOURCES, MARKED_BYLINE, PROJECT_URL,
     SUPPORTING_DESCRIPTION, TITLE,
@@ -120,12 +120,12 @@ def si_tex():
     from docx.text.paragraph import Paragraph
     doc = Document(MAN / 'Supporting_Information.docx')
     front_matter = {'Supporting Information', TITLE, MARKED_BYLINE,
-                    AFFILIATION + '\n*' + CORRESPONDENCE}
+                    AFFILIATIONS['jcim'] + '\n*' + CORRESPONDENCE}
     parts = []
     for child in doc.element.body.iterchildren():
         if child.tag.endswith('}p'):
             paragraph = Paragraph(child, doc)
-            text = paragraph.text
+            text = paragraph.text.rstrip()
             if not text or text in front_matter:
                 continue
             if paragraph.style.name.startswith('Heading'):
@@ -151,27 +151,6 @@ def si_tex():
                          r'\begin{longtable}{@{}' + columns + '@{}}\n\\toprule\n' + header +
                          '\n\\endfirsthead\n\\toprule\n' + header + '\n\\endhead\n' +
                          '\n'.join(lines) + '\n\\bottomrule\n\\end{longtable}\n}')
-    front = r'''\documentclass[10pt,a4paper]{article}
-\usepackage[margin=2.1cm]{geometry}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable,needspace}
-\usepackage{url}
-\usepackage{hyperref}
-''' + pdf_metadata('Supporting Information for ' + TITLE) + r'''
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{5pt}
-\emergencystretch=2em
-\renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\thepage}{S\arabic{page}}
-\begin{document}
-\begin{center}
-{\LARGE Supporting Information}\\[8pt]
-{\large ''' + tex_text(TITLE) + r'''}\\[6pt]
-''' + byline_tex() + r'''\\
-''' + tex_text(AFFILIATION) + r'''\\
-{\small ''' + correspondence_tex() + r'''}
-\end{center}
-'''
     displays = [
         ('S12. External test groups', 'external_groups', 'Ensemble MAE across all published test groups. The final row uses acid-plus-adduct quantum input; the other neural rows use optimized acid input.'),
         ('S13. Pnictogen-center comparison', 'pnictogen_prediction', 'Main-test class MAE for frozen ensembles and the quantum correction, with sample counts. Full 21-class exports accompany the code.'),
@@ -183,7 +162,37 @@ def si_tex():
                      r'\includegraphics[width=.98\textwidth,height=.79\textheight,keepaspectratio]{figures/' + name + '.pdf}\n' +
                      r'\caption{' + tex_text(caption) + '}\n' + r'\end{figure}')
     parts.append(r'\clearpage\bibliographystyle{unsrt}\bibliography{references}')
-    (MAN / 'supporting_information.tex').write_text(front + '\n\n'.join(parts) + '\n\\end{document}\n')
+    (MAN / 'supporting_information_body.tex').write_text('\n\n'.join(parts) + '\n')
+
+    variants = (
+        ('digital_discovery', 'digital_discovery_si', 'Supplementary Information'),
+        ('jcim', 'supporting_information', 'Supporting Information'),
+    )
+    for journal, stem, heading in variants:
+        document = r'''\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable,needspace}
+\usepackage{url}
+\usepackage{hyperref}
+''' + pdf_metadata(heading + ' for ' + TITLE) + r'''
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\emergencystretch=2em
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thepage}{S\arabic{page}}
+\begin{document}
+\begin{center}
+{\LARGE ''' + tex_text(heading) + r'''}\\[8pt]
+{\large ''' + tex_text(TITLE) + r'''}\\[6pt]
+''' + byline_tex() + r'''\\
+''' + tex_text(AFFILIATIONS[journal]) + r'''\\
+{\small ''' + correspondence_tex() + r'''}
+\end{center}
+\input{supporting_information_body}
+\end{document}
+'''
+        (MAN / f'{stem}.tex').write_text(document)
 
 
 def build_latex(abstract, blocks):
@@ -207,7 +216,7 @@ def build_latex(abstract, blocks):
 \vspace*{-.4cm}
 {\sffamily\Large\bfseries ''' + tex_text(TITLE) + r'''}\par\medskip
 {\large ''' + byline_tex() + r'''}\par\smallskip
-{\small ''' + tex_text(AFFILIATION) + r'''}\par
+{\small ''' + tex_text(AFFILIATIONS['digital_discovery']) + r'''}\par
 {\small ''' + correspondence_tex() + r'''}\par\medskip
 {\small\bfseries Abstract}\par
 {\small ''' + tex_text(abstract) + r'''}\par\vspace{.7cm}
@@ -227,7 +236,7 @@ def build_latex(abstract, blocks):
         acs += '\\author{' + tex_text(name) + '}\n'
         if name == CORRESPONDING_AUTHOR:
             acs += '\\email{' + CORRESPONDING_EMAIL + '}\n'
-        acs += '\\affiliation{' + tex_text(AFFILIATION) + '}\n'
+        acs += '\\affiliation{' + tex_text(AFFILIATIONS['jcim']) + '}\n'
     acs += '\\begin{document}\n\\begin{abstract}\n' + tex_text(abstract) + '\n\\end{abstract}\n\\input{body}\n'
     acs += '\n' + endmatter(acs=True) + '\n\\bibliography{references}\n'
     acs += r'''\renewcommand*{\tocentryname}{For Table of Contents Only}

@@ -23,7 +23,12 @@ def main():
  verification=json.loads((ROOT/'reports/archive_verification.json').read_text())
  assert len(verification['models'])==23
  exports=[]
- for source,name in [('digital_discovery.pdf','Digital_Discovery_LaTeX.pdf'),('jcim.pdf','JCIM_LaTeX.pdf'),('supporting_information.pdf','Supporting_Information_LaTeX.pdf')]:
+ for source,name in [
+  ('digital_discovery.pdf', 'Digital_Discovery_LaTeX.pdf'),
+  ('digital_discovery_si.pdf', 'Digital_Discovery_Supplementary_Information_LaTeX.pdf'),
+  ('jcim.pdf', 'JCIM_LaTeX.pdf'),
+  ('supporting_information.pdf', 'Supporting_Information_LaTeX.pdf'),
+ ]:
   target=output/name;shutil.copy2(ROOT/'manuscript/compiled'/source,target);exports.append(target)
  latex_archive=output/'Lewis_Acidity_LaTeX_Sources.zip'
  with zipfile.ZipFile(latex_archive,'w',compression=zipfile.ZIP_DEFLATED) as z:
@@ -45,7 +50,8 @@ def main():
 工作目录：/data2/hsm/Lewis-Acidity-Prediction
 
 正文：Digital_Discovery_LaTeX.pdf 或 JCIM_LaTeX.pdf。
-科学补充材料：Supporting_Information_LaTeX.pdf。
+科学补充材料：Digital_Discovery_Supplementary_Information_LaTeX.pdf（Digital Discovery）
+或 Supporting_Information_LaTeX.pdf（JCIM）。
 LaTeX源文件：Lewis_Acidity_LaTeX_Sources.zip，包含tex、bib、样式与矢量图，
 可上传Overleaf。两份期刊正文共享科学内容，采用对应RSC/ACS版式。
 压缩包的 submission/ 中含两刊投稿信、目录图和投稿清单。
@@ -72,7 +78,7 @@ LaTeX源文件：Lewis_Acidity_LaTeX_Sources.zip，包含tex、bib、样式与�
 解压后运行 python scripts/restore_artifacts.py，再按README准备版本化公开数据。
 完整化学诊断表也包含在压缩包中；它们可从源码再生成。
 模型训练已完成23次；本次新增化学分析使用冻结预测，未重新选择模型。
-23项回归检查通过，三份LaTeX文稿经过编译与版面检查。
+23项回归检查通过，两刊正文及各自的补充材料均经过编译与版面检查。
 逐文件SHA256校验记录随压缩包和交付文件提供。
 
 作者署名、分工、资助和利益冲突声明及正式归档DOI需在投稿前由作者确认。

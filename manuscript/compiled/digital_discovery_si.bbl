@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{sigmund2024fia}
+L.~M. Sigmund, S.~Sowndarya S.~V., A.~Albers, P.~Erdmann, R.~S. Paton, and
+  L.~Greb.
+\newblock Predicting lewis acidity: Machine learning the fluoride ion affinity
+  of p-block-atom-based molecules.
+\newblock {\em Angewandte Chemie International Edition}, 63:e202401084, 2024.
+
+\bibitem{fenogli2025boron}
+J.~Fenogli, L.~Grimaud, and R.~Vuilleumier.
+\newblock Constructing and explaining machine learning models for the
+  exploration and design of boron-based lewis acids.
+\newblock {\em Digital Discovery}, 4:3623--3634, 2025.
+
+\bibitem{kirsch2025pnictogen}
+Tamina~Z. Kirsch, Tyler~J. Hannah, and Saurabh~S. Chitnis.
+\newblock Influence of pnictogen and ligand framework on the lewis acidity and
+  steric environment in pnictogen pincer complexes.
+\newblock {\em Chemistry -- A European Journal}, 31:e202403258, 2025.
+
+\bibitem{mahdian2026base}
+A.~Mahdian, K.~Laasonen, and K.~Farshadfar.
+\newblock Quantifying base-dependent lewis acidity in substituted boranes
+  through {DFT} and machine learning.
+\newblock {\em Inorganic Chemistry}, 65:25557--25566, 2026.
+
+\bibitem{bhattacharya2026proton}
+Debjyoti Bhattacharya, Yifan Liu, Valentino~R. Cooper, and Wesley~F. Reinhart.
+\newblock Accelerating proton affinity prediction with multi-fidelity machine
+  learning.
+\newblock {\em Digital Discovery}, 2026.
+\newblock In press.
+
+\bibitem{ramakrishnan2015delta}
+R.~Ramakrishnan, P.~O. Dral, M.~Rupp, and O.~A. von Lilienfeld.
+\newblock Big data meets quantum chemistry approximations: The
+  {$\Delta$}-machine learning approach.
+\newblock {\em Journal of Chemical Theory and Computation}, 11:2087--2096,
+  2015.
+
+\end{thebibliography}

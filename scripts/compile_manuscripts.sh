@@ -11,7 +11,7 @@ if [[ ! -x "$LATEX_COMPILER" ]] && ! command -v "$LATEX_COMPILER" >/dev/null 2>&
 fi
 mkdir -p "$TASK_ROOT/manuscript/compiled" "$TASK_ROOT/work/tex/cache"
 cd "$TASK_ROOT/manuscript"
-for manuscript in digital_discovery jcim supporting_information; do
+for manuscript in digital_discovery digital_discovery_si jcim supporting_information; do
   XDG_CACHE_HOME="$TASK_ROOT/work/tex/cache" "$LATEX_COMPILER" --keep-logs --keep-intermediates \
     --outdir compiled "$manuscript.tex"
 done

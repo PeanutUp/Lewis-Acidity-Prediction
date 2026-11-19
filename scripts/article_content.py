@@ -8,7 +8,10 @@ AUTHOR_NAMES = ('Simin Huang', 'Shenqi Zong', 'Han Chen', 'Shaoguang Zhang')
 CORRESPONDING_AUTHOR = AUTHOR_NAMES[-1]
 CORRESPONDING_DEPARTMENT = 'Department of Chemistry'
 CORRESPONDING_EMAIL = 'sgzhang@tsinghua.edu.cn'
-AFFILIATION = 'Tsinghua University, Beijing 100084, China'
+AFFILIATIONS = {
+    'digital_discovery': 'Tsinghua University, Beijing, China',
+    'jcim': 'Tsinghua University, Beijing 100084, China',
+}
 CORRESPONDENCE = f'{CORRESPONDING_DEPARTMENT}. Email: {CORRESPONDING_EMAIL}'
 MARKED_BYLINE = ', '.join(AUTHOR_NAMES[:-1]) + f', and {CORRESPONDING_AUTHOR}*'
 PROJECT_URL = 'https://github.com/PeanutUp/Lewis-Acidity-Prediction'

@@ -11,7 +11,7 @@ from docx.shared import Inches,Pt,RGBColor
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from article_content import (
- AFFILIATION, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
+ AFFILIATIONS, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
  CORRESPONDING_AUTHOR, CORRESPONDING_DEPARTMENT, CORRESPONDING_EMAIL, DATA_AVAILABILITY,
  MARKED_BYLINE, REFS, ROOT, SUPPORTING_DESCRIPTION, TITLE, content,
 )
@@ -72,17 +72,18 @@ def endmatter(doc,journal):
  for n,ref in enumerate(REFS,1):doc.add_paragraph(f'[{n}] {ref}')
 
 
-def byline(doc):
+def byline(doc, affiliation):
  paragraph = doc.add_paragraph(MARKED_BYLINE.removesuffix('*'))
  paragraph.add_run('*').font.superscript = True
- contact = doc.add_paragraph(AFFILIATION + '\n')
+ contact = doc.add_paragraph(affiliation + '\n')
  contact.add_run('*').font.superscript = True
  contact.add_run(CORRESPONDENCE)
 
 
 def article(journal,abstract,blocks):
  doc=Document();style_document(doc,journal)
- doc.add_heading(TITLE,0);byline(doc)
+ journal_key = 'jcim' if journal == 'JCIM' else 'digital_discovery'
+ doc.add_heading(TITLE,0);byline(doc, AFFILIATIONS[journal_key])
  doc.add_heading('Abstract',1);doc.add_paragraph(abstract)
  doc.add_paragraph('Keywords: fluoride ion affinity; Lewis acidity; geometric learning; quantum-chemical correction; chemical generalization; model validation')
  for block in blocks:
@@ -100,9 +101,9 @@ def article(journal,abstract,blocks):
  path=MAN/('Digital_Discovery.docx' if journal=='Digital Discovery' else 'JCIM.docx');doc.save(path)
 
 
-def si():
+def si(heading, affiliation, filename):
  doc=Document();style_document(doc,small=True)
- doc.add_heading('Supporting Information',0);doc.add_paragraph(TITLE);byline(doc)
+ doc.add_heading(heading,0);doc.add_paragraph(TITLE);byline(doc, affiliation)
  doc.add_heading('S1. Versioned data and complete geometry preparation',1)
  from importlib.util import spec_from_file_location,module_from_spec
  spec=spec_from_file_location('prepare',ROOT/'lewis_acidity/prepare.py');module=module_from_spec(spec);spec.loader.exec_module(module)
@@ -176,21 +177,23 @@ def si():
   ['Mahdian et al. [10]','3,927 adduct free energies; 816 boranes and five bases','DFT and chemically informed descriptors','Quantifies substituent effects and base-dependent acidity rankings. The present target is gas-phase fluoride-binding enthalpy.'],
   ['Bhattacharya et al. [16]','Gas-phase proton affinities; experimental and DFT references','PM7 binding estimates, electronic and cheminformatics descriptors','Multi-fidelity correction and prospective screening. The present work applies established correction learning to FIA and resolves coordination, central-element and geometry-source dependence.']])
  doc.add_paragraph('These studies use different chemical populations, reference methods and endpoints. Their reported errors are interpreted within those settings. Direct numerical comparisons here use released FIA-GNN predictions aligned to the identical FIA49k test molecules; the acid-plus-adduct refinement is reported as a separate computational input regime. Δ-learning follows the established formulation. [7]')
- doc.save(MAN/'Supporting_Information.docx')
+ doc.save(MAN/filename)
 
 
 def main():
  MAN.mkdir(exist_ok=True)
  abstract,blocks=content()
  article_data = dict(
-  title=TITLE, authors=AUTHOR_NAMES, affiliation=AFFILIATION,
+  title=TITLE, authors=AUTHOR_NAMES, affiliations=AFFILIATIONS,
   corresponding_author=dict(name=CORRESPONDING_AUTHOR, department=CORRESPONDING_DEPARTMENT,
                             email=CORRESPONDING_EMAIL),
   abstract=abstract, blocks=blocks, references=REFS,
  )
  (MAN/'article_content.json').write_text(json.dumps(article_data,ensure_ascii=False,indent=2)+'\n')
  for journal in ['Digital Discovery','JCIM']:article(journal,abstract,blocks)
- si();build_latex(abstract,blocks)
+ si('Supporting Information', AFFILIATIONS['jcim'], 'Supporting_Information.docx')
+ si('Supplementary Information', AFFILIATIONS['digital_discovery'], 'Digital_Discovery_Supplementary_Information.docx')
+ build_latex(abstract,blocks)
  review=MAN/'review';review.mkdir(exist_ok=True)
  for path in MAN.glob('*.docx'):shutil.copy2(path,review/path.name)
  print('Built both journal manuscripts, SI and TeX sources',flush=True)
