@@ -1,8 +1,7 @@
-"""Build editable journal variants, SI, Chinese response report and TeX sources.
+"""Build editable journal variants, supporting information and TeX sources.
 
 Run with python-docx installed. Numerical tables are read from the frozen reports;
-partial experiments cannot silently enter the final article. Author-only metadata
-remain explicit in the separate revision report rather than being invented.
+partial experiments cannot silently enter the final article.
 """
 from pathlib import Path
 import json,re,sys,shutil
@@ -11,7 +10,11 @@ from docx import Document
 from docx.shared import Inches,Pt,RGBColor
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from article_content import ROOT,TITLE,AUTHORS,AFFILIATION,REFS,content
+from article_content import (
+ AFFILIATION, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
+ CORRESPONDING_AUTHOR, CORRESPONDING_DEPARTMENT, CORRESPONDING_EMAIL, DATA_AVAILABILITY,
+ MARKED_BYLINE, REFS, ROOT, SUPPORTING_DESCRIPTION, TITLE, content,
+)
 from latex_manuscripts import build_latex
 MAN=ROOT/'manuscript'
 
@@ -58,21 +61,28 @@ def add_figure(doc,name,caption,width=6.2):
 
 
 def endmatter(doc,journal):
- if journal=='JCIM':
-  doc.add_heading('Supporting Information',1)
-  doc.add_paragraph('Dataset and geometry provenance; split definitions and identity checks; model configurations and seed-level errors; subgroup and paired-bootstrap comparisons; geometry-source robustness; matched-ligand reference-method comparisons (PDF). Machine-readable manifests, predictions and frozen checkpoints accompany the reproducibility archive.')
- doc.add_heading('Data and software availability' if journal=='JCIM' else 'Data availability',1)
- doc.add_paragraph('FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 at https://doi.org/10.6084/m9.figshare.24635136.v1, https://doi.org/10.6084/m9.figshare.24635157.v1 and https://doi.org/10.6084/m9.figshare.24635187.v1. Preparation, training and analysis code, configurations and machine-readable result tables are available at https://github.com/PeanutUp/Lewis-Acidity-Prediction, main development branch master. The prepared data can be regenerated from versioned sources with checksum validation. Frozen models, prediction exports and split manifests accompany the source code.')
- doc.add_heading('Acknowledgements',1)
- doc.add_paragraph('OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.')
+ acs = journal == 'JCIM'
+ doc.add_heading('Supporting Information' if acs else 'Supplementary information',1)
+ doc.add_paragraph(SUPPORTING_DESCRIPTION + ' (PDF).')
+ doc.add_heading('Data and Software Availability' if acs else 'Data availability',1)
+ doc.add_paragraph(DATA_AVAILABILITY)
+ doc.add_heading('Acknowledgments' if acs else 'Acknowledgements',1)
+ doc.add_paragraph(AI_ACKNOWLEDGEMENT)
  doc.add_heading('References',1)
  for n,ref in enumerate(REFS,1):doc.add_paragraph(f'[{n}] {ref}')
 
 
+def byline(doc):
+ paragraph = doc.add_paragraph(MARKED_BYLINE.removesuffix('*'))
+ paragraph.add_run('*').font.superscript = True
+ contact = doc.add_paragraph(AFFILIATION + '\n')
+ contact.add_run('*').font.superscript = True
+ contact.add_run(CORRESPONDENCE)
+
+
 def article(journal,abstract,blocks):
  doc=Document();style_document(doc,journal)
- doc.add_heading(TITLE,0);doc.add_paragraph('Simin Huang*, Shenqi Zong, and Han Chen')
- doc.add_paragraph(AFFILIATION+'\n*Correspondence: hsm24@mails.tsinghua.edu.cn')
+ doc.add_heading(TITLE,0);byline(doc)
  doc.add_heading('Abstract',1);doc.add_paragraph(abstract)
  doc.add_paragraph('Keywords: fluoride ion affinity; Lewis acidity; geometric learning; quantum-chemical correction; chemical generalization; model validation')
  for block in blocks:
@@ -84,14 +94,15 @@ def article(journal,abstract,blocks):
    add_table(doc,block[2],block[3])
   elif block[0]=='figure':add_figure(doc,block[1],block[2])
  endmatter(doc,journal)
- doc.add_page_break();doc.add_heading('Table of contents graphic',1)
- add_figure(doc,'toc_graphic','Input availability determines the appropriate FIA prediction workflow.',width=3.25)
+ if journal == 'JCIM':
+  doc.add_page_break();doc.add_heading('For Table of Contents Only',1)
+  doc.add_picture(str(MAN/'figures'/'toc_graphic.png'),width=Inches(3.25))
  path=MAN/('Digital_Discovery.docx' if journal=='Digital Discovery' else 'JCIM.docx');doc.save(path)
 
 
 def si():
  doc=Document();style_document(doc,small=True)
- doc.add_heading('Supporting Information',0);doc.add_paragraph(TITLE);doc.add_paragraph(AUTHORS)
+ doc.add_heading('Supporting Information',0);doc.add_paragraph(TITLE);byline(doc)
  doc.add_heading('S1. Versioned data and complete geometry preparation',1)
  from importlib.util import spec_from_file_location,module_from_spec
  spec=spec_from_file_location('prepare',ROOT/'lewis_acidity/prepare.py');module=module_from_spec(spec);spec.loader.exec_module(module)
@@ -171,7 +182,13 @@ def si():
 def main():
  MAN.mkdir(exist_ok=True)
  abstract,blocks=content()
- (MAN/'article_content.json').write_text(json.dumps(dict(title=TITLE,authors=AUTHORS,abstract=abstract,blocks=blocks,references=REFS),ensure_ascii=False,indent=2)+'\n')
+ article_data = dict(
+  title=TITLE, authors=AUTHOR_NAMES, affiliation=AFFILIATION,
+  corresponding_author=dict(name=CORRESPONDING_AUTHOR, department=CORRESPONDING_DEPARTMENT,
+                            email=CORRESPONDING_EMAIL),
+  abstract=abstract, blocks=blocks, references=REFS,
+ )
+ (MAN/'article_content.json').write_text(json.dumps(article_data,ensure_ascii=False,indent=2)+'\n')
  for journal in ['Digital Discovery','JCIM']:article(journal,abstract,blocks)
  si();build_latex(abstract,blocks)
  review=MAN/'review';review.mkdir(exist_ok=True)

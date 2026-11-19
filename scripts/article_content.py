@@ -4,8 +4,37 @@ import json
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]
 TITLE='Coordination Constraints and Information Content in Predicting Lewis Acidity'
-AUTHORS='Simin Huang, Shenqi Zong, and Han Chen'
-AFFILIATION='Tanwei College, Tsinghua University, Beijing 100086, China'
+AUTHOR_NAMES = ('Simin Huang', 'Shenqi Zong', 'Han Chen', 'Shaoguang Zhang')
+CORRESPONDING_AUTHOR = AUTHOR_NAMES[-1]
+CORRESPONDING_DEPARTMENT = 'Department of Chemistry'
+CORRESPONDING_EMAIL = 'sgzhang@tsinghua.edu.cn'
+AFFILIATION = 'Tsinghua University, Beijing 100084, China'
+CORRESPONDENCE = f'{CORRESPONDING_DEPARTMENT}. Email: {CORRESPONDING_EMAIL}'
+MARKED_BYLINE = ', '.join(AUTHOR_NAMES[:-1]) + f', and {CORRESPONDING_AUTHOR}*'
+PROJECT_URL = 'https://github.com/PeanutUp/Lewis-Acidity-Prediction'
+DATA_SOURCES = (
+    ('FIA49k targets', 'https://doi.org/10.6084/m9.figshare.24635136.v1'),
+    ('geometries', 'https://doi.org/10.6084/m9.figshare.24635157.v1'),
+    ('released FIA-GNN predictions', 'https://doi.org/10.6084/m9.figshare.24635187.v1'),
+)
+DATA_AVAILABILITY = (
+    ', '.join(f'{name} ({url})' for name, url in DATA_SOURCES[:-1])
+    + f', and {DATA_SOURCES[-1][0]} ({DATA_SOURCES[-1][1]}) '
+    + 'are available from Figshare under CC BY 4.0. [11–13] '
+    + f'Preparation, training and analysis code and archived artifacts are available at {PROJECT_URL}. '
+    + 'The repository provides instructions for retrieving the source data and restoring the frozen '
+    + 'checkpoints, prediction tables and split manifests. The accompanying information describes '
+    + 'dataset provenance, model configurations, and additional evaluations.'
+)
+SUPPORTING_DESCRIPTION = (
+    'Dataset and geometry provenance, partition definitions, neural configurations, seed and ensemble '
+    'errors, classical controls, paired uncertainty, molecular structure atlas, geometry-source tests, '
+    'and matched-ligand reference-method corrections'
+)
+AI_ACKNOWLEDGEMENT = (
+    'OpenAI Codex assisted with drafting and editing the manuscript and with developing and running '
+    'the experiment and analysis scripts.'
+)
 REFS=[
 'L. M. Sigmund, S. Sowndarya S. V., A. Albers, P. Erdmann, R. S. Paton and L. Greb. Predicting Lewis Acidity: Machine Learning the Fluoride Ion Affinity of p-Block-Atom-Based Molecules. Angew. Chem. Int. Ed. 2024, 63, e202401084. https://doi.org/10.1002/anie.202401084.',
 'P. Erdmann, J. Leitner, J. Schwarz and L. Greb. An Extensive Set of Accurate Fluoride Ion Affinities for p-Block Element Lewis Acids and Basic Design Principles for Strong Fluoride Ion Acceptors. ChemPhysChem 2020, 21, 987–994. https://doi.org/10.1002/cphc.202000244.',

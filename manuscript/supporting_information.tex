@@ -1,22 +1,25 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[margin=2.1cm]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable}
+\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable,needspace}
 \usepackage{url}
 \usepackage{hyperref}
-\hypersetup{hidelinks}
+\hypersetup{hidelinks,pdftitle={Supporting Information for Coordination Constraints and Information Content in Predicting Lewis Acidity},pdfauthor={Simin Huang, Shenqi Zong, Han Chen, Shaoguang Zhang}}
+
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
 \emergencystretch=2em
 \renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thepage}{S\arabic{page}}
 \begin{document}
 \begin{center}
 {\LARGE Supporting Information}\\[8pt]
 {\large Coordination Constraints and Information Content in Predicting Lewis Acidity}\\[6pt]
-Simin Huang, Shenqi Zong, and Han Chen\\
-Tanwei College, Tsinghua University, Beijing 100086, China
+Simin Huang, Shenqi Zong, Han Chen, and Shaoguang Zhang\textsuperscript{*}\\
+Tsinghua University, Beijing 100084, China\\
+{\small \textsuperscript{*}Department of Chemistry. Email: \href{mailto:sgzhang@tsinghua.edu.cn}{sgzhang@tsinghua.edu.cn}}
 \end{center}
-\section*{S1. Versioned data and complete geometry preparation}
+\Needspace{9\baselineskip}\section*{S1. Versioned data and complete geometry preparation}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.300\textwidth}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.450\textwidth}@{}}
@@ -57,7 +60,7 @@ test\_\allowbreak{}5 & 15 \\
 
 All atom and target arrays are finite, coordinate row counts are exact, unknown atomic symbols raise an error, and Compound identifiers are unique. No fallback from acid to fluoride-adduct geometry is allowed. The first-atom accepting-center convention is checked against central-element identity for every record. Element-sequence agreement cannot alone exclude permutations of chemically equivalent atoms. 
 
-\section*{S2. Partition definitions and regression checks}
+\Needspace{9\baselineskip}\section*{S2. Partition definitions and regression checks}
 
 Generic ligand-scaffold multiset: 12,448 groups containing 46,066 molecules, assigned as 33,460 training, 6,379 validation and 6,227 test records. Individual-ligand overlap with training is 80.8\% in validation and 84.6\% in test.
 
@@ -67,7 +70,7 @@ Canonical acid identity checking found zero records crossing partitions under th
 
 Regression checks cover reproducible disjoint splits, prediction identities and targets, strict geometry parsing, geometric invariance, independent batching, exact checkpoint restoration, training-derived preprocessing, source fingerprints and deterministic ligand grouping. The validation record accompanies the code.
 
-\section*{S3. Neural configurations and seed-level test results}
+\Needspace{9\baselineskip}\section*{S3. Neural configurations and seed-level test results}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}>{\raggedright\arraybackslash}p{0.096\textwidth}@{}}
@@ -106,7 +109,7 @@ composition-qm-s1 & 413,061 & 64 & 39 & 19.732 & 20.155 & 29.017 \\
 
 Scaffold runs report their respective scaffold test. All errors are kJ/mol. Ensemble and seed-average MAEs are reported separately. Runtime records describe observed shared-host epoch wall time. CUDA index\_\allowbreak{}add may produce nondeterministic rounding with fixed RNG seeds. Full configurations, data fingerprints and history logs accompany each checkpoint.
 
-\section*{S4. Neural ensemble errors across partitions}
+\Needspace{9\baselineskip}\section*{S4. Neural ensemble errors across partitions}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
@@ -164,7 +167,7 @@ composition-qm & test\_\allowbreak{}6 & 31 & 21.827 & 33.458 & 0.6542 \\
 \end{longtable}
 }
 
-\section*{S5. Classical baselines and quantum-refinement controls}
+\Needspace{9\baselineskip}\section*{S5. Classical baselines and quantum-refinement controls}
 
 qm\_\allowbreak{}baseline
 
@@ -280,7 +283,7 @@ delta\_\allowbreak{}RDKit\_\allowbreak{}LA\_\allowbreak{}QM & test & 6227 & 3.34
 
 The final HGB stage budget is matched across primary, grouped and refinement experiments: stages 100/400/1000 are selected on validation only. Every fitted feature list and selection score is saved in the corresponding config.json. The lower-level FIA in refinement is an explicit adduct-dependent input; it is not included in the acid-QM fusion models.
 
-\section*{S6. Paired uncertainty and subgroup interpretation}
+\Needspace{9\baselineskip}\section*{S6. Paired uncertainty and subgroup interpretation}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.310\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}>{\raggedright\arraybackslash}p{0.141\textwidth}@{}}
@@ -340,7 +343,7 @@ composition-qm & test\_\allowbreak{}6 & 13.297 & 11.173 & 15.557 \\
 
 $\Delta$ MAE is new-model ensemble error minus reference error; negative values favor the new model. Official-partition reference: released FIA-GNN. Scaffold reference: the independently refitted RDKit HGB baseline. Each bootstrap resample preserves central-class counts and pairs predictions on the same molecules. These intervals condition on the fitted weights. The complete by\_\allowbreak{}class.csv contains per-class n, target variance, MAE, RMSE and R2; small classes and low-variance targets require caution.
 
-\section*{S7. Geometry-source and paired-structure diagnostics}
+\Needspace{9\baselineskip}\section*{S7. Geometry-source and paired-structure diagnostics}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
@@ -378,7 +381,7 @@ The heavy-atom pair-distance RMS change is sqrt(mean[(d\_\allowbreak{}ij,adduct 
 
 \clearpage
 
-\section*{S8. Matched-ligand reference-method corrections}
+\Needspace{9\baselineskip}\section*{S8. Matched-ligand reference-method corrections}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.250\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}>{\raggedright\arraybackslash}p{0.120\textwidth}@{}}
@@ -403,11 +406,11 @@ Sn(II) & Pb(II) & 103 & 6.349 & 6.005 & 6.681 \\
 
 The correction is FIA(DSD-BLYP) minus FIA(PBEh-3c), in kJ/mol. Comparisons use only training molecules. Repeated records are averaged within each canonical ligand-set/center-class cell before pairing. The nine neighboring-center contrasts were defined before inspection and are all retained. Intervals use 2,000 bootstrap samples over matched ligand sets with seed 20261113; they are descriptive, without a multiple-testing significance claim.
 
-\section*{S9. Reproduction and provenance}
+\Needspace{9\baselineskip}\section*{S9. Reproduction and provenance}
 
 README.md gives the preparation, training, evaluation and analysis commands. reports/experiment\_\allowbreak{}plan.json distinguishes the initial fixed comparisons from exploratory acid-QM and geometry-source extensions. requirements-benchmark.txt and run configurations record the software environment; THIRD\_\allowbreak{}PARTY.md records upstream code commits and licenses. A frozen archive contains split identities, all prediction exports, histories and checkpoints, together with a checksum manifest. The storage manifest provides SHA256 verification for each restored file.
 
-\section*{S10. Chemical environments and paired-structure analysis}
+\Needspace{9\baselineskip}\section*{S10. Chemical environments and paired-structure analysis}
 
 Chemical subgroup analyses are exploratory evaluations of frozen models on all 6,732 main-test molecules. Bins use training-set percentiles. The binding-induced heavy-atom pair-distance RMS thresholds are 0.278968, 0.532265, 0.837720, 1.173082 Å. The PBEh-3c/GFN2-xTB geometry-disagreement thresholds are 0.127501, 0.226552, 0.386364 Å. Intervals use 2,000 central-class-stratified molecule bootstrap samples with seed 20261114 and fixed fitted models.
 
@@ -546,7 +549,7 @@ P90--100 & 703.0 & 4.915 & 3.963 & 5.852 \\
 
 Giving each of the 21 center classes equal weight yields geometry-source penalties of 1.679 kJ/mol below the training upper-decile threshold and 3.761 kJ/mol above it. Paired-geometry disagreement is evaluated where both protocols are available. The source-change experiment retains PBEh-trained weights; independent xTB-domain training is a separate modeling task.
 
-\section*{S11. Relationship to contemporary studies}
+\Needspace{9\baselineskip}\section*{S11. Relationship to contemporary studies}
 
 {\footnotesize\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.160\textwidth}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.280\textwidth}@{}}

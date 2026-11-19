@@ -8,8 +8,9 @@
 - `references.bib`: BibTeX bibliography used by both journal variants.
 - `supporting_information.tex`: separate scientific supporting information.
 - `compiled/`: PDFs compiled directly from these LaTeX sources.
-- `review/`: optional local Word exports and separate Chinese notes; generated
-  locally and excluded from version control to keep one authoritative article.
+- [`submission/`](submission/README.md): journal-specific cover letters, TOC assets,
+  and the remaining author checks.
+- `review/`: optional local Word exports and PDF copies.
 
 Regenerate the sources and compile from the repository root:
 
@@ -28,7 +29,3 @@ Official guidance:
 [Digital Discovery](https://www.rsc.org/publishing/publish-with-us/publish-a-journal-article/digital-discovery),
 [JCIM](https://researcher-resources.acs.org/publish/author_guidelines?coden=jcisd8),
 [ACS TeX support](https://pubs.acs.org/page/4authors/submission/tex.html).
-
-Before journal submission, the authors must supply their conflict/funding and
-contributor statements, confirm authorship, and deposit the new research archive
-persistently. These are author metadata, separate from the scientific narrative.

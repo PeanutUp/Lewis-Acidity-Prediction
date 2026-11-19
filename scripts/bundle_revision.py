@@ -28,7 +28,10 @@ def main():
  latex_archive=output/'Lewis_Acidity_LaTeX_Sources.zip'
  with zipfile.ZipFile(latex_archive,'w',compression=zipfile.ZIP_DEFLATED) as z:
   for path in sorted((ROOT/'manuscript').rglob('*')):
-   if path.is_file() and (path.suffix in {'.tex','.bib','.sty','.bbl','.md'} or path.parent.name=='figures' and path.suffix=='.pdf'):
+   source_file = path.suffix in {'.tex','.bib','.sty','.bbl','.md'}
+   vector_figure = path.parent.name == 'figures' and path.suffix == '.pdf'
+   submission_asset = path.parent.name == 'submission' and path.suffix in {'.tif','.txt'}
+   if path.is_file() and (source_file or vector_figure or submission_asset):
     z.write(path,str(path.relative_to(ROOT/'manuscript')))
  exports.append(latex_archive)
  for source,name in [('reports/chemistry/by_center.csv','chemical_center_metrics.csv'),('reports/chemistry/by_denticity.csv','chemical_denticity_metrics.csv'),('reports/chemistry/geometry_shift_penalty.csv','geometry_source_penalty.csv'),('reports/neural/seed_summary.csv','neural_seed_summary.csv'),('reports/refinement/metrics.csv','quantum_refinement_metrics.csv')]:
@@ -45,6 +48,7 @@ def main():
 科学补充材料：Supporting_Information_LaTeX.pdf。
 LaTeX源文件：Lewis_Acidity_LaTeX_Sources.zip，包含tex、bib、样式与矢量图，
 可上传Overleaf。两份期刊正文共享科学内容，采用对应RSC/ACS版式。
+压缩包的 submission/ 中含两刊投稿信、目录图和投稿清单。
 
 本研究的主要结果：
 1. 三齿配体环境的几何增益：同一1875分子测试子集，FIA-GNN集成参考
@@ -78,7 +82,7 @@ LaTeX源文件：Lewis_Acidity_LaTeX_Sources.zip，包含tex、bib、样式与�
  raw=subprocess.check_output(['git','ls-files','--cached','--modified','--others','--exclude-standard','-z'],cwd=ROOT).decode()
  paths={p for p in raw.split('\0') if p and (ROOT/p).is_file()}
  paths.update(p for p in ['reports/chemistry/center_geometry.csv','reports/chemistry/test_diagnostics.csv.gz'] if (ROOT/p).exists())
- allowed={'.py','.md','.txt','.json','.jsonl','.csv','.yaml','.yml','.toml','.ini','.sh','.tex','.bib','.sty','.bbl','.svg','.pdf','.png','.xlsx','.gz'}
+ allowed={'.py','.md','.txt','.json','.jsonl','.csv','.yaml','.yml','.toml','.ini','.sh','.tex','.bib','.sty','.bbl','.svg','.pdf','.png','.tif','.xlsx','.gz'}
  selected=sorted(p for p in paths if (ROOT/p).suffix in allowed or '.part-' in p or Path(p).name in {'.gitignore','LICENSE','Makefile'})
  assert 'manuscript/rsc_official_article_template.tex' in selected
  manifest={p:dict(bytes=(ROOT/p).stat().st_size,sha256=digest(ROOT/p)) for p in selected}

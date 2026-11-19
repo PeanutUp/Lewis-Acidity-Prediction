@@ -1,4 +1,5 @@
 """Check compiled article consistency, references and TeX layout diagnostics."""
+from datetime import date
 from pathlib import Path
 import hashlib,json,re,sys
 import pymupdf
@@ -26,8 +27,24 @@ def main():
   with pymupdf.open(pdf) as doc:
    text='\n'.join(p.get_text() for p in doc)
    n=len(doc)
-   # Every substantive page must contain extractable text.
+   first_page = re.sub(r'\s+', ' ', doc[0].get_text(sort=True))
+   assert first_page.count(article['affiliation']) == 1
+   assert doc.metadata['author'] == ', '.join(article['authors'])
+   byline = ', '.join(article['authors'][:-1]) + ', and ' + article['authors'][-1]
+   assert re.search(re.escape(byline) + r'\s*[*∗]', first_page)
+   contact = article['corresponding_author']
+   assert contact['department'] in first_page and contact['email'] in first_page
    assert all(len(p.get_text().strip())>30 for p in doc)
+   if name == 'jcim':
+    assert 'For Table of Contents Only' in doc[-1].get_text()
+    assert 'Data and Software Availability' in re.sub(r'\s+', ' ', text)
+   elif name == 'digital_discovery':
+    assert 'Data availability' in text
+   if name != 'supporting_information':
+    links = {link.get('uri') for page in doc for link in page.get_links()}
+    assert all(any(key in (url or '') for url in links)
+               for key in ['24635136.v1', '24635157.v1', '24635187.v1',
+                           'PeanutUp/Lewis-Acidity-Prediction'])
   for phrase in FORBIDDEN:
    if phrase in re.sub(r'\s+',' ',text).lower():raise ValueError(f'{name}: obsolete narrative: {phrase}')
   if name!='supporting_information':
@@ -36,10 +53,8 @@ def main():
   checks[name]=dict(pages=n,bytes=pdf.stat().st_size,
    sha256=hashlib.sha256(pdf.read_bytes()).hexdigest(),
    missing_glyphs=0,undefined_references=0,overfull_boxes=0)
- result=dict(date='2026-11-14',documents=checks,main_figure_names=figures,
-  checks='Shared prose, completed PDFs, figure presence, resolved references, glyphs, TeX boxes, obsolete-draft narrative',
-  visual_review='Final-size typography, chemical drawings, labels, uncertainty markers and page layout inspected separately; these automated checks do not certify absence of visual overlap',
-  additional_checks='23 regression tests passed; chemical diagnostic thresholds use official training molecules; no new model selection in exploratory chemical analyses')
+ result=dict(date=date.today().isoformat(),documents=checks,main_figure_names=figures,
+  checks='Shared prose, compiled PDFs, bylines, correspondence, data links, journal section titles, TOC page, figures, references, glyphs, TeX boxes and obsolete-draft narrative')
  (ROOT/'reports/latex_build_verification.json').write_text(json.dumps(result,indent=2)+'\n')
  print(json.dumps(result,indent=2))
 

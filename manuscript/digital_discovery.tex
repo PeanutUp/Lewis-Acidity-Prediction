@@ -5,7 +5,8 @@
 \usepackage{amsmath,graphicx,booktabs,tabularx,array}
 \usepackage{url}
 \usepackage{hyperref}
-\hypersetup{hidelinks}
+\hypersetup{hidelinks,pdftitle={Coordination Constraints and Information Content in Predicting Lewis Acidity},pdfauthor={Simin Huang, Shenqi Zong, Han Chen, Shaoguang Zhang}}
+
 \emergencystretch=2em
 \setcounter{dbltopnumber}{2}
 \renewcommand{\dbltopfraction}{.90}
@@ -16,18 +17,28 @@
 \twocolumn[\begin{@twocolumnfalse}
 \vspace*{-.4cm}
 {\sffamily\Large\bfseries Coordination Constraints and Information Content in Predicting Lewis Acidity}\par\medskip
-{\large Simin Huang,$^{*}$ Shenqi Zong, and Han Chen}\par\smallskip
-{\small Tanwei College, Tsinghua University, Beijing 100086, China}\par
-{\small $^{*}$E-mail: \href{mailto:hsm24@mails.tsinghua.edu.cn}{hsm24@mails.tsinghua.edu.cn}}\par\medskip
+{\large Simin Huang, Shenqi Zong, Han Chen, and Shaoguang Zhang\textsuperscript{*}}\par\smallskip
+{\small Tsinghua University, Beijing 100084, China}\par
+{\small \textsuperscript{*}Department of Chemistry. Email: \href{mailto:sgzhang@tsinghua.edu.cn}{sgzhang@tsinghua.edu.cn}}\par\medskip
 {\small\bfseries Abstract}\par
 {\small Molecular geometry and electronic descriptors provide complementary routes to predicting the fluoride ion affinity (FIA) of Lewis acids, but their value depends on coordination constraints and the information available about binding. Across 48,986 FIA49k molecules, DimeNet++ achieves a main-test MAE of 11.21 $\pm$ 0.27 kJ\,mol$^{-1}$ over three training seeds, with ensemble analysis showing the largest absolute gain over released connectivity predictions for tridentate ligand environments. P(III) compounds remain difficult across acid-geometry representations, whereas refinement of a PBEh-3c acid--fluoride calculation gives MAE 3.44 kJ\,mol$^{-1}$ for this class and 3.29 kJ\,mol$^{-1}$ overall, retaining 3.35 kJ\,mol$^{-1}$ on held-out ligand-scaffold combinations. Paired molecular structures reveal a second, distinct sensitivity: the loss of accuracy upon changing geometry source is concentrated in acids whose optimized structures disagree, connecting chemical coordination, quantum refinement and structural provenance in the choice of an FIA prediction workflow.}\par\vspace{.7cm}
 \end{@twocolumnfalse}]
 \input{body}
 
+\section*{Supplementary information}
+Dataset and geometry provenance, partition definitions, neural configurations, seed and ensemble errors, classical controls, paired uncertainty, molecular structure atlas, geometry-source tests, and matched-ligand reference-method corrections are provided in the Supplementary Information.
+
+% Insert the author-approved CRediT statement here.
+% \section*{Author contributions}
+% Insert the author-approved conflict of interest statement here before submission.
+% \section*{Conflicts of interest}
+
 \section*{Data availability}
-FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 from Figshare. \cite{fia49ktargets,fia49kgeometries,fia49kpredictions} Code, frozen models, complete predictions, split manifests and training configurations are available at \url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}. Source archives and restored artifacts are verified by checksums.
+FIA49k targets (\url{https://doi.org/10.6084/m9.figshare.24635136.v1}), geometries (\url{https://doi.org/10.6084/m9.figshare.24635157.v1}), and released FIA-GNN predictions (\url{https://doi.org/10.6084/m9.figshare.24635187.v1}) are available from Figshare under CC BY 4.0. \cite{fia49ktargets,fia49kgeometries,fia49kpredictions} Preparation, training and analysis code and archived artifacts are available at \url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}. The repository provides instructions for retrieving the source data and restoring the frozen checkpoints, prediction tables and split manifests. The accompanying information describes dataset provenance, model configurations, and additional evaluations.
+
 \section*{Acknowledgements}
-OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.
+OpenAI Codex assisted with drafting and editing the manuscript and with developing and running the experiment and analysis scripts.
+% Add author-confirmed funding and other acknowledgments here.
 \bibliographystyle{rsc}
 \bibliography{references}
 \end{document}

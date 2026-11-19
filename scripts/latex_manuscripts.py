@@ -1,6 +1,12 @@
 """Native journal manuscripts with shared prose, BibTeX and separate SI."""
 from pathlib import Path
 import re
+from article_content import (
+    AFFILIATION, AI_ACKNOWLEDGEMENT, AUTHOR_NAMES, CORRESPONDENCE,
+    CORRESPONDING_AUTHOR, CORRESPONDING_DEPARTMENT, CORRESPONDING_EMAIL,
+    DATA_AVAILABILITY, DATA_SOURCES, MARKED_BYLINE, PROJECT_URL,
+    SUPPORTING_DESCRIPTION, TITLE,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 MAN = ROOT / 'manuscript'
@@ -67,25 +73,65 @@ def body_tex(blocks):
     return '\n\n'.join(parts) + '\n'
 
 
+def byline_tex():
+    return tex_text(MARKED_BYLINE.removesuffix('*')) + r'\textsuperscript{*}'
+
+
+def correspondence_tex():
+    return (r'\textsuperscript{*}' + tex_text(CORRESPONDING_DEPARTMENT)
+            + r'. Email: \href{mailto:' + CORRESPONDING_EMAIL + '}{'
+            + tex_text(CORRESPONDING_EMAIL) + '}')
+
+
+def pdf_metadata(title):
+    return (r'\hypersetup{hidelinks,pdftitle={' + tex_text(title)
+            + '},pdfauthor={' + ', '.join(AUTHOR_NAMES) + '}}\n')
+
+
+def endmatter(acs=False):
+    data = tex_text(DATA_AVAILABILITY)
+    for url in (PROJECT_URL, *(url for _, url in DATA_SOURCES)):
+        data = data.replace(tex_text(url), r'\url{' + url + '}')
+    parts = []
+    if acs:
+        parts.append(r'\begin{suppinfo}' + '\n' + tex_text(SUPPORTING_DESCRIPTION)
+                     + r' (PDF).' + '\n' + r'\end{suppinfo}')
+    else:
+        parts.append(r'\section*{Supplementary information}' + '\n'
+                     + tex_text(SUPPORTING_DESCRIPTION) + ' are provided in the Supplementary Information.')
+        parts.append(r'''% Insert the author-approved CRediT statement here.
+% \section*{Author contributions}
+% Insert the author-approved conflict of interest statement here before submission.
+% \section*{Conflicts of interest}''')
+    data_heading = r'Data and Software \mbox{Availability}' if acs else 'Data availability'
+    acknowledgement = 'Acknowledgments' if acs else 'Acknowledgements'
+    parts.extend((
+        r'\section*{' + data_heading + '}\n' + data,
+        r'\section*{' + acknowledgement + '}\n' + tex_text(AI_ACKNOWLEDGEMENT)
+        + '\n% Add author-confirmed funding and other acknowledgments here.',
+    ))
+    return '\n\n'.join(parts) + '\n'
+
+
 def si_tex():
-    """Export the scientific SI, without the private revision/audit response."""
+    """Export the scientific supporting information."""
     from docx import Document
     from docx.table import Table
     from docx.text.paragraph import Paragraph
     doc = Document(MAN / 'Supporting_Information.docx')
+    front_matter = {'Supporting Information', TITLE, MARKED_BYLINE,
+                    AFFILIATION + '\n*' + CORRESPONDENCE}
     parts = []
     for child in doc.element.body.iterchildren():
         if child.tag.endswith('}p'):
             paragraph = Paragraph(child, doc)
             text = paragraph.text
-            if not text or text == 'Supporting Information':
+            if not text or text in front_matter:
                 continue
             if paragraph.style.name.startswith('Heading'):
                 if text.startswith('S8.'):
                     parts.append(r'\clearpage')
-                parts.append(r'\section*{' + tex_text(text) + '}')
-            elif text == __import__('article_content').TITLE or text.startswith('Simin Huang'):
-                continue
+                parts.append(r'\Needspace{9\baselineskip}\section*{' + tex_text(text) + '}')
             else:
                 parts.append(tex_text(text))
         elif child.tag.endswith('}tbl'):
@@ -108,24 +154,24 @@ def si_tex():
     front = r'''\documentclass[10pt,a4paper]{article}
 \usepackage[margin=2.1cm]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable}
+\usepackage{lmodern,amsmath,graphicx,booktabs,array,longtable,needspace}
 \usepackage{url}
 \usepackage{hyperref}
-\hypersetup{hidelinks}
+''' + pdf_metadata('Supporting Information for ' + TITLE) + r'''
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
 \emergencystretch=2em
 \renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thepage}{S\arabic{page}}
 \begin{document}
 \begin{center}
 {\LARGE Supporting Information}\\[8pt]
-{\large ARTICLE_TITLE}\\[6pt]
-Simin Huang, Shenqi Zong, and Han Chen\\
-Tanwei College, Tsinghua University, Beijing 100086, China
+{\large ''' + tex_text(TITLE) + r'''}\\[6pt]
+''' + byline_tex() + r'''\\
+''' + tex_text(AFFILIATION) + r'''\\
+{\small ''' + correspondence_tex() + r'''}
 \end{center}
 '''
-    from article_content import TITLE
-    front = front.replace('ARTICLE_TITLE', tex_text(TITLE))
     displays = [
         ('S12. External test groups', 'external_groups', 'Ensemble MAE across all published test groups. The final row uses acid-plus-adduct quantum input; the other neural rows use optimized acid input.'),
         ('S13. Pnictogen-center comparison', 'pnictogen_prediction', 'Main-test class MAE for frozen ensembles and the quantum correction, with sample counts. Full 21-class exports accompany the code.'),
@@ -141,24 +187,16 @@ Tanwei College, Tsinghua University, Beijing 100086, China
 
 
 def build_latex(abstract, blocks):
-    from article_content import TITLE, AFFILIATION
     (MAN / 'body.tex').write_text(body_tex(blocks))
     common = r'''\usepackage{amsmath,graphicx,booktabs,tabularx,array}
 \usepackage{url}
 \usepackage{hyperref}
-\hypersetup{hidelinks}
+''' + pdf_metadata(TITLE) + r'''
 \emergencystretch=2em
 \setcounter{dbltopnumber}{2}
 \renewcommand{\dbltopfraction}{.90}
 \renewcommand{\textfraction}{.07}
 \renewcommand{\dblfloatpagefraction}{.75}
-'''
-    availability = ('FIA49k targets, geometries and released FIA-GNN predictions are available under CC BY 4.0 from Figshare. [11–13] '
-                    'Code, frozen models, complete predictions, split manifests and training configurations are available at '
-                    'https://github.com/PeanutUp/Lewis-Acidity-Prediction. Source archives and restored artifacts are verified by checksums.')
-    ending = '\n\\section*{Data availability}\n' + tex_text(availability).replace('https://github.com/PeanutUp/Lewis-Acidity-Prediction.', r'\url{https://github.com/PeanutUp/Lewis-Acidity-Prediction}.') + '\n'
-    ending += r'''\section*{Acknowledgements}
-OpenAI Codex was used for manuscript editing, code development, computational experiment execution and analysis-script preparation.
 '''
     rsc = r'''% RSC author-template layout; see rsc_official_article_template.tex and rsc_review.sty.
 \PassOptionsToPackage{hyphens}{url}
@@ -168,14 +206,14 @@ OpenAI Codex was used for manuscript editing, code development, computational ex
     rsc += r'''\twocolumn[\begin{@twocolumnfalse}
 \vspace*{-.4cm}
 {\sffamily\Large\bfseries ''' + tex_text(TITLE) + r'''}\par\medskip
-{\large Simin Huang,$^{*}$ Shenqi Zong, and Han Chen}\par\smallskip
+{\large ''' + byline_tex() + r'''}\par\smallskip
 {\small ''' + tex_text(AFFILIATION) + r'''}\par
-{\small $^{*}$E-mail: \href{mailto:hsm24@mails.tsinghua.edu.cn}{hsm24@mails.tsinghua.edu.cn}}\par\medskip
+{\small ''' + correspondence_tex() + r'''}\par\medskip
 {\small\bfseries Abstract}\par
 {\small ''' + tex_text(abstract) + r'''}\par\vspace{.7cm}
 \end{@twocolumnfalse}]
 '''
-    rsc += '\\input{body}\n' + ending
+    rsc += '\\input{body}\n\n' + endmatter()
     rsc += '\\bibliographystyle{rsc}\n\\bibliography{references}\n\\end{document}\n'
     (MAN / 'digital_discovery.tex').write_text(rsc)
     acs = r'''% ACS manuscript class, journal identifier jcisd8.
@@ -183,18 +221,23 @@ OpenAI Codex was used for manuscript editing, code development, computational ex
 \documentclass[journal=jcisd8,manuscript=article,layout=twocolumn]{achemso}
 ''' + common + r'''\setkeys{acs}{articletitle=true,doi=true}
 \title{''' + tex_text(TITLE) + '}\n'
-    for name in ['Simin Huang', 'Shenqi Zong', 'Han Chen']:
-        acs += '\\author{' + name + '}\n'
-        if name == 'Simin Huang':
-            acs += '\\email{hsm24@mails.tsinghua.edu.cn}\n'
+    acs += (r'\renewcommand*{\emailfont}{\small\textsuperscript{*}'
+            + tex_text(CORRESPONDING_DEPARTMENT) + r'.\ }' + '\n')
+    for name in AUTHOR_NAMES:
+        acs += '\\author{' + tex_text(name) + '}\n'
+        if name == CORRESPONDING_AUTHOR:
+            acs += '\\email{' + CORRESPONDING_EMAIL + '}\n'
         acs += '\\affiliation{' + tex_text(AFFILIATION) + '}\n'
     acs += '\\begin{document}\n\\begin{abstract}\n' + tex_text(abstract) + '\n\\end{abstract}\n\\input{body}\n'
-    acs += r'''\begin{suppinfo}
-Dataset and geometry provenance, partition definitions, neural configurations, seed and ensemble errors, classical controls, paired uncertainty, geometry-source tests and matched-ligand reference-method corrections (PDF).
-\end{suppinfo}
+    acs += '\n' + endmatter(acs=True) + '\n\\bibliography{references}\n'
+    acs += r'''\renewcommand*{\tocentryname}{For Table of Contents Only}
+\begin{tocentry}
+\nointerlineskip
+\hbox{\includegraphics[width=3.25in]{figures/toc_graphic.pdf}}
+\vfil
+\end{tocentry}
+\end{document}
 '''
-    acs += ending + '\n\\bibliography{references}\n'
-    acs += '\\begin{tocentry}\n\\includegraphics[width=3.00in]{figures/toc_graphic.pdf}\n\\end{tocentry}\n\\end{document}\n'
     (MAN / 'jcim.tex').write_text(acs)
     si_tex()
     # Historical hand-numbered bibliography is superseded by the BibTeX source.

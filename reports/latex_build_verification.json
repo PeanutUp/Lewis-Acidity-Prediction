@@ -1,26 +1,26 @@
 {
-  "date": "2026-11-14",
+  "date": "2026-11-19",
   "documents": {
     "digital_discovery": {
       "pages": 8,
-      "bytes": 184941,
-      "sha256": "94bd23f45d2a1d5e10764497d46ccd2e4096ea451f4b39c5410bd06957d4784f",
+      "bytes": 186848,
+      "sha256": "e804d0ad65c3a2cf69a959772665b6b2b884a5c097a0bf555b4d472eaf4c92fa",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0
     },
     "jcim": {
       "pages": 13,
-      "bytes": 217954,
-      "sha256": "654a05dc632e38fa35487cfddc798a59b9a7e2e69f5b12ce8fc47b5b38c7cd4b",
+      "bytes": 220778,
+      "sha256": "e50224aea661dbbe013ae2b5c74cfabbe4bf4d6be1d24b598b47a948bdc61845",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0
     },
     "supporting_information": {
       "pages": 13,
-      "bytes": 170768,
-      "sha256": "d03287deb0e31bf6e1570d4a9310cfe53ec5ddd746b70bc88a527915087b5621",
+      "bytes": 175450,
+      "sha256": "223349d31235607c3887870afcf420ad9a2b00de2d5faa62f8c7facba1a3e1c0",
       "missing_glyphs": 0,
       "undefined_references": 0,
       "overfull_boxes": 0
@@ -34,7 +34,5 @@
     "method_corrections",
     "geometry_disagreement"
   ],
-  "checks": "Shared prose, completed PDFs, figure presence, resolved references, glyphs, TeX boxes, obsolete-draft narrative",
-  "visual_review": "Final-size typography, chemical drawings, labels, uncertainty markers and page layout inspected separately; these automated checks do not certify absence of visual overlap",
-  "additional_checks": "23 regression tests passed; chemical diagnostic thresholds use official training molecules; no new model selection in exploratory chemical analyses"
+  "checks": "Shared prose, compiled PDFs, bylines, correspondence, data links, journal section titles, TOC page, figures, references, glyphs, TeX boxes and obsolete-draft narrative"
 }

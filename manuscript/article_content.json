@@ -1,6 +1,17 @@
 {
   "title": "Coordination Constraints and Information Content in Predicting Lewis Acidity",
-  "authors": "Simin Huang, Shenqi Zong, and Han Chen",
+  "authors": [
+    "Simin Huang",
+    "Shenqi Zong",
+    "Han Chen",
+    "Shaoguang Zhang"
+  ],
+  "affiliation": "Tsinghua University, Beijing 100084, China",
+  "corresponding_author": {
+    "name": "Shaoguang Zhang",
+    "department": "Department of Chemistry",
+    "email": "sgzhang@tsinghua.edu.cn"
+  },
   "abstract": "Molecular geometry and electronic descriptors provide complementary routes to predicting the fluoride ion affinity (FIA) of Lewis acids, but their value depends on coordination constraints and the information available about binding. Across 48,986 FIA49k molecules, DimeNet++ achieves a main-test MAE of 11.21 ± 0.27 kJ mol−1 over three training seeds, with ensemble analysis showing the largest absolute gain over released connectivity predictions for tridentate ligand environments. P(III) compounds remain difficult across acid-geometry representations, whereas refinement of a PBEh-3c acid–fluoride calculation gives MAE 3.44 kJ mol−1 for this class and 3.29 kJ mol−1 overall, retaining 3.35 kJ mol−1 on held-out ligand-scaffold combinations. Paired molecular structures reveal a second, distinct sensitivity: the loss of accuracy upon changing geometry source is concentrated in acids whose optimized structures disagree, connecting chemical coordination, quantum refinement and structural provenance in the choice of an FIA prediction workflow.",
   "blocks": [
     [
